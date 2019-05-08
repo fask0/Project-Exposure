@@ -13,11 +13,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: Assets\FMOD Banks\Desktop\Master Bank.strings.bank
-  lastModified: 636929131324066714
+  lastModified: 636929262809671147
   LoadResult: 0
   FileSizes:
   - Name: 
     Value: 724
+  Exists: 1
+--- !u!114 &-6480596646245713884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: E:\Development\Year 2\2.4 Project Exposure\Project Exposure\Assets\FMOD Banks\Desktop\Master
+    Bank.bank
+  lastModified: 636929262809651195
+  LoadResult: 0
+  FileSizes:
+  - Name: 
+    Value: 13116
   Exists: 1
 --- !u!114 &-4767341618143704989
 MonoBehaviour:
@@ -59,6 +79,26 @@ MonoBehaviour:
   - Name: 
     Value: 13116
   Exists: 1
+--- !u!114 &-3201336108412699840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: E:\Development\Year 2\2.4 Project Exposure\Project Exposure\Assets\FMOD Banks\Desktop\Master
+    Bank.bank
+  lastModified: 636929262809651195
+  LoadResult: 0
+  FileSizes:
+  - Name: 
+    Value: 13116
+  Exists: 1
 --- !u!114 &-1544719093231401022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,14 +133,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EditorBanks:
   - {fileID: -7489165649470922562}
-  - {fileID: -3308869829092629064}
+  - {fileID: -3201336108412699840}
   EditorEvents:
   - {fileID: 6786716479342747201}
   MasterBanks:
-  - {fileID: -3308869829092629064}
+  - {fileID: -3201336108412699840}
   StringsBanks:
   - {fileID: -7489165649470922562}
-  stringsBankWriteTime: 636929131324066714
+  stringsBankWriteTime: 636929262809671147
   cacheVersion: 3
 --- !u!114 &6786716479342747201
 MonoBehaviour:
@@ -117,7 +157,7 @@ MonoBehaviour:
   Path: event:/Player/Player
   guid: 6b513dd4dbe4e2498ca3e6c1a2e2ba29
   Banks:
-  - {fileID: -3308869829092629064}
+  - {fileID: -3201336108412699840}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
