@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: Assets\FMOD Banks\Desktop\Master Bank.strings.bank
-  lastModified: 636928370616714095
+  lastModified: 636929131324066714
   LoadResult: 0
   FileSizes:
   - Name: 
@@ -34,6 +34,26 @@ MonoBehaviour:
   Path: D:\Unity Projects\Project Exposure SOURCE TREE2\Project Exposure\Assets\FMOD
     Banks\Desktop\Master Bank.bank
   lastModified: 636928356482385384
+  LoadResult: 0
+  FileSizes:
+  - Name: 
+    Value: 13116
+  Exists: 1
+--- !u!114 &-3308869829092629064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: D:\Alex\University\2.4\Project Exposure\Project-Exposure\Project Exposure\Assets\FMOD
+    Banks\Desktop\Master Bank.bank
+  lastModified: 636929131324056857
   LoadResult: 0
   FileSizes:
   - Name: 
@@ -73,14 +93,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EditorBanks:
   - {fileID: -7489165649470922562}
-  - {fileID: -1544719093231401022}
+  - {fileID: -3308869829092629064}
   EditorEvents:
   - {fileID: 6786716479342747201}
   MasterBanks:
-  - {fileID: -1544719093231401022}
+  - {fileID: -3308869829092629064}
   StringsBanks:
   - {fileID: -7489165649470922562}
-  stringsBankWriteTime: 636928370616714095
+  stringsBankWriteTime: 636929131324066714
   cacheVersion: 3
 --- !u!114 &6786716479342747201
 MonoBehaviour:
@@ -97,7 +117,7 @@ MonoBehaviour:
   Path: event:/Player/Player
   guid: 6b513dd4dbe4e2498ca3e6c1a2e2ba29
   Banks:
-  - {fileID: -1544719093231401022}
+  - {fileID: -3308869829092629064}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
