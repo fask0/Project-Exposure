@@ -14,9 +14,14 @@ public class CameraBehaviour : MonoBehaviour
 
     private JoystickBehaviour _joystickBehaviour;
 
-    void Start()
+    private void Awake()
     {
         _target = GameObject.Find("CameraFollowPoint");
+        transform.position = _target.transform.position;
+    }
+
+    void Start()
+    {
         _playerTransform = _target.transform.parent.transform;
         _joystickBehaviour = GameObject.Find("Joystick").GetComponent<JoystickBehaviour>();
     }

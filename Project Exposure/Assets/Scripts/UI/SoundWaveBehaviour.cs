@@ -2,18 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sin : MonoBehaviour
+public class SoundWaveBehaviour : MonoBehaviour
 {
+    private GameObject _micArea;
+    private Collider _micCollider;
     private List<AudioSource> _audioSourceList = new List<AudioSource>();
     private LineRenderer _lineLinerenderer;
     private float[] _outputData;
 
     void Start()
     {
-        _audioSourceList.Add(GetComponent<AudioSource>());
+        _micArea = GameObject.Find("MicrophoneArea");
+        _micCollider = _micArea.transform.GetChild(0).GetComponent<CapsuleCollider>();
+        //_audioSourceList.Add(GetComponent<AudioSource>());
         _lineLinerenderer = GetComponent<LineRenderer>();
         _outputData = new float[_lineLinerenderer.positionCount];
-        transform.position = new Vector3(-_outputData.Length * 0.0005f, transform.position.y, transform.position.z);
+        transform.localPosition = new Vector3(-_outputData.Length * 0.0005f, transform.localPosition.y, transform.localPosition.z);
     }
 
     void Update()
@@ -43,6 +47,14 @@ public class Sin : MonoBehaviour
     {
         for (int i = 0; i < _audioSourceList.Count; i++)
             if (_audioSourceList[i] == pAuidoSource)
+            {
+                _audioSourceList[i].volume = 0;
                 _audioSourceList.RemoveAt(i);
+            }
+    }
+
+    public List<AudioSource> AudioList()
+    {
+        return _audioSourceList;
     }
 }

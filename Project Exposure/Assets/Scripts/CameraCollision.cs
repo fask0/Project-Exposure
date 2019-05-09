@@ -10,10 +10,13 @@ public class CameraCollision : MonoBehaviour
     private Vector3 _dollyDirAdjust;
     private float _distance;
 
+    private LayerMask _ignoreLayer;
+
     void Awake()
     {
         _dollyDir = transform.localPosition.normalized;
         _distance = transform.localPosition.magnitude;
+        transform.localPosition = _dollyDir * _distance;
     }
 
     void Update()
@@ -22,9 +25,16 @@ public class CameraCollision : MonoBehaviour
         RaycastHit hit;
 
         if (Physics.Linecast(transform.parent.position, newCameraPos, out hit))
-            _distance = Mathf.Clamp(hit.distance * 0.85f, _minDistance, _maxDistance);
+        {
+            if (!hit.collider.isTrigger)
+            {
+                _distance = Mathf.Clamp(hit.distance * 0.85f, _minDistance, _maxDistance);
+            }
+        }
         else
+        {
             _distance = _maxDistance;
+        }
 
         transform.localPosition = Vector3.Lerp(transform.localPosition, _dollyDir * _distance, _smoothing * Time.deltaTime);
     }
