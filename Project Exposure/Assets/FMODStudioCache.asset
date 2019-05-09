@@ -13,11 +13,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: Assets\FMOD Banks\Desktop\Master Bank.strings.bank
-  lastModified: 636929131324066714
+  lastModified: 636929335131767020
   LoadResult: 0
   FileSizes:
   - Name: 
     Value: 724
+  Exists: 1
+--- !u!114 &-7420150897792620444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: G:\School\Year 2\Project Exposure\Project Exposure\Assets\FMOD Banks\Desktop\Master
+    Bank.bank
+  lastModified: 636929335131741548
+  LoadResult: 0
+  FileSizes:
+  - Name: 
+    Value: 13116
   Exists: 1
 --- !u!114 &-6480596646245713884
 MonoBehaviour:
@@ -133,35 +153,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EditorBanks:
   - {fileID: -7489165649470922562}
-  - {fileID: 6156526533101292952}
+  - {fileID: -7420150897792620444}
   EditorEvents:
   - {fileID: 6786716479342747201}
   MasterBanks:
-  - {fileID: 6156526533101292952}
+  - {fileID: -7420150897792620444}
   StringsBanks:
   - {fileID: -7489165649470922562}
-  stringsBankWriteTime: 636929131324066714
+  stringsBankWriteTime: 636929335131767020
   cacheVersion: 3
---- !u!114 &6156526533101292952
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Path: D:\Alex\University\2.4\Project Exposure\Project-Exposure\Project Exposure\Assets\FMOD
-    Banks\Desktop\Master Bank.bank
-  lastModified: 636929131324056857
-  LoadResult: 0
-  FileSizes:
-  - Name: 
-    Value: 13116
-  Exists: 1
 --- !u!114 &6786716479342747201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,7 +177,7 @@ MonoBehaviour:
   Path: event:/Player/Player
   guid: 6b513dd4dbe4e2498ca3e6c1a2e2ba29
   Banks:
-  - {fileID: 6156526533101292952}
+  - {fileID: -7420150897792620444}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
