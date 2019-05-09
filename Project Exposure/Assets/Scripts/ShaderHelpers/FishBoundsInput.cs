@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class FishBoundsInput : MonoBehaviour
 {
+    [SerializeField]
+    [Range(0, 1)]
+    private float _multiplier = 1;
 
     new Renderer renderer;
 
@@ -19,7 +22,7 @@ public class FishBoundsInput : MonoBehaviour
         renderer.material.SetFloat("_Offset", rand);
 
         float speed = transform.parent.GetComponent<FishBehaviour>().GetMinSpeed();
-        renderer.material.SetFloat("_WobbleSpeed", speed * 20);
+        renderer.material.SetFloat("_WobbleSpeed", speed * 100 * _multiplier);
 
 
     }

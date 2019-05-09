@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SchoolFishLeaderBehaviour : FishBehaviour
 {
-    private SchoolFishSchool _school;
+    private FishZone _school;
     private Vector3 _checkpoint;
 
     private bool _hasAddedItselfToSchool = false;
@@ -21,9 +21,9 @@ public class SchoolFishLeaderBehaviour : FishBehaviour
 
     private void GetSchool()
     {
-        if (transform.parent.GetComponent<SchoolFishSchool>())
+        if (transform.parent.GetComponent<FishZone>())
         {
-            _school = transform.parent.GetComponent<SchoolFishSchool>();
+            _school = transform.parent.GetComponent<FishZone>();
             _school.AddFishToSchool(this.gameObject, false, true);
         }
     }
@@ -74,7 +74,7 @@ public class SchoolFishLeaderBehaviour : FishBehaviour
         return _checkpoint;
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(_checkpoint, 2);

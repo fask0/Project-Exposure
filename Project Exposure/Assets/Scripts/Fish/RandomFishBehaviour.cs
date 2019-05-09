@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RandomFishBehaviour : FishBehaviour
 {
-    private SchoolFishSchool _school;
+    private FishZone _school;
     private Vector3 _checkpoint;
 
     private bool _hasAddedItselfToSchool = false;
@@ -21,9 +21,9 @@ public class RandomFishBehaviour : FishBehaviour
 
     private void GetSchool()
     {
-        if (transform.parent.GetComponent<SchoolFishSchool>())
+        if (transform.parent.GetComponent<FishZone>())
         {
-            _school = transform.parent.GetComponent<SchoolFishSchool>();
+            _school = transform.parent.GetComponent<FishZone>();
             _school.AddFishToSchool(this.gameObject, true);
         }
     }
