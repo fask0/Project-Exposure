@@ -4,27 +4,25 @@ using UnityEngine;
 
 public class MicrophoneBehaviour : MonoBehaviour
 {
-    [SerializeField] float _pickUpDistance = 5.0f;
-
-    private CapsuleCollider _collider;
-    private SoundWaveBehaviour _soundWaveBehaviour;
+    private MeshCollider _collider;
+    private SoundWaveManager _soundWaveManager;
 
     void Start()
     {
-        _collider = GetComponent<CapsuleCollider>();
-        _soundWaveBehaviour = GameObject.Find("SoundWave").GetComponent<SoundWaveBehaviour>();
+        _collider = GetComponent<MeshCollider>();
+        _soundWaveManager = SingleTons.SoundWaveManager;
     }
 
     void Update()
     {
-        transform.parent.rotation = Camera.main.transform.parent.rotation;
+        transform.parent.rotation = Camera.main.transform.parent.rotation * Quaternion.Euler(0, 180, 0);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == 10)
         {
-            _soundWaveBehaviour.AddAudioSource(other.GetComponent<AudioSource>());
+            _soundWaveManager.AddAudioSourceToPlayerSoundWave(other.GetComponent<AudioSource>());
         }
     }
 
@@ -32,7 +30,8 @@ public class MicrophoneBehaviour : MonoBehaviour
     {
         if (other.gameObject.layer == 10)
         {
-            _soundWaveBehaviour.RemoveAudioSource(other.GetComponent<AudioSource>());
+            _soundWaveManager.RemoveAudioSourceFromPlayerSoundWave(other.GetComponent<AudioSource>());
+            other.GetComponent<AudioSource>().volume = 0;
         }
     }
 
@@ -41,9 +40,9 @@ public class MicrophoneBehaviour : MonoBehaviour
         if (other.gameObject.layer == 10)
         {
             AudioSource oSound = other.GetComponent<AudioSource>();
-            for (int i = 0; i < _soundWaveBehaviour.AudioList().Count; i++)
+            for (int i = 0; i < _soundWaveManager.GetPlayerSoundWaveAudioSourceList.Count; i++)
             {
-                if (oSound == _soundWaveBehaviour.AudioList()[i])
+                if (oSound == _soundWaveManager.GetPlayerSoundWaveAudioSourceList[i])
                 {
                     Vector3 micCentre = _collider.bounds.center;
                     Vector3 oCentre = other.bounds.center;
@@ -51,8 +50,13 @@ public class MicrophoneBehaviour : MonoBehaviour
                     float vol = 1 - (((micCentre - oCentre).magnitude) / _collider.bounds.extents.z);
                     if (Vector3.Dot(Camera.main.transform.forward, oCentre - micCentre) < 0)
                         vol = 1;
-                    _soundWaveBehaviour.AudioList()[i].volume = Mathf.Clamp(vol, 0.02f, 1);
+                    _soundWaveManager.GetPlayerSoundWaveAudioSourceList[i].volume = Mathf.Clamp(vol, 0.001f, 1);
                 }
+            }
+
+            if (other.tag == string.Format("Target" + SingleTons.QuestManager.GetCurrentTargetIndex))
+            {
+                _soundWaveManager.CompareOutput();
             }
         }
     }

@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Mic
+  - Target0
+  - Target1
+  - Target2
+  - Target3
   layers:
   - Default
   - TransparentFX
@@ -14,7 +18,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Player
   - 
   - Audio Source
   - 

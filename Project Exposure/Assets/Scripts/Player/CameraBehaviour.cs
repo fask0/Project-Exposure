@@ -49,7 +49,7 @@ public class CameraBehaviour : MonoBehaviour
 
         if (_joystickBehaviour.Vertical() == 0)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, transform.eulerAngles.y, 0), 2 * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, transform.eulerAngles.y, 0), Time.deltaTime);
             _rotX = transform.rotation.eulerAngles.x;
             _rotX = (_rotX > 180) ? _rotX - 360 : _rotX;
         }
