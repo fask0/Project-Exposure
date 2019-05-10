@@ -30,4 +30,6 @@ public static class SingleTons
 {
     public static GameController GameController;
     public static FishManager FishManager;
+    public static QuestManager QuestManager;
+    public static SoundWaveManager SoundWaveManager;
 }
