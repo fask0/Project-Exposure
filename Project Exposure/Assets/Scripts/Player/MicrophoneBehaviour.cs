@@ -32,6 +32,9 @@ public class MicrophoneBehaviour : MonoBehaviour
         {
             _soundWaveManager.RemoveAudioSourceFromPlayerSoundWave(other.GetComponent<AudioSource>());
             other.GetComponent<AudioSource>().volume = 0;
+
+            if (other.tag == string.Format("Target" + SingleTons.QuestManager.GetCurrentTargetIndex))
+                _soundWaveManager.HideProgress();
         }
     }
 
@@ -56,6 +59,11 @@ public class MicrophoneBehaviour : MonoBehaviour
 
             if (other.tag == string.Format("Target" + SingleTons.QuestManager.GetCurrentTargetIndex))
             {
+                if ((transform.parent.transform.position - other.transform.position).magnitude <= 7.0f)
+                    _soundWaveManager.ShowProgress();
+                else
+                    _soundWaveManager.HideProgress();
+
                 _soundWaveManager.CompareOutput();
             }
         }
