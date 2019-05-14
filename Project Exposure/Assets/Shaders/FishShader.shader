@@ -13,6 +13,7 @@
 
 		_Offset("Offset", Range(0, 1)) = 0
 		_FishLength("FishLength", Range(0, 10)) = 1
+		_Specular("Specular", Range(0, 1)) = 0
 	}
 		SubShader
 		{
@@ -32,6 +33,7 @@
 			{
 				float2 uv_MainTex;
 				float3 vertexPos;
+				float3 worldRefl;
 			};
 
 
@@ -62,6 +64,7 @@
 			half _Glossiness;
 			half _Metallic;
 			fixed4 _Color;
+			float _Specular;
 			void surf(Input IN, inout SurfaceOutputStandard o)
 			{
 				// Albedo comes from a texture tinted by color

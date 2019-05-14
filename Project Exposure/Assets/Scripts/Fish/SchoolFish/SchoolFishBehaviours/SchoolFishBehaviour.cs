@@ -10,14 +10,12 @@ public class SchoolFishBehaviour : FishBehaviour
     private bool _hasAddedItselfToSchool = false;
     private bool _fishTooClose = false;
     private GameObject _fishThatsTooClose;
-    private FishBehaviour _fishThatsTooCloseBehaviour;
+    private FishBehaviourParent _fishThatsTooCloseBehaviour;
 
     [SerializeField]
     private float _avoidFishRange = 3;
     [SerializeField]
     private float _keepAvoidingFishRange = 5;
-    [SerializeField]
-    private GameObject _dummy;
 
     // Start is called before the first frame update
     void Start()
@@ -36,7 +34,22 @@ public class SchoolFishBehaviour : FishBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    //void FixedUpdate()
+    //{
+    //    if (!_fishTooClose)
+    //    {
+    //        RotateTowardsCheckPoint();
+    //    }
+    //    else
+    //    {
+    //        RotateAwayFromFish();
+    //    }
+
+    //    SpeedUpAndDown();
+    //    transform.position += (transform.forward * Time.fixedDeltaTime * _currentSpeed);
+    //}
+
+    private void Update()
     {
         if (!_fishTooClose)
         {
@@ -48,14 +61,43 @@ public class SchoolFishBehaviour : FishBehaviour
         }
 
         SpeedUpAndDown();
-        if (_fishTooClose)
+        transform.position += (transform.forward * Time.deltaTime * _currentSpeed);
+
+
+        _rigidBody.velocity = Vector3.zero;
+
+        if (!_hasAddedItselfToSchool)
         {
-            transform.position += (transform.forward * Time.fixedDeltaTime * _currentSpeed);
+            GetSchool();
+            _hasAddedItselfToSchool = true;
+        }
+
+        if (!_fishTooClose)
+        {
+            //Other things to avoid
+            for (int i = 0; i < SingleTons.FishManager.GetFishAvoiders().Count; i++)
+            {
+                if (SingleTons.FishManager.GetFishAvoiders()[i] != gameObject)
+                {
+                    if (Vector3.Distance(transform.position, SingleTons.FishManager.GetFishAvoiders()[i].transform.position) < SingleTons.FishManager.GetFishAvoiders()[i].GetThreatRange())
+                    {
+                        _fishThatsTooClose = SingleTons.FishManager.GetFishAvoiders()[i].gameObject;
+                        _fishThatsTooCloseBehaviour = SingleTons.FishManager.GetFishAvoiders()[i];
+                        _fishTooClose = true;
+                        return;
+                    }
+                }
+            }
         }
         else
         {
-            transform.position += (transform.forward * Time.fixedDeltaTime * _currentSpeed);
+            if (Vector3.Distance(transform.position, _fishThatsTooClose.transform.position) > _fishThatsTooCloseBehaviour.GetThreatFleeRange())
+            {
+                _fishTooClose = false;
+            }
+            return;
         }
+        _fishTooClose = false;
     }
 
     private void SpeedUpAndDown()
@@ -76,7 +118,7 @@ public class SchoolFishBehaviour : FishBehaviour
         {
             _dummy.transform.LookAt(_schoolFishLeaderBehaviour.GetCheckPoint(), Vector3.up);
 
-            transform.rotation = Quaternion.Slerp(transform.rotation, _dummy.transform.rotation, Time.fixedDeltaTime * _turningSpeed);
+            transform.rotation = Quaternion.Lerp(transform.rotation, _dummy.transform.rotation, Time.fixedDeltaTime * _turningSpeed);
         }
     }
 
@@ -84,48 +126,12 @@ public class SchoolFishBehaviour : FishBehaviour
     {
         _dummy.transform.LookAt(Reflect(_schoolFishLeaderBehaviour.GetCheckPoint(), _fishThatsTooClose.transform.position), Vector3.up);
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, _dummy.transform.rotation, Time.fixedDeltaTime * _turningSpeed);
+        transform.rotation = Quaternion.Lerp(transform.rotation, _dummy.transform.rotation, Time.fixedDeltaTime * _turningSpeed);
     }
 
-    private void Update()
+    public void SetSchoolFishLeader(SchoolFishLeaderBehaviour schoolFishLeaderBehaviour)
     {
-        if (!_hasAddedItselfToSchool)
-        {
-            GetSchool();
-            _hasAddedItselfToSchool = true;
-        }
-
-        if (!_fishTooClose)
-        {
-            List<GameObject> fishToAvoid = _school.GetFishToAvoid();
-            List<FishBehaviour> fishToAvoidBehaviours = _school.GetFishToAvoidBehaviours();
-            for (int i = 0; i < fishToAvoid.Count; i++)
-            {
-                if (fishToAvoid[i] != gameObject)
-                {
-                    if (Vector3.Distance(transform.position, fishToAvoid[i].transform.position) < fishToAvoidBehaviours[i].GetThreatRange())
-                    {
-                        _fishThatsTooClose = fishToAvoid[i];
-                        _fishThatsTooCloseBehaviour = fishToAvoidBehaviours[i];
-                        _fishTooClose = true;
-                        return;
-                    }
-                }
-            }
-        }
-        else
-        {
-            if (Vector3.Distance(transform.position, _fishThatsTooClose.transform.position) > _fishThatsTooCloseBehaviour.GetThreatFleeRange())
-            {
-                _fishTooClose = false;
-                return;
-            }
-            else
-            {
-                return;
-            }
-        }
-        _fishTooClose = false;
+        _schoolFishLeaderBehaviour = schoolFishLeaderBehaviour;
     }
 
     private Vector3 Reflect(Vector3 _checkPoint, Vector3 _otherFishPos)
@@ -136,8 +142,15 @@ public class SchoolFishBehaviour : FishBehaviour
         return transform.position + (diff * 2 - new Vector3(0, 0, subtractingValue.z));
     }
 
-    public void SetSchoolFishLeader(SchoolFishLeaderBehaviour schoolFishLeaderBehaviour)
+    public bool IsFishTooClose()
     {
-        _schoolFishLeaderBehaviour = schoolFishLeaderBehaviour;
+        return _fishTooClose;
+    }
+
+    public void SetFishToAvoid(SchoolFishBehaviour _fishBehaviour)
+    {
+        _fishThatsTooCloseBehaviour = _fishBehaviour;
+        _fishThatsTooClose = _fishBehaviour.gameObject;
+        _fishTooClose = true;
     }
 }

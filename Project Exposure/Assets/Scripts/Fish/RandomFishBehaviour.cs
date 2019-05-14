@@ -9,9 +9,6 @@ public class RandomFishBehaviour : FishBehaviour
 
     private bool _hasAddedItselfToSchool = false;
 
-    [SerializeField]
-    private GameObject _dummy;
-
     // Start is called before the first frame update
     void Start()
     {
