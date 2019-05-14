@@ -129,5 +129,6 @@ public class SwarmAreaBehaviour : MonoBehaviour
         _behaviour = BehaviourMode.MoveTowardsArea;
         _expectedPosition = Vector3.zero;
         _rotationSpeed = 1;
+        Start();
     }
 }
