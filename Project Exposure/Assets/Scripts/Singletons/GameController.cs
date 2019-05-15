@@ -33,4 +33,5 @@ public static class SingleTons
     public static FishManager FishManager;
     public static QuestManager QuestManager;
     public static SoundWaveManager SoundWaveManager;
+    public static CollectionsManager CollectionsManager;
 }
