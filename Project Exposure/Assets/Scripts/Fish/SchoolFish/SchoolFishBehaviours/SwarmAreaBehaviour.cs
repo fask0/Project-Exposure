@@ -30,7 +30,7 @@ public class SwarmAreaBehaviour : MonoBehaviour
     void Start()
     {
         _fishBehaviour = GetComponent<FishBehaviour>();
-        _rigidBody = GetComponent<Rigidbody>();
+        //_rigidBody = GetComponent<Rigidbody>();
 
         //Get the swarm distance
         _swarmDist = _swarmArea.GetSwarmDistance();
@@ -77,7 +77,7 @@ public class SwarmAreaBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _rigidBody.velocity = Vector3.zero;
+        // _rigidBody.velocity = Vector3.zero;
 
         SwitchBehaviour();
         ActOnBehaviour();
