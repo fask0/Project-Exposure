@@ -21,10 +21,15 @@ public class FishBehaviour : FishBehaviourParent
 
     protected float _currentSpeed;
 
+    [SerializeField]
+    protected List<FishManager.AvoidableCreatures> _creaturesToAvoid = new List<FishManager.AvoidableCreatures>();
+
     // Start is called before the first frame update
     void Start()
     {
         _currentSpeed = _minSpeed;
+        SingleTons.FishManager.AddAvoidableCreature(_thisCreatureType, this);
+        Debug.Log("Added " + gameObject.name + " to " + _thisCreatureType);
     }
 
     // Update is called once per frame
