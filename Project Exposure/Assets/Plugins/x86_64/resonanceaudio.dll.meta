@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 8514ea8d6deab804895ec1cab6902681
+guid: 4c8fb9b92ea2eae4f9112a3941c4f128
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -14,29 +14,15 @@ PluginImporter:
   - first:
       '': OSXIntel
     second:
-      enabled: 1
+      enabled: 0
       settings:
-        CPU: None
+        CPU: AnyCPU
   - first:
       '': OSXIntel64
     second:
-      enabled: 1
-      settings:
-        CPU: AnyCPU
-  - first:
-      '': SamsungTV
-    second:
-      enabled: 0
-      settings:
-        STV_MODEL: STANDARD_13
-  - first:
-      '': WP8
-    second:
       enabled: 0
       settings:
         CPU: AnyCPU
-        DontProcess: False
-        PlaceholderPath: 
   - first:
       Android: Android
     second:
@@ -51,11 +37,11 @@ PluginImporter:
   - first:
       Editor: Editor
     second:
-      enabled: 1
+      enabled: 0
       settings:
         CPU: x86_64
         DefaultValueInitialized: true
-        OS: Windows
+        OS: AnyOS
   - first:
       Facebook: Win
     second:
@@ -71,27 +57,15 @@ PluginImporter:
   - first:
       Standalone: Linux
     second:
-      enabled: 1
+      enabled: 0
       settings:
-        CPU: AnyCPU
+        CPU: x86
   - first:
       Standalone: Linux64
     second:
-      enabled: 1
+      enabled: 0
       settings:
         CPU: x86_64
-  - first:
-      Standalone: LinuxUniversal
-    second:
-      enabled: 1
-      settings:
-        CPU: AnyCPU
-  - first:
-      Standalone: OSXUniversal
-    second:
-      enabled: 1
-      settings:
-        CPU: AnyCPU
   - first:
       Standalone: Win
     second:
@@ -104,22 +78,6 @@ PluginImporter:
       enabled: 1
       settings:
         CPU: AnyCPU
-  - first:
-      Windows Store Apps: WindowsStoreApps
-    second:
-      enabled: 0
-      settings:
-        CPU: AnyCPU
-        DontProcess: False
-        PlaceholderPath: 
-        SDK: AnySDK
-  - first:
-      iPhone: iOS
-    second:
-      enabled: 0
-      settings:
-        CompileFlags: 
-        FrameworkDependencies: 
   userData: 
   assetBundleName: 
   assetBundleVariant: 

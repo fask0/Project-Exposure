@@ -33,7 +33,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: Assets\FMOD Banks\Desktop\Master Bank.strings.bank
-  lastModified: 636929262809671147
+  lastModified: 636928359431483688
   LoadResult: 0
   FileSizes:
   - Name: 
@@ -118,7 +118,7 @@ MonoBehaviour:
   FileSizes:
   - Name: 
     Value: 13116
-  Exists: 1
+  Exists: 0
 --- !u!114 &-3308869829092629064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,15 +193,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EditorBanks:
   - {fileID: -7489165649470922562}
-  - {fileID: -4042237851960713503}
+  - {fileID: 5998869334056308222}
   EditorEvents:
   - {fileID: 6786716479342747201}
   MasterBanks:
-  - {fileID: -4042237851960713503}
+  - {fileID: 5998869334056308222}
   StringsBanks:
   - {fileID: -7489165649470922562}
-  stringsBankWriteTime: 636929262809671147
+  stringsBankWriteTime: 636928359431483688
   cacheVersion: 3
+--- !u!114 &5998869334056308222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: D:\Unity Projects\Project Exposure SOURCE TREE2\Project Exposure\Assets\FMOD
+    Banks\Desktop\Master Bank.bank
+  lastModified: 636928359431463619
+  LoadResult: 0
+  FileSizes:
+  - Name: 
+    Value: 13116
+  Exists: 1
 --- !u!114 &6786716479342747201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,7 +237,7 @@ MonoBehaviour:
   Path: event:/Player/Player
   guid: 6b513dd4dbe4e2498ca3e6c1a2e2ba29
   Banks:
-  - {fileID: -4042237851960713503}
+  - {fileID: 5998869334056308222}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
