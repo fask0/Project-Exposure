@@ -9,6 +9,7 @@ TagManager:
   - Target1
   - Target2
   - Target3
+  - Collectable
   layers:
   - Default
   - TransparentFX

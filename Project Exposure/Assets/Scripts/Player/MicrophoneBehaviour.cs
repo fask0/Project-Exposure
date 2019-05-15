@@ -1,16 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MicrophoneBehaviour : MonoBehaviour
 {
     private MeshCollider _collider;
     private SoundWaveManager _soundWaveManager;
+    private Transform _playerTransform;
 
     void Start()
     {
         _collider = GetComponent<MeshCollider>();
         _soundWaveManager = SingleTons.SoundWaveManager;
+
+        _playerTransform = GameObject.Find("Player").transform;
     }
 
     void Update()
@@ -22,7 +26,16 @@ public class MicrophoneBehaviour : MonoBehaviour
     {
         if (other.gameObject.layer == 10)
         {
-            _soundWaveManager.AddAudioSourceToPlayerSoundWave(other.GetComponent<AudioSource>());
+            SingleTons.SoundWaveManager.GetListeningToAll.Add(other.transform.gameObject);
+
+            foreach (string key in SingleTons.CollectionsManager.CollectedAudioSources.Keys)
+            {
+                if (other.transform.name == key)
+                {
+                    SingleTons.SoundWaveManager.GetListeningToCollected.Add(other.transform.gameObject);
+                    break;
+                }
+            }
         }
     }
 
@@ -30,11 +43,20 @@ public class MicrophoneBehaviour : MonoBehaviour
     {
         if (other.gameObject.layer == 10)
         {
-            _soundWaveManager.RemoveAudioSourceFromPlayerSoundWave(other.GetComponent<AudioSource>());
-            other.GetComponent<AudioSource>().volume = 0;
+            other.GetComponent<AudioSource>().maxDistance = SingleTons.CollectionsManager.GetMaxDistance;
 
             if (other.tag == string.Format("Target" + SingleTons.QuestManager.GetCurrentTargetIndex))
-                _soundWaveManager.HideProgress();
+                _soundWaveManager.HideProgress(other.transform.gameObject);
+
+            SingleTons.SoundWaveManager.GetListeningToAll.Remove(other.transform.gameObject);
+
+            for (int i = 0; i < SingleTons.SoundWaveManager.GetListeningToCollected.Count; i++)
+            {
+                if (other.transform.gameObject == SingleTons.SoundWaveManager.GetListeningToCollected[i])
+                {
+                    SingleTons.SoundWaveManager.GetListeningToCollected.RemoveAt(i);
+                }
+            }
         }
     }
 
@@ -43,28 +65,25 @@ public class MicrophoneBehaviour : MonoBehaviour
         if (other.gameObject.layer == 10)
         {
             AudioSource oSound = other.GetComponent<AudioSource>();
-            for (int i = 0; i < _soundWaveManager.GetPlayerSoundWaveAudioSourceList.Count; i++)
+            oSound.maxDistance = _collider.bounds.extents.z * 1.5f;
+
+            if (other.tag == string.Format("Target" + SingleTons.QuestManager.GetCurrentTargetIndex) || other.tag == "Collectable")
             {
-                if (oSound == _soundWaveManager.GetPlayerSoundWaveAudioSourceList[i])
+                for (int i = 0; i < SingleTons.SoundWaveManager.GetListeningToCollected.Count; i++)
+                    if (SingleTons.SoundWaveManager.GetListeningToCollected[i] == other) return;
+
+                if ((_playerTransform.position - other.transform.position).magnitude <= 5.0f)
                 {
-                    Vector3 micCentre = _collider.bounds.center;
-                    Vector3 oCentre = other.bounds.center;
-
-                    float vol = 1 - (((micCentre - oCentre).magnitude) / _collider.bounds.extents.z);
-                    if (Vector3.Dot(Camera.main.transform.forward, oCentre - micCentre) < 0)
-                        vol = 1;
-                    _soundWaveManager.GetPlayerSoundWaveAudioSourceList[i].volume = Mathf.Clamp(vol, 0.001f, 1);
+                    if (!SingleTons.CollectionsManager.IsCollected(other.transform.name))
+                    {
+                        _soundWaveManager.ScanObject(other.transform.gameObject);
+                        _soundWaveManager.ShowProgress(other.transform.gameObject);
+                    }
                 }
-            }
-
-            if (other.tag == string.Format("Target" + SingleTons.QuestManager.GetCurrentTargetIndex))
-            {
-                if ((transform.parent.transform.position - other.transform.position).magnitude <= 7.0f)
-                    _soundWaveManager.ShowProgress();
                 else
-                    _soundWaveManager.HideProgress();
-
-                _soundWaveManager.CompareOutput();
+                {
+                    _soundWaveManager.HideProgress(other.transform.gameObject);
+                }
             }
         }
     }
