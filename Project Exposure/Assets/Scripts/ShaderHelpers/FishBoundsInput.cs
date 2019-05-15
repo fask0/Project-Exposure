@@ -23,7 +23,5 @@ public class FishBoundsInput : MonoBehaviour
 
         float speed = transform.parent.GetComponent<FishBehaviour>().GetMinSpeed();
         renderer.material.SetFloat("_WobbleSpeed", speed * 100 * _multiplier);
-
-
     }
 }

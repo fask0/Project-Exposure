@@ -9,8 +9,9 @@ public class RandomFishBehaviour : FishBehaviour
 
     private bool _hasAddedItselfToSchool = false;
 
-    [SerializeField]
-    private GameObject _dummy;
+    private bool _fishTooClose = false;
+    private GameObject _fishThatsTooClose;
+    private FishBehaviourParent _fishThatsTooCloseBehaviour;
 
     // Start is called before the first frame update
     void Start()
@@ -29,25 +30,6 @@ public class RandomFishBehaviour : FishBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
-    {
-        if (_hasAddedItselfToSchool)
-        {
-            _dummy.transform.LookAt(_checkpoint, Vector3.up);
-
-            if (Vector3.Distance(transform.position, _checkpoint) < 8)
-            {
-                transform.rotation = Quaternion.Slerp(transform.rotation, _dummy.transform.rotation, Time.fixedDeltaTime * _turningSpeed * (Vector3.Distance(transform.position, _checkpoint)));
-            }
-            else
-            {
-                transform.rotation = Quaternion.Slerp(transform.rotation, _dummy.transform.rotation, Time.fixedDeltaTime * _turningSpeed);
-            }
-
-            transform.position += (transform.forward * Time.fixedDeltaTime * _minSpeed);
-        }
-    }
-
     private void Update()
     {
         if (!_hasAddedItselfToSchool)
@@ -61,6 +43,92 @@ public class RandomFishBehaviour : FishBehaviour
         {
             _checkpoint = _school.GenerateNewCheckPoint(transform.position);
         }
+
+        _rigidBody.velocity = Vector3.zero;
+
+        if (!_fishTooClose)
+        {
+            RotateTowardsCheckPoint();
+        }
+        else
+        {
+            RotateAwayFromFish();
+        }
+
+        SpeedUpAndDown();
+        transform.position += (transform.forward * Time.deltaTime * _currentSpeed);
+
+        if (!_fishTooClose)
+        {
+            //Iterate over creatures to avoid
+            foreach (FishManager.AvoidableCreatures creatureType in _creaturesToAvoid)
+            {
+                foreach (FishBehaviourParent fishBehaviour in SingleTons.FishManager.GetAvoidableCreatures(creatureType))
+                {
+                    AvoidFish(fishBehaviour);
+                }
+            }
+        }
+        else
+        {
+            //Check if still too close to certain creature
+            if (Vector3.Distance(transform.position, _fishThatsTooClose.transform.position) > _fishThatsTooCloseBehaviour.GetThreatFleeRange())
+            {
+                _fishTooClose = false;
+            }
+            return;
+        }
+    }
+
+    private void AvoidFish(FishBehaviourParent fish)
+    {
+        GameObject fishObj = fish.gameObject;
+        Vector3 fishPos = fishObj.transform.position;
+
+        if (Vector3.Distance(transform.position, fishPos) < fish.GetThreatRange())
+        {
+            _fishThatsTooClose = fishObj;
+            _fishThatsTooCloseBehaviour = fish;
+            _fishTooClose = true;
+            return;
+        }
+    }
+
+    private void RotateTowardsCheckPoint()
+    {
+        if (_hasAddedItselfToSchool)
+        {
+            _dummy.transform.LookAt(_checkpoint, Vector3.up);
+
+            transform.rotation = Quaternion.Lerp(transform.rotation, _dummy.transform.rotation, Time.fixedDeltaTime * _turningSpeed);
+        }
+    }
+
+    private void RotateAwayFromFish()
+    {
+        _dummy.transform.LookAt(Reflect(_checkpoint, _fishThatsTooClose.transform.position), Vector3.up);
+
+        transform.rotation = Quaternion.Lerp(transform.rotation, _dummy.transform.rotation, Time.fixedDeltaTime * _turningSpeed);
+    }
+
+    private void SpeedUpAndDown()
+    {
+        if (_fishTooClose)
+        {
+            _currentSpeed = Mathf.Lerp(_currentSpeed, Mathf.Min(_minSpeed * _fishThatsTooCloseBehaviour.GetThreatLevel(), _maxSpeed), Time.fixedDeltaTime * _speedUpRate);
+        }
+        else
+        {
+            _currentSpeed = Mathf.Lerp(_currentSpeed, _minSpeed, Time.fixedDeltaTime * _speedUpRate);
+        }
+    }
+
+    private Vector3 Reflect(Vector3 _checkPoint, Vector3 _otherFishPos)
+    {
+        Vector3 diff = transform.position - _otherFishPos;
+        Vector3 subtractingValue = (_checkPoint - transform.position).normalized * diff.magnitude;
+
+        return transform.position + (diff * 2 - new Vector3(0, 0, subtractingValue.z));
     }
 
     private bool InRangeOfCheckPoint()

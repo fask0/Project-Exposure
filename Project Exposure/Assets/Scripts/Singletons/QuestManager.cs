@@ -10,20 +10,11 @@ public class QuestManager : MonoBehaviour
 
     private AudioSource _soundDummyAudioSource;
 
-    //private PlayerSoundWaveBehaviour _playerSoundWaveBehaviour;
-    //private TargetSoundWaveBehaviour _targetSoundWaveBehaviour;
-
-    private bool _isListeningToTarget;
-    private float _scanDuration;
-
     void Start()
     {
         SingleTons.QuestManager = this;
         _currentTargetIndex = 0;
         _soundDummyAudioSource = GameObject.Find("TargetSoundDummy").GetComponent<AudioSource>();
-        //_playerSoundWaveBehaviour = GameObject.Find("PlayerSoundWave").GetComponent<PlayerSoundWaveBehaviour>();
-        //_targetSoundWaveBehaviour = GameObject.Find("TargetSoundWave").GetComponent<TargetSoundWaveBehaviour>();
-        //_scanDuration = 1.0f;
 
         for (int i = 0; i < 999; i++)
         {
@@ -35,44 +26,6 @@ public class QuestManager : MonoBehaviour
 
         SetTargetAudio(0);
     }
-
-    void Update()
-    {
-    }
-
-    //public void CompareOutput()
-    //{
-    //    float accuracy = 0;
-    //    float tries = 0;
-    //    float[] player = _playerSoundWaveBehaviour.GetOutpt();
-    //    float[] target = _targetSoundWaveBehaviour.GetOutpt();
-    //    for (int i = 0; i < target.Length; ++i)
-    //    {
-    //        tries++;
-    //        if (target[i] < 0)
-    //        {
-    //            if (target[i] == _playerSoundWaveBehaviour.GetOutpt()[i])
-    //                accuracy++;
-    //        }
-    //        else if (target[i] > 0)
-    //        {
-    //            if (target[i] == player[i])
-    //                accuracy++;
-    //        }
-    //    }
-    //    print(accuracy);
-
-    //    if (accuracy / tries >= 0.7f)
-    //    {
-    //        _scanDuration -= Time.deltaTime;
-    //        if (_scanDuration <= 0)
-    //        {
-    //            NextTargetAudio();
-    //            print("yay :)");
-    //            _scanDuration = 1;
-    //        }
-    //    }
-    //}
 
     public void SetTargetAudio(int pTargetIndex)
     {
@@ -99,11 +52,5 @@ public class QuestManager : MonoBehaviour
     public int GetCurrentTargetIndex
     {
         get { return _currentTargetIndex; }
-    }
-
-    public bool IsListeningToTarget
-    {
-        get { return _isListeningToTarget; }
-        set { _isListeningToTarget = value; }
     }
 }

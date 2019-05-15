@@ -9,8 +9,13 @@ public class SchoolFishLeaderBehaviour : FishBehaviour
 
     private bool _hasAddedItselfToSchool = false;
 
-    [SerializeField]
-    private GameObject _dummy;
+    [HideInInspector]
+    public List<GameObject> _schoolFishWithLeader = new List<GameObject>();
+    [HideInInspector]
+    public List<SchoolFishBehaviour> _schoolFishWithLeaderBehaviours = new List<SchoolFishBehaviour>();
+
+    private int fishCheckingIndex = 0;
+    private int fishCheckingSubdivision = 10;
 
     // Start is called before the first frame update
     void Start()
@@ -58,6 +63,40 @@ public class SchoolFishLeaderBehaviour : FishBehaviour
         {
             _checkpoint = _school.GenerateNewCheckPoint(transform.position);
         }
+
+        //Correct schoolfish movement
+        CorrectSchoolFishMovement();
+    }
+
+    private void CorrectSchoolFishMovement()
+    {
+        if (fishCheckingIndex > fishCheckingSubdivision)
+        {
+            fishCheckingIndex = 0;
+        }
+
+        float count = _schoolFishWithLeader.Count / (fishCheckingSubdivision + 1);
+        int startIndex = (int)(count * fishCheckingIndex);
+
+        for (int i = startIndex; i < startIndex + count; i++)
+        {
+            if (!_schoolFishWithLeaderBehaviours[i].IsFishTooClose())
+            {
+                for (int j = startIndex; j < _schoolFishWithLeader.Count; j++)
+                {
+                    if (j >= startIndex && j <= i) { continue; }
+
+                    if (Vector3.Distance(_schoolFishWithLeader[i].transform.position, _schoolFishWithLeader[j].transform.position) < _schoolFishWithLeaderBehaviours[j].GetThreatRange())
+                    {
+                        _schoolFishWithLeaderBehaviours[i].SetFishToAvoid(_schoolFishWithLeaderBehaviours[j]);
+                        _schoolFishWithLeaderBehaviours[j].SetFishToAvoid(_schoolFishWithLeaderBehaviours[i]);
+                        break;
+                    }
+                }
+            }
+        }
+
+        fishCheckingIndex++;
     }
 
     private bool InRangeOfCheckPoint()

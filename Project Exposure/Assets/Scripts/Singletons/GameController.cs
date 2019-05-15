@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    [HideInInspector] public GameObject Player;
 
     // Start is called before the first frame update
     void Start()
@@ -32,4 +33,5 @@ public static class SingleTons
     public static FishManager FishManager;
     public static QuestManager QuestManager;
     public static SoundWaveManager SoundWaveManager;
+    public static CollectionsManager CollectionsManager;
 }

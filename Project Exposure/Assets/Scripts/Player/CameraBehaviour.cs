@@ -33,18 +33,11 @@ public class CameraBehaviour : MonoBehaviour
             _rotX += -_joystickBehaviour.Vertical() * _inputSensitivity * Time.deltaTime;
             _rotY += _joystickBehaviour.Horizontal() * _inputSensitivity * Time.deltaTime;
 
-            _rotX = Mathf.Clamp(_rotX, -_clampAngle, _clampAngle);
+            float clamp = _clampAngle * Mathf.Abs(_joystickBehaviour.Vertical());
+            _rotX = Mathf.Clamp(_rotX, -clamp, clamp);
 
-            Quaternion localRotation = Quaternion.Euler(_rotX, _rotY, 0);
+            Quaternion localRotation = Quaternion.Slerp(transform.localRotation, Quaternion.Euler(_rotX, _rotY, 0), Time.deltaTime * 2);
             transform.rotation = localRotation;
-        }
-        else if (_joystickBehaviour.GetTimeIdle() > 2)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, _playerTransform.rotation, 2 * Time.deltaTime);
-            _rotX = transform.rotation.eulerAngles.x;
-            _rotY = transform.rotation.eulerAngles.y;
-
-            _rotX = (_rotX > 180) ? _rotX - 360 : _rotX;
         }
 
         if (_joystickBehaviour.Vertical() == 0)
@@ -52,6 +45,11 @@ public class CameraBehaviour : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, transform.eulerAngles.y, 0), Time.deltaTime);
             _rotX = transform.rotation.eulerAngles.x;
             _rotX = (_rotX > 180) ? _rotX - 360 : _rotX;
+        }
+
+        if (_joystickBehaviour.Horizontal() == 0)
+        {
+            _rotY = transform.localRotation.eulerAngles.y;
         }
     }
 
