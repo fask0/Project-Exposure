@@ -4,14 +4,10 @@ using UnityEngine;
 
 public class FishAvoider : FishBehaviourParent
 {
-
-
-
     private void Start()
     {
-        SingleTons.FishManager.AddFishAvoider(this);
+        SingleTons.FishManager.AddGlobalFishAvoider(this);
+        SingleTons.FishManager.AddAvoidableCreature(_thisCreatureType, this);
+        Debug.Log("Added " + gameObject.name + " to " + _thisCreatureType);
     }
-
-
-
 }

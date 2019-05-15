@@ -103,7 +103,7 @@ public class SwarmAreaBehaviour : MonoBehaviour
             case BehaviourMode.MoveTowardsArea:
                 _fishBehaviour.GetDummy().transform.LookAt(_expectedPosition, Vector3.up);
                 transform.rotation = Quaternion.Slerp(transform.rotation, _fishBehaviour.GetDummy().transform.rotation, Time.fixedDeltaTime * _fishBehaviour.GetTurningSpeed() * 10);
-                transform.position += (transform.forward * Time.fixedDeltaTime * _fishBehaviour.GetMinSpeed());
+                transform.position += (transform.forward * Time.fixedDeltaTime * _fishBehaviour.GetMaxSpeed());
                 break;
             case BehaviourMode.Swarm:
                 switch (_swarmFormation)
