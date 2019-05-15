@@ -7,8 +7,10 @@
 		_Glossiness("Smoothness", Range(0,1)) = 0.5
 		_Metallic("Metallic", Range(0,1)) = 0.0
 
-		_NoiseSpeed("NoiseSpeed", Range(0, 100)) = 10
+		_NoiseSpeed("NoiseSpeed", Range(0, 10)) = 1
 		_NoiseAmplifier("NoiseAmplifier", Range(0, 1)) = 0.2
+		_NoiseFrequency("NoiseFrequency", Range(0, 1)) = 0.1
+
 		_WaveDirection("WaveDirection", Vector) = (0,0,0,0)
 		_WaveAmplitude("WaveAmplitude", Range(0, 10)) = 1
 		_WaveLength("WaveLength", Range(0, 10)) = 3
@@ -21,16 +23,24 @@
 			Tags { "RenderType" = "Opaque" }
 			LOD 200
 			Cull Off
-			Zwrite Off
+			//Zwrite Off
 
 			CGPROGRAM
 			// Physically based Standard lighting model, and enable shadows on all light types
-			#pragma surface surf Standard fullforwardshadows addshadow vertex:vert alpha
+			#pragma surface surf Standard fullforwardshadows addshadow vertex:vert //alpha 
 
 			// Use shader model 3.0 target, to get nicer looking lighting
-			#pragma target 3.0
-
+			#pragma target 5.0
+			#include "noiseSimplex.cginc"
 			sampler2D _MainTex;
+
+		struct appdata
+		{
+			float4 vertex : POSITION;
+			float4 tangent : TANGENT;
+			float3 normal : NORMAL;
+			float2 texcoord : TEXCOORD0;
+		};
 
 			struct Input
 			{
@@ -44,35 +54,40 @@
 
 			// Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
 			// See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
-			// #pragma instancing_options assumeuniformscaling
-			UNITY_INSTANCING_BUFFER_START(Props)
-				// put more per-instance properties here
-				UNITY_INSTANCING_BUFFER_END(Props)
 
-				float4 _WaveDirection;
+			float4 _WaveDirection;
 			float _WaveAmplitude;
 			float _WaveLength;
 			float _WaveSpeed;
 			float _WaveSteepness;
 			float _NoiseAmplifier;
 			float _NoiseSpeed;
-			void vert(inout appdata_full v, out Input o)
+			float _NoiseFrequency;
+			void vert(inout appdata v, out Input o)
 			{
-				float3 startPos = v.vertex;
+				for (int i = 0; i < 2; i++)
+				{
+					float time = _Time;
+					if (i > 0)
+					{
+						time += 3.46f;
+					}
 
-				v.vertex.y += sin(v.vertex.x + v.vertex.z - (v.vertex.x * v.vertex.z) + (_Time * _NoiseSpeed)) * _NoiseAmplifier;
+					float3 startPos = v.vertex;
+					v.vertex.y += snoise((float3(v.vertex.xyz) + (time * _NoiseSpeed)) * _NoiseFrequency) * _NoiseAmplifier;// sin(v.vertex.x + v.vertex.z - (v.vertex.x * v.vertex.z) + (_Time * _NoiseSpeed)) * _NoiseAmplifier;
 
-				float2 dir = float2(_WaveDirection.x, _WaveDirection.z);
+					float2 dir = float2(_WaveDirection.x, _WaveDirection.z);
 
-				float wi = 2 / _WaveLength;
-				float Qi = _WaveSteepness / (_WaveAmplitude * wi * 10);
-				float phi = _WaveSpeed * wi;
-				float rad = dot(dir, v.vertex.xz) * wi + _Time * phi;
-				v.vertex.y += sin(rad) * _WaveAmplitude;
-				v.vertex.xz += cos(rad) * _WaveAmplitude * Qi * dir;
+					float wi = 2 / _WaveLength;
+					float Qi = _WaveSteepness / (_WaveAmplitude * wi * 10);//10);
+					float phi = _WaveSpeed * wi;
+					float rad = dot(dir, v.vertex.xz) * wi + time * phi;
+					v.vertex.y += sin(rad) * _WaveAmplitude;
+					v.vertex.xz += cos(rad) * _WaveAmplitude * Qi * dir;
 
-				UNITY_INITIALIZE_OUTPUT(Input, o);
-				o.vertexPos = v.vertex;
+					UNITY_INITIALIZE_OUTPUT(Input, o);
+					o.vertexPos = v.vertex * v.normal;
+				}
 			}
 
 			float _WaveColorAmplifier;

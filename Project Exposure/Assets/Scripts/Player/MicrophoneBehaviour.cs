@@ -26,6 +26,9 @@ public class MicrophoneBehaviour : MonoBehaviour
     {
         if (other.gameObject.layer == 10)
         {
+            AudioSource oSound = other.GetComponent<AudioSource>();
+            oSound.maxDistance = _collider.bounds.extents.z * 1.5f;
+
             SingleTons.SoundWaveManager.GetListeningToAll.Add(other.transform.gameObject);
 
             foreach (string key in SingleTons.CollectionsManager.CollectedAudioSources.Keys)
@@ -64,9 +67,6 @@ public class MicrophoneBehaviour : MonoBehaviour
     {
         if (other.gameObject.layer == 10)
         {
-            AudioSource oSound = other.GetComponent<AudioSource>();
-            oSound.maxDistance = _collider.bounds.extents.z * 1.5f;
-
             if (other.tag == string.Format("Target" + SingleTons.QuestManager.GetCurrentTargetIndex) || other.tag == "Collectable")
             {
                 for (int i = 0; i < SingleTons.SoundWaveManager.GetListeningToCollected.Count; i++)

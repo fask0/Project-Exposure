@@ -4,13 +4,23 @@ using UnityEngine;
 
 public class SeaWeedBoundsInput : MonoBehaviour
 {
-
     new Renderer renderer;
 
     // Start is called before the first frame update
     void Start()
     {
         renderer = GetComponent<Renderer>();
-        renderer.material.SetFloat("_SeaWeedHeight", (renderer.bounds.size.y / 2) / transform.localScale.y);
+
+        float rand = SingleTons.GameController.GetRandomRange(1, 1000);
+        renderer.material.SetFloat("_Offset", rand);
+
+        renderer.material.SetFloat("_HighestY", transform.position.y + renderer.bounds.extents.y);
+        renderer.material.SetFloat("_LowestY", transform.position.y - renderer.bounds.extents.y);
     }
+
+    //private void Update()
+    //{
+    //    renderer.material.SetFloat("_HighestY", transform.position.y + renderer.bounds.extents.y);
+    //    renderer.material.SetFloat("_LowestY", transform.position.y - renderer.bounds.extents.y);
+    //}
 }

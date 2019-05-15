@@ -5,16 +5,16 @@ using UnityEngine;
 
 public class FishZone : MonoBehaviour
 {
-    private List<GameObject> _fishToAvoid;
-    private List<FishBehaviour> _fishToAvoidBehaviours;
-    private List<GameObject> _otherFish;
+    private List<GameObject> _fishToAvoid = new List<GameObject>();
+    private List<FishBehaviour> _fishToAvoidBehaviours = new List<FishBehaviour>();
+    private List<GameObject> _otherFish = new List<GameObject>();
 
     //School fish stuff
-    private List<GameObject> _schoolFish;
-    private List<SchoolFishBehaviour> _schoolFishBehaviours;
+    private List<GameObject> _schoolFish = new List<GameObject>();
+    private List<SchoolFishBehaviour> _schoolFishBehaviours = new List<SchoolFishBehaviour>();
 
-    private List<GameObject> _leaders;
-    private List<SchoolFishLeaderBehaviour> _leaderBehaviours;
+    private List<GameObject> _leaders = new List<GameObject>();
+    private List<SchoolFishLeaderBehaviour> _leaderBehaviours = new List<SchoolFishLeaderBehaviour>();
     private int _leaderIndex = 0;
 
     [SerializeField]
@@ -25,15 +25,7 @@ public class FishZone : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _schoolFish = new List<GameObject>();
-        _schoolFishBehaviours = new List<SchoolFishBehaviour>();
-
-        _otherFish = new List<GameObject>();
-        _fishToAvoid = new List<GameObject>();
-        _fishToAvoidBehaviours = new List<FishBehaviour>();
-
-        _leaders = new List<GameObject>();
-        _leaderBehaviours = new List<SchoolFishLeaderBehaviour>();
+        SingleTons.FishManager.AddFishZone(this);
     }
 
     // Update is called once per frame
@@ -57,6 +49,8 @@ public class FishZone : MonoBehaviour
                 _schoolFishBehaviours.Add(Fish.GetComponent<SchoolFishBehaviour>());
                 _schoolFish.Add(Fish);
                 _schoolFishBehaviours[_schoolFishBehaviours.Count - 1].SetSchoolFishLeader(_leaderBehaviours[_leaderIndex]);
+                _leaderBehaviours[_leaderIndex]._schoolFishWithLeader.Add(Fish);
+                _leaderBehaviours[_leaderIndex]._schoolFishWithLeaderBehaviours.Add(Fish.GetComponent<SchoolFishBehaviour>());
                 _leaderIndex++;
                 if (_leaderIndex >= _leaders.Count) { _leaderIndex = 0; }
             }

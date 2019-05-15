@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class FishBehaviour : MonoBehaviour
+public class FishBehaviour : FishBehaviourParent
 {
     protected Rigidbody _rigidBody;
 
@@ -17,14 +17,7 @@ public class FishBehaviour : MonoBehaviour
     [Range(0, 100)]
     protected float _speedUpRate = 10;
     [SerializeField]
-    [Range(0, 50)]
-    protected float _threatRange = 5;
-    [SerializeField]
-    [Range(0, 50)]
-    protected float _threatFleeRange = 5;
-    [SerializeField]
-    [Range(0, 10)]
-    protected float _threatLevel;
+    protected GameObject _dummy;
 
     protected float _currentSpeed;
 
@@ -50,27 +43,37 @@ public class FishBehaviour : MonoBehaviour
         return _maxSpeed;
     }
 
-    public float GetThreatRange()
+    public float GetTurningSpeed()
     {
-        return _threatRange;
+        return _turningSpeed;
     }
 
-    public float GetThreatFleeRange()
+    public GameObject GetDummy()
     {
-        return _threatFleeRange;
+        return _dummy;
     }
 
-    public float GetThreatLevel()
-    {
-        return _threatLevel;
-    }
+    //public float GetThreatRange()
+    //{
+    //    return _threatRange;
+    //}
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, _threatRange);
+    //public float GetThreatFleeRange()
+    //{
+    //    return _threatFleeRange;
+    //}
 
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, _threatFleeRange);
-    }
+    //public float GetThreatLevel()
+    //{
+    //    return _threatLevel;
+    //}
+
+    //private void OnDrawGizmosSelected()
+    //{
+    //    Gizmos.color = Color.blue;
+    //    Gizmos.DrawWireSphere(transform.position, _threatRange);
+
+    //    Gizmos.color = Color.cyan;
+    //    Gizmos.DrawWireSphere(transform.position, _threatFleeRange);
+    //}
 }
