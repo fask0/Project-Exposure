@@ -38,8 +38,8 @@ public class JoystickBehaviour : MonoBehaviour, IDragHandler, IPointerUpHandler,
             _inputVector = new Vector3(position.x * 2 + 1, position.y * 2 - 1, 0);
             _inputVector = (_inputVector.magnitude > 1) ? _inputVector.normalized : _inputVector;
 
-            _button.rectTransform.anchoredPosition = new Vector3(_inputVector.x * (_background.rectTransform.sizeDelta.x * 0.35f),
-                                                                 _inputVector.y * (_background.rectTransform.sizeDelta.y * 0.35f),
+            _button.rectTransform.anchoredPosition = new Vector3(_inputVector.x * (_background.rectTransform.sizeDelta.x * 0.4f),
+                                                                 _inputVector.y * (_background.rectTransform.sizeDelta.y * 0.4f),
                                                                  0);
         }
 
