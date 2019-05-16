@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class SoundWaveManager : MonoBehaviour
 {
+    [SerializeField] private int _heightMultiplier = 300;
+
     private const int SpectrumSize = 4096;
 
     //PlayerSoundWave Fields
@@ -274,7 +276,7 @@ public class SoundWaveManager : MonoBehaviour
         _generalLineWidth = width;
 
         pLineRenderer.positionCount = pViewSpectrum.Count;
-        pLineRenderer.SetPositions(pViewSpectrum.Select((x, i) => new Vector3((-width / 2) + i * pointDistance, (x * 125 < 65) ? x * 150 : 65, 0) + pOffset).ToArray());
+        pLineRenderer.SetPositions(pViewSpectrum.Select((x, i) => new Vector3((-width / 2) + i * pointDistance, (x * _heightMultiplier < 65) ? x * _heightMultiplier : 65, 0) + pOffset).ToArray());
     }
 
     public void AddSource(GameObject pGameObject)
