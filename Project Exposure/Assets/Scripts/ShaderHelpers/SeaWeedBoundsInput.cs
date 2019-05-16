@@ -18,10 +18,4 @@ public class SeaWeedBoundsInput : MonoBehaviour
         renderer.material.SetFloat("_HighestY", renderer.bounds.center.y + renderer.bounds.extents.y);
         renderer.material.SetFloat("_LowestY", renderer.bounds.center.y - renderer.bounds.extents.y);
     }
-
-    private void Update()
-    {
-        renderer.material.SetFloat("_HighestY", renderer.bounds.center.y + renderer.bounds.extents.y);
-        renderer.material.SetFloat("_LowestY", renderer.bounds.center.y - renderer.bounds.extents.y);
-    }
 }
