@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7741553501933906566
+--- !u!1 &5136450891210423900
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,9 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6716235095979939989}
-  - component: {fileID: 2337326988964553379}
-  - component: {fileID: 8310077993491996250}
+  - component: {fileID: 8147872677730913359}
+  - component: {fileID: 884968016440997497}
+  - component: {fileID: 6878264177535208064}
   m_Layer: 0
   m_Name: Rock3
   m_TagString: Untagged
@@ -18,35 +18,35 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6716235095979939989
+--- !u!4 &8147872677730913359
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7741553501933906566}
+  m_GameObject: {fileID: 5136450891210423900}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.76, y: 0.92283535, z: -17.91}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 13.17, y: 6.873355, z: -5.81}
+  m_LocalScale: {x: 1.2394794, y: 1.2394794, z: 1.2394794}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &2337326988964553379
+--- !u!33 &884968016440997497
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7741553501933906566}
-  m_Mesh: {fileID: 7126982261743312174, guid: 67e3579de9fecbd4495072cf8eac4e1c, type: 3}
---- !u!23 &8310077993491996250
+  m_GameObject: {fileID: 5136450891210423900}
+  m_Mesh: {fileID: 7126982261743312174, guid: bff863259fde0644b8c1b761b9da875a, type: 3}
+--- !u!23 &6878264177535208064
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7741553501933906566}
+  m_GameObject: {fileID: 5136450891210423900}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
