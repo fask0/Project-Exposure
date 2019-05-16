@@ -52,7 +52,7 @@ public class SoundWaveManager : MonoBehaviour
 
     void Update()
     {
-        //UpdatePlayerSoundWave();
+        UpdatePlayerSoundWave();
         UpdateTargetSoundWave();
     }
 
