@@ -5,6 +5,8 @@ using UnityEngine;
 public class FishBehaviourParent : MonoBehaviour
 {
     [SerializeField]
+    protected FishManager.AvoidableCreatures _thisCreatureType = FishManager.AvoidableCreatures.Other;
+    [SerializeField]
     [Range(0, 50)]
     protected float _threatRange = 5;
     [SerializeField]
@@ -15,6 +17,12 @@ public class FishBehaviourParent : MonoBehaviour
     protected float _threatLevel;
     [SerializeField]
     private bool _drawRange = false;
+
+    private void Start()
+    {
+        SingleTons.FishManager.AddAvoidableCreature(_thisCreatureType, this);
+        Debug.Log("Added " + gameObject.name + " to " + _thisCreatureType);
+    }
 
     public float GetThreatRange()
     {

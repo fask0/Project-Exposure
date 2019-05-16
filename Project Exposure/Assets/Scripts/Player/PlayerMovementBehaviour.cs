@@ -18,6 +18,8 @@ public class PlayerMovementBehaviour : MonoBehaviour
         _waterResistance = _acceleration * 0.5f;
         _rigidbody = GetComponent<Rigidbody>();
         _joystickBehaviour = GameObject.Find("Joystick").GetComponent<JoystickBehaviour>();
+
+        SingleTons.GameController.Player = this.gameObject;
     }
 
     void Update()

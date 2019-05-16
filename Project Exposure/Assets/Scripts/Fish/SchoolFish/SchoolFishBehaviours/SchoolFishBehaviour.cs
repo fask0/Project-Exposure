@@ -8,19 +8,15 @@ public class SchoolFishBehaviour : FishBehaviour
     private SchoolFishLeaderBehaviour _schoolFishLeaderBehaviour;
 
     private bool _hasAddedItselfToSchool = false;
+
     private bool _fishTooClose = false;
     private GameObject _fishThatsTooClose;
     private FishBehaviourParent _fishThatsTooCloseBehaviour;
 
-    [SerializeField]
-    private float _avoidFishRange = 3;
-    [SerializeField]
-    private float _keepAvoidingFishRange = 5;
-
     // Start is called before the first frame update
     void Start()
     {
-        _rigidBody = GetComponent<Rigidbody>();
+        //_rigidBody = GetComponent<Rigidbody>();
     }
 
     private void GetSchool()
@@ -33,24 +29,17 @@ public class SchoolFishBehaviour : FishBehaviour
         }
     }
 
-    // Update is called once per frame
-    //void FixedUpdate()
-    //{
-    //    if (!_fishTooClose)
-    //    {
-    //        RotateTowardsCheckPoint();
-    //    }
-    //    else
-    //    {
-    //        RotateAwayFromFish();
-    //    }
-
-    //    SpeedUpAndDown();
-    //    transform.position += (transform.forward * Time.fixedDeltaTime * _currentSpeed);
-    //}
-
     private void Update()
     {
+        //Add itself to school
+        if (!_hasAddedItselfToSchool)
+        {
+            GetSchool();
+            _hasAddedItselfToSchool = true;
+        }
+
+        //_rigidBody.velocity = Vector3.zero;
+
         if (!_fishTooClose)
         {
             RotateTowardsCheckPoint();
@@ -63,41 +52,40 @@ public class SchoolFishBehaviour : FishBehaviour
         SpeedUpAndDown();
         transform.position += (transform.forward * Time.deltaTime * _currentSpeed);
 
-
-        _rigidBody.velocity = Vector3.zero;
-
-        if (!_hasAddedItselfToSchool)
-        {
-            GetSchool();
-            _hasAddedItselfToSchool = true;
-        }
-
         if (!_fishTooClose)
         {
-            //Other things to avoid
-            for (int i = 0; i < SingleTons.FishManager.GetFishAvoiders().Count; i++)
+            //Iterate over creatures to avoid
+            foreach (FishManager.AvoidableCreatures creatureType in _creaturesToAvoid)
             {
-                if (SingleTons.FishManager.GetFishAvoiders()[i] != gameObject)
+                foreach (FishBehaviourParent fishBehaviour in SingleTons.FishManager.GetAvoidableCreatures(creatureType))
                 {
-                    if (Vector3.Distance(transform.position, SingleTons.FishManager.GetFishAvoiders()[i].transform.position) < SingleTons.FishManager.GetFishAvoiders()[i].GetThreatRange())
-                    {
-                        _fishThatsTooClose = SingleTons.FishManager.GetFishAvoiders()[i].gameObject;
-                        _fishThatsTooCloseBehaviour = SingleTons.FishManager.GetFishAvoiders()[i];
-                        _fishTooClose = true;
-                        return;
-                    }
+                    AvoidFish(fishBehaviour);
                 }
             }
         }
         else
         {
+            //Check if still too close to certain creature
             if (Vector3.Distance(transform.position, _fishThatsTooClose.transform.position) > _fishThatsTooCloseBehaviour.GetThreatFleeRange())
             {
                 _fishTooClose = false;
             }
             return;
         }
-        _fishTooClose = false;
+    }
+
+    private void AvoidFish(FishBehaviourParent fish)
+    {
+        GameObject fishObj = fish.gameObject;
+        Vector3 fishPos = fishObj.transform.position;
+
+        if (Vector3.Distance(transform.position, fishPos) < fish.GetThreatRange())
+        {
+            _fishThatsTooClose = fishObj;
+            _fishThatsTooCloseBehaviour = fish;
+            _fishTooClose = true;
+            return;
+        }
     }
 
     private void SpeedUpAndDown()

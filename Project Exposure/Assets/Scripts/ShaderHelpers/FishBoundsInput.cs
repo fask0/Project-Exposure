@@ -14,15 +14,14 @@ public class FishBoundsInput : MonoBehaviour
     void Start()
     {
         renderer = GetComponent<Renderer>();
-        var mat = new Material(renderer.sharedMaterial);
 
         float length = Mathf.Max(renderer.bounds.size.x, renderer.bounds.size.z, renderer.bounds.size.y);
-        mat.SetFloat("_FishLength", (length / 2) / transform.localScale.x);
+        renderer.material.SetFloat("_FishLength", (length / 2) / transform.localScale.x);
 
         float rand = SingleTons.GameController.GetRandomRange(0, 1);
-        mat.SetFloat("_Offset", rand);
+        renderer.material.SetFloat("_Offset", rand);
 
         float speed = transform.parent.GetComponent<FishBehaviour>().GetMinSpeed();
-        mat.SetFloat("_WobbleSpeed", speed * 100 * _multiplier);
+        renderer.material.SetFloat("_WobbleSpeed", speed * 100 * _multiplier);
     }
 }

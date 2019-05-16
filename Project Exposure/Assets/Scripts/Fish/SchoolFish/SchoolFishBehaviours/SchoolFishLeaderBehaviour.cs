@@ -9,13 +9,13 @@ public class SchoolFishLeaderBehaviour : FishBehaviour
 
     private bool _hasAddedItselfToSchool = false;
 
+    [HideInInspector]
     public List<GameObject> _schoolFishWithLeader = new List<GameObject>();
+    [HideInInspector]
     public List<SchoolFishBehaviour> _schoolFishWithLeaderBehaviours = new List<SchoolFishBehaviour>();
-    private int fishCheckingIndex = 0;
-    private int fishCheckingSubdivision = 3;
 
-    [SerializeField]
-    private GameObject _dummy;
+    private int fishCheckingIndex = 0;
+    private int fishCheckingSubdivision = 10;
 
     // Start is called before the first frame update
     void Start()
@@ -82,8 +82,10 @@ public class SchoolFishLeaderBehaviour : FishBehaviour
         {
             if (!_schoolFishWithLeaderBehaviours[i].IsFishTooClose())
             {
-                for (int j = i + 1; j < startIndex + count; j++)
+                for (int j = startIndex; j < _schoolFishWithLeader.Count; j++)
                 {
+                    if (j >= startIndex && j <= i) { continue; }
+
                     if (Vector3.Distance(_schoolFishWithLeader[i].transform.position, _schoolFishWithLeader[j].transform.position) < _schoolFishWithLeaderBehaviours[j].GetThreatRange())
                     {
                         _schoolFishWithLeaderBehaviours[i].SetFishToAvoid(_schoolFishWithLeaderBehaviours[j]);
