@@ -145,7 +145,7 @@ public class SoundWaveManager : MonoBehaviour
                 float xPos = 0.0f;
                 if (_listeningToCollected.Count == 1)
                 {
-                    xScale = 0.98f;
+                    xScale = 0.9755f;
                     xPos = 1.0f;
                 }
                 else if (_listeningToCollected.Count == 2)
