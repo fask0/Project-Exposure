@@ -30,12 +30,15 @@ public class SoundWaveManager : MonoBehaviour
     //0
     private LineRenderer _playerCollectedLineRenderer0;
     private Image _playerCollectedLineRendererBackground0;
+    private Color[,] _playerCollectedBackgroundColors0;
     //1
     private LineRenderer _playerCollectedLineRenderer1;
     private Image _playerCollectedLineRendererBackground1;
+    private Color[,] _playerCollectedBackgroundColors1;
     //2
     private LineRenderer _playerCollectedLineRenderer2;
     private Image _playerCollectedLineRendererBackground2;
+    private Color[,] _playerCollectedBackgroundColors2;
 
     private float[] _individualOutputData;
 
@@ -72,10 +75,16 @@ public class SoundWaveManager : MonoBehaviour
         _texHeight = _playerLeftBackground.sprite.texture.height;
 
         _playerLeftBackgroundColors = new Color[_texWidth, _texHeight];
-        _playerSoundWaveLeft.transform.localPosition += new Vector3(-_texWidth - 20, 0, 0);
+        _playerSoundWaveLeft.transform.localPosition += new Vector3(-_texWidth - 21, 0, 0);
 
         _playerRightBackgroundColors = new Color[_texWidth, _texHeight];
-        _playerSoundWaveRight.transform.localPosition += new Vector3(_texWidth + 20, 0, 0);
+        _playerSoundWaveRight.transform.localPosition += new Vector3(_texWidth + 21, 0, 0);
+
+        _targetBackgroundColors = new Color[_texWidth, _texHeight];
+
+        _playerCollectedBackgroundColors0 = new Color[_texWidth, _texHeight];
+        _playerCollectedBackgroundColors1 = new Color[_texWidth, _texHeight];
+        _playerCollectedBackgroundColors2 = new Color[_texWidth, _texHeight];
     }
 
     void Update()
@@ -94,7 +103,7 @@ public class SoundWaveManager : MonoBehaviour
         //Right
         _playerSoundWaveRight = GameObject.Find("PlayerSoundWaveRight");
         _playerLineRendererRight = _playerSoundWaveRight.GetComponent<LineRenderer>();
-        _playerLeftBackground = _playerSoundWaveRight.transform.GetChild(0).GetComponent<Image>();
+        _playerRightBackground = _playerSoundWaveRight.transform.GetChild(0).GetComponent<Image>();
         _playerOutputDataRight = new float[SpectrumSize];
 
         //Collected
@@ -125,8 +134,10 @@ public class SoundWaveManager : MonoBehaviour
         for (int i = 0; i < _listeningToCollected.Count; i++)
         {
             _listeningToCollected[i].GetComponent<AudioSource>().GetSpectrumData(_individualOutputData, 0, FFTWindow.BlackmanHarris);
-            List<float> individualView = new List<float>();
-            FillListWithSamples(individualView, _individualOutputData);
+
+            //Line Renderer
+            //List<float> individualView = new List<float>();
+            //FillListWithSamples(individualView, _individualOutputData);
 
             if (i == 0)
             {
@@ -134,12 +145,12 @@ public class SoundWaveManager : MonoBehaviour
                 float xPos = 0.0f;
                 if (_listeningToCollected.Count == 1)
                 {
-                    xScale = 1.0f;
+                    xScale = 0.98f;
                     xPos = 1.0f;
                 }
                 else if (_listeningToCollected.Count == 2)
                 {
-                    xScale = 0.48f;
+                    xScale = 0.475f;
                     xPos = 0.35f;
                 }
                 else if (_listeningToCollected.Count == 3)
@@ -151,10 +162,14 @@ public class SoundWaveManager : MonoBehaviour
                 _playerCollectedLineRenderer0.enabled = true;
                 _playerCollectedLineRendererBackground0.enabled = true;
                 _playerCollectedLineRenderer0.gameObject.transform.localScale = new Vector3(xScale, _playerCollectedLineRenderer0.gameObject.transform.localScale.y, 1);
-                _playerCollectedLineRenderer0.gameObject.transform.localPosition = new Vector3(-(_generalLineWidth * 0.5f) * (1 - xPos),
+                _playerCollectedLineRenderer0.gameObject.transform.localPosition = new Vector3(-(_texWidth * 0.00065f * 0.5f) * (1 - xPos),
                                                                                                 _playerCollectedLineRenderer0.gameObject.transform.localPosition.y,
                                                                                                 _playerCollectedLineRenderer0.gameObject.transform.localPosition.z);
-                SetLinePoints(individualView, _playerCollectedLineRenderer0);
+                //Line Renderer
+                //SetLinePoints(individualView, _playerCollectedLineRenderer0);
+
+                //Texture
+                GenerateSoundWaveColorArray(_playerCollectedLineRendererBackground0, _playerCollectedBackgroundColors0, _individualOutputData);
             }
             else if (i == 1)
             {
@@ -162,7 +177,7 @@ public class SoundWaveManager : MonoBehaviour
                 float xPos = 0.0f;
                 if (_listeningToCollected.Count == 2)
                 {
-                    xScale = 0.48f;
+                    xScale = 0.475f;
                     xPos = 0.35f;
                 }
                 else if (_listeningToCollected.Count == 3)
@@ -174,10 +189,14 @@ public class SoundWaveManager : MonoBehaviour
                 _playerCollectedLineRenderer1.enabled = true;
                 _playerCollectedLineRendererBackground1.enabled = true;
                 _playerCollectedLineRenderer1.gameObject.transform.localScale = new Vector3(xScale, _playerCollectedLineRenderer1.gameObject.transform.localScale.y, 1);
-                _playerCollectedLineRenderer1.gameObject.transform.localPosition = new Vector3((_generalLineWidth * 0.5f) * (1 - xPos),
+                _playerCollectedLineRenderer1.gameObject.transform.localPosition = new Vector3((_texWidth * 0.00065f * 0.5f) * (1 - xPos),
                                                                                                 _playerCollectedLineRenderer1.gameObject.transform.localPosition.y,
                                                                                                 _playerCollectedLineRenderer1.gameObject.transform.localPosition.z);
-                SetLinePoints(individualView, _playerCollectedLineRenderer1);
+                //Line Renderer
+                //SetLinePoints(individualView, _playerCollectedLineRenderer1);
+
+                //Texture
+                GenerateSoundWaveColorArray(_playerCollectedLineRendererBackground1, _playerCollectedBackgroundColors1, _individualOutputData);
             }
             else if (i == 2)
             {
@@ -192,10 +211,14 @@ public class SoundWaveManager : MonoBehaviour
                 _playerCollectedLineRenderer2.enabled = true;
                 _playerCollectedLineRendererBackground2.enabled = true;
                 _playerCollectedLineRenderer2.gameObject.transform.localScale = new Vector3(xScale, _playerCollectedLineRenderer2.gameObject.transform.localScale.y, 1);
-                _playerCollectedLineRenderer2.gameObject.transform.localPosition = new Vector3((_generalLineWidth * 0.5f) * (1 - xPos),
+                _playerCollectedLineRenderer2.gameObject.transform.localPosition = new Vector3((_texWidth * 0.00065f * 0.5f) * (1 - xPos),
                                                                                                 _playerCollectedLineRenderer2.gameObject.transform.localPosition.y,
                                                                                                 _playerCollectedLineRenderer2.gameObject.transform.localPosition.z);
-                SetLinePoints(individualView, _playerCollectedLineRenderer2);
+                //Line Renderer
+                //SetLinePoints(individualView, _playerCollectedLineRenderer2);
+
+                //Texture
+                GenerateSoundWaveColorArray(_playerCollectedLineRendererBackground2, _playerCollectedBackgroundColors2, _individualOutputData);
             }
 
             for (int j = 0; j < SpectrumSize; j++)
@@ -209,17 +232,20 @@ public class SoundWaveManager : MonoBehaviour
 
         /**
         //Update Line Renderer
+        //Left
         List<float> playerViewSpectrumLeft = new List<float>();
-        List<float> playerViewSpectrumRight = new List<float>();
         FillListWithSamples(playerViewSpectrumLeft, _playerOutputDataLeft, subtractOutput);
-        FillListWithSamples(playerViewSpectrumRight, _playerOutputDataRight, subtractOutput);
         SetLinePoints(playerViewSpectrumLeft, _playerLineRendererLeft);
-        SetLinePoints(playerViewSpectrumRight, _playerLineRendererRight);
         _playerSoundWaveLeft.transform.localPosition = new Vector3(-_generalLineWidth * 3600 * 0.5f, _playerSoundWaveLeft.transform.localPosition.y, _playerSoundWaveLeft.transform.localPosition.z);
+        //Right
+        List<float> playerViewSpectrumRight = new List<float>();
+        FillListWithSamples(playerViewSpectrumRight, _playerOutputDataRight, subtractOutput);
+        SetLinePoints(playerViewSpectrumRight, _playerLineRendererRight);
         _playerSoundWaveRight.transform.localPosition = new Vector3(_generalLineWidth * 3600 * 0.5f, _playerSoundWaveRight.transform.localPosition.y, _playerSoundWaveRight.transform.localPosition.z);
         /**/
         //Update Texture
-        GenerateSoundWaveColorArray(_playerLeftBackground, _playerLeftBackgroundColors);
+        GenerateSoundWaveColorArray(_playerLeftBackground, _playerLeftBackgroundColors, _playerOutputDataLeft);
+        GenerateSoundWaveColorArray(_playerRightBackground, _playerRightBackgroundColors, _playerOutputDataRight);
         /**/
     }
 
@@ -229,6 +255,7 @@ public class SoundWaveManager : MonoBehaviour
         _targetSoundWave.transform.localPosition += new Vector3(-625, 0, 0);
         _targetAudioSource = GameObject.Find("TargetSoundDummy").GetComponent<AudioSource>();
         _targetLineLineRenderer = _targetSoundWave.GetComponent<LineRenderer>();
+        _targetBackground = _targetSoundWave.transform.GetChild(0).GetComponent<Image>();
         _targetOutputData = new float[SpectrumSize];
     }
 
@@ -246,9 +273,16 @@ public class SoundWaveManager : MonoBehaviour
         }
 
         _targetAudioSource.GetSpectrumData(_targetOutputData, 0, FFTWindow.BlackmanHarris);
+
+        /**
+        //Update Line Renderer
         List<float> targetViewSpectrum = new List<float>();
         FillListWithSamples(targetViewSpectrum, _targetOutputData);
         SetLinePoints(targetViewSpectrum, _targetLineLineRenderer);
+        /**/
+        //Update Texture
+        GenerateSoundWaveColorArray(_targetBackground, _targetBackgroundColors, _targetOutputData);
+        /**/
     }
 
     public void ScanObject(GameObject pScannedObject)
@@ -338,7 +372,7 @@ public class SoundWaveManager : MonoBehaviour
         pLineRenderer.SetPositions(pViewSpectrum.Select((x, i) => new Vector3((-width / 2) + i * pointDistance, (x * _heightMultiplier < 65) ? x * _heightMultiplier : 65, 0)).ToArray());
     }
 
-    private void GenerateSoundWaveColorArray(Image pImage, Color[,] pSaveArray)
+    private void GenerateSoundWaveColorArray(Image pImage, Color[,] pSaveArray, float[] pSpectrum)
     {
         Color[] total = new Color[_texWidth * _texHeight];
         int index = 0;
@@ -353,7 +387,7 @@ public class SoundWaveManager : MonoBehaviour
                 if (index < SpectrumSize)
                 {
                     float d = 0.0f;
-                    d = _playerOutputDataLeft[index];
+                    d = pSpectrum[index];
                     b = Mathf.Max(d, b);
                 }
                 if (index == (_texWidth * _texHeight) - 1)
@@ -368,11 +402,15 @@ public class SoundWaveManager : MonoBehaviour
                             pSaveArray[x, i] = new Vector4(delta + 0.5f, delta * 0.1f + 0.5f, 0, 1);
                         }
                         else
+                        {
                             pSaveArray[x, i] = Color.black;
+                        }
                     }
                 }
 
                 total[index] = pSaveArray[y, x];
+                if (total[index].a <= 0.05f)
+                    total[index] = Color.black;
                 index++;
             }
         }
