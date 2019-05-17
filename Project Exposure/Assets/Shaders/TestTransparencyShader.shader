@@ -14,7 +14,7 @@
 			Tags {"Queue" = "AlphaTest" "IgnoreProjector" = "True" "RenderType" = "TransparentCutout" }
 			LOD 200
 			Cull Off
-			//Zwrite Off
+			Zwrite Off
 
 			CGPROGRAM
 			// Physically based Standard lighting model, and enable shadows on all light types
@@ -37,6 +37,7 @@
 		{
 			float2 uv_MainTex;
 			float3 vertexPos;
+			float Time;
 		};
 
 		half _Glossiness;
@@ -48,7 +49,10 @@
 
 		void vert(inout appdata v, out Input o)
 		{
-				UNITY_INITIALIZE_OUTPUT(Input, o);
+			UNITY_INITIALIZE_OUTPUT(Input, o);
+			o.vertexPos = v.vertex.xyz;
+			o.uv_MainTex = v.texcoord;
+			o.Time = _Time;
 		}
 
 		float _WaveColorAmplifier;
@@ -58,12 +62,12 @@
 			fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
 
 			float colChange = IN.vertexPos.y * _WaveColorAmplifier;
-			o.Albedo = c.rgb + float3(colChange, colChange, colChange);
+			//o.Albedo = c.rgb + float3(colChange, colChange, colChange);
+			o.Albedo = float3(IN.vertexPos.x, IN.vertexPos.z, IN.vertexPos.y);
 			// Metallic and smoothness come from slider variables
 			o.Metallic = _Metallic;
 			o.Smoothness = _Glossiness;
-			//o.Alpha = (sin(IN.vertexPos.x) + 1) * 0.5f;
-			o.Alpha = 0.1f;
+			o.Alpha = tex2D(_MainTex, IN.uv_MainTex + float2(_Time.b * 0.1f, _Time.g * 0.1f)).r;// (sin(IN.vertexPos.x) + 1) * 0.5f;
 		}
 		ENDCG
 		}
