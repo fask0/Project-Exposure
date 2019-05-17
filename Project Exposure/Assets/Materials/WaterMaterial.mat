@@ -75,9 +75,9 @@ Material:
     - _SrcBlend: 1
     - _Tess: 32
     - _UVSec: 0
-    - _WaveAmplitude: 2.7
+    - _WaveAmplitude: 0.9
     - _WaveColorAmplifier: 0.07
-    - _WaveLength: 4.6
+    - _WaveLength: 4.4
     - _WaveSpeed: 98
     - _WaveSteepness: 5
     - _ZWrite: 1
