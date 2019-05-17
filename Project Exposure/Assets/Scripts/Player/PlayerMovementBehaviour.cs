@@ -26,7 +26,15 @@ public class PlayerMovementBehaviour : MonoBehaviour
     {
         if (_joystickBehaviour.IsPressed())
         {
-            _velocity += _acceleration * Time.deltaTime;
+            if (_joystickBehaviour.GetTimeAtZero() >= 0.5f || _joystickBehaviour.Vertical() != 0)
+            {
+                _velocity += _acceleration * Time.deltaTime;
+            }
+            else
+            {
+                _velocity -= _waterResistance * Time.deltaTime;
+                _rigidbody.velocity = Vector3.zero;
+            }
         }
         else
         {
