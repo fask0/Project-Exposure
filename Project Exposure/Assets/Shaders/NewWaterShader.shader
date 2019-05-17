@@ -29,11 +29,6 @@ Shader "Custom/NewWaterShader"
 		_NoiseAmplifier("NoiseAmplifier", float) = 0.2
 		_NoiseFrequency("NoiseFrequency", float) = 0.1
 
-		_WaveDirection("WaveDirection", Vector) = (0,0,0,0)
-		_WaveAmplitude("WaveAmplitude", Range(0, 10)) = 1
-		_WaveLength("WaveLength", Range(0, 10)) = 3
-		_WaveSpeed("WaveSpeed", Range(0, 100)) = 30
-		_WaveSteepness("WaveSteepness", Range(0, 50)) = 0.8
 		_WaveColorAmplifier("WaveColorAmplifier", float) = 0.2
 
 		_Cutoff("Alpha cutoff", Range(0,1)) = 0.5
@@ -44,9 +39,7 @@ Shader "Custom/NewWaterShader"
 		{
 			Tags { "IgnoreProjector" = "True" "RenderType" = "TransparentCutout" }
 			LOD 200
-			//Cull Off
-			//Zwrite Off
-			ZTest Greater //GEqual | Equal | NotEqual | Always
+			ZTest Greater
 
 			CGPROGRAM
 			// Physically based Standard lighting model, and enable shadows on all light types
@@ -120,11 +113,6 @@ Shader "Custom/NewWaterShader"
 					float3 normal		: NORMAL;
 				};
 
-				float4 _WaveDirection;
-				float _WaveAmplitude;
-				float _WaveLength;
-				float _WaveSpeed;
-				float _WaveSteepness;
 				float _NoiseAmplifier;
 				float _NoiseSpeed;
 				float _NoiseFrequency;

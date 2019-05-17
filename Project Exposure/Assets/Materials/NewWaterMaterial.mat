@@ -77,7 +77,7 @@ Material:
     - _Tess: 32
     - _UVSec: 0
     - _UvMoveDist: 0.5
-    - _Uvspeed: 0.02
+    - _Uvspeed: 0.03
     - _WaterDepth: 1
     - _WaterSpeed: 1
     - _WaterSpeed2: 0.37
