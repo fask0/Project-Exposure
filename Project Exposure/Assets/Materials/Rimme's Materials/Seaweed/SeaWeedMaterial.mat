@@ -72,9 +72,9 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
-    - _HighestY: -7.5149226
-    - _LeanDistance: 0
-    - _LowestY: -15.985077
+    - _HighestY: -8.49
+    - _LeanDistance: 4
+    - _LowestY: 0
     - _MaxDist: 50
     - _MaxTess: 5
     - _Metallic: 0
@@ -89,11 +89,11 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _Tess: 8
+    - _Tess: 5
     - _UVSec: 0
-    - _WobbleCurve: 0.276
-    - _WobbleDistance: 0.174
-    - _WobbleSpeed: 0.134
+    - _WobbleCurve: 0.38
+    - _WobbleDistance: 1
+    - _WobbleSpeed: 0.2
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 0.30077425, g: 0.8490566, b: 0.14017433, a: 1}

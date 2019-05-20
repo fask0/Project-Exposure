@@ -27,12 +27,11 @@
 		SubShader
 		{
 			Tags {"Queue" = "AlphaTest" "IgnoreProjector" = "True" "RenderType" = "TransparentCutout" }
-			/*Tags { "Queue" = "Transparent" "IgnoreProjector" = "True" "RenderType" = "Transparent" }*/
 			Cull Off
 
 			CGPROGRAM
 			// Physically based Standard lighting model, and enable shadows on all light types
-			#pragma surface surf Standard fullforwardshadows vertex:vert tessellate:tess /*alpha:fade*/  alphatest:_Cutoff addshadow
+			#pragma surface surf Standard fullforwardshadows vertex:vert tessellate:tess alphatest:_Cutoff addshadow
 
 			// Use shader model 3.0 target, to get nicer looking lighting
 			#pragma target 5.0
