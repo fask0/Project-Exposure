@@ -9,18 +9,22 @@ public class JoystickBehaviour : MonoBehaviour, IDragHandler, IPointerUpHandler,
     private Vector3 _inputVector;
     private bool _isPressed;
     private float _timeIdle;
+    private float _timeAtZero;
 
     void Start()
     {
         _background = GetComponent<Image>();
         _button = transform.GetChild(0).GetComponent<Image>();
         _isPressed = false;
+        _timeAtZero = 0;
     }
 
     private void Update()
     {
         if (!_isPressed)
             _timeIdle += Time.deltaTime;
+        else if ((Horizontal() == 0 && Vertical() == 0) || Vertical() != 0)
+            _timeAtZero += Time.deltaTime;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -56,6 +60,7 @@ public class JoystickBehaviour : MonoBehaviour, IDragHandler, IPointerUpHandler,
         _inputVector = Vector3.zero;
         _button.rectTransform.anchoredPosition = _inputVector;
         _isPressed = false;
+        _timeAtZero = 0;
     }
 
     public float Horizontal()
@@ -77,6 +82,11 @@ public class JoystickBehaviour : MonoBehaviour, IDragHandler, IPointerUpHandler,
     public float GetTimeIdle()
     {
         return _timeIdle;
+    }
+
+    public float GetTimeAtZero()
+    {
+        return _timeAtZero;
     }
 
     public bool IsPressed()
