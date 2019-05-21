@@ -73,7 +73,7 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 1
     - _HighestY: -8.49
-    - _LeanDistance: 4
+    - _LeanDistance: 0.8
     - _LowestY: 0
     - _MaxDist: 50
     - _MaxTess: 5
@@ -91,9 +91,9 @@ Material:
     - _SrcBlend: 1
     - _Tess: 1
     - _UVSec: 0
-    - _WobbleCurve: 0.38
-    - _WobbleDistance: 1
-    - _WobbleSpeed: 0.2
+    - _WobbleCurve: 0.21
+    - _WobbleDistance: 0.26
+    - _WobbleSpeed: 0.05
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 0.30077425, g: 0.8490566, b: 0.14017433, a: 1}
