@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class CollectionsManager : MonoBehaviour
@@ -7,8 +8,11 @@ public class CollectionsManager : MonoBehaviour
     [SerializeField] [Range(0, 1)] private float _volume = 0.8f;
     [SerializeField] [Range(0, 15)] private int _maxDistance = 8;
 
-    [HideInInspector] public List<GameObject> CollectableAudioSources = new List<GameObject>();
-    [HideInInspector] public Dictionary<string, AudioSource> CollectedAudioSources = new Dictionary<string, AudioSource>();
+    [HideInInspector] public List<GameObject> collectableAudioSources = new List<GameObject>();
+    [HideInInspector] public Dictionary<string, AudioSource> collectedAudioSources = new Dictionary<string, AudioSource>();
+
+    private Dictionary<string, Image> _codexMainMenu = new Dictionary<string, Image>();
+    private List<Sprite> _fishImages = new List<Sprite>();
 
     void Start()
     {
@@ -27,14 +31,25 @@ public class CollectionsManager : MonoBehaviour
                 aSource.loop = true;
 
                 if (gos[i].tag == "Collectable")
-                    CollectableAudioSources.Add(gos[i]);
+                    collectableAudioSources.Add(gos[i]);
             }
         }
+
+        GameObject codexMainMenu = GameObject.Find("CodexMainMenu");
+        Image[] fishIcons = codexMainMenu.transform.GetChild(0).GetComponentsInChildren<Image>();
+        for (int i = 0; i < fishIcons.Length; i++)
+            _codexMainMenu.Add(fishIcons[i].gameObject.name, fishIcons[i]);
+
+        Sprite[] fishSprites = Resources.LoadAll<Sprite>("CodexMainMenu Sprites");
+        for (int i = 0; i < fishSprites.Length; i++)
+            _fishImages.Add(fishSprites[i]);
+
+        codexMainMenu.transform.parent.gameObject.SetActive(false);
     }
 
     public bool IsCollected(string pGameObjectName)
     {
-        foreach (string key in CollectedAudioSources.Keys)
+        foreach (string key in collectedAudioSources.Keys)
         {
             if (key == pGameObjectName)
                 return true;
@@ -46,13 +61,29 @@ public class CollectionsManager : MonoBehaviour
     public void AddToCollection(GameObject pGameObject)
     {
         bool isAlreadyCollected = true;
-        for (int i = 0; i < CollectableAudioSources.Count; i++)
+        for (int i = 0; i < collectableAudioSources.Count; i++)
         {
-            if (CollectableAudioSources[i] == pGameObject)
+            if (collectableAudioSources[i] == pGameObject)
             {
-                CollectedAudioSources.Add(pGameObject.name, pGameObject.GetComponent<AudioSource>());
+                collectedAudioSources.Add(pGameObject.name, pGameObject.GetComponent<AudioSource>());
                 isAlreadyCollected = false;
                 Debug.Log(string.Format("New audio sample found: {0}", pGameObject.transform.name.ToUpper()));
+
+                foreach (KeyValuePair<string, Image> entry in _codexMainMenu)
+                {
+                    if (entry.Key == pGameObject.name)
+                    {
+                        for (int j = 0; j < _fishImages.Count; j++)
+                        {
+                            if (entry.Key == _fishImages[j].name)
+                            {
+                                entry.Value.sprite = _fishImages[j];
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
                 break;
             }
         }
@@ -63,9 +94,9 @@ public class CollectionsManager : MonoBehaviour
             return;
         }
 
-        for (int i = CollectableAudioSources.Count - 1; i >= 0; i--)
-            if (CollectableAudioSources[i].name == pGameObject.name)
-                CollectableAudioSources.RemoveAt(i);
+        for (int i = collectableAudioSources.Count - 1; i >= 0; i--)
+            if (collectableAudioSources[i].name == pGameObject.name)
+                collectableAudioSources.RemoveAt(i);
     }
 
     public int GetMaxDistance
