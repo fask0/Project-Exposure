@@ -132,7 +132,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _volume: 0.8
   _maxDistance: 8
-  CollectableAudioSources: []
+  collectableAudioSources: []
 --- !u!1 &8605413665887928146
 GameObject:
   m_ObjectHideFlags: 0
@@ -329,7 +329,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8605413666202504086}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -16.540783, y: -18.083292, z: 14.13319}
+  m_LocalPosition: {x: -16.540783, y: -18.09, z: 14.13319}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8605413666412022122}
@@ -347,7 +347,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f212009a01ba2e346b243735fd0c01cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _heightMultiplier: 2000
+  _heightMultiplier: 300
 --- !u!1 &8605413666412022123
 GameObject:
   m_ObjectHideFlags: 0

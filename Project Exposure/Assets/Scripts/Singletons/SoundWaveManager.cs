@@ -105,17 +105,22 @@ public class SoundWaveManager : MonoBehaviour
         _collected0 = collected.transform.GetChild(0).gameObject;
         _collectedQuadMat0 = _collected0.transform.GetChild(0).GetComponent<MeshRenderer>().material;
         _collected0Child0 = _collected0.transform.GetChild(0).gameObject;
+        _collected0Child0.GetComponent<MeshRenderer>().material = _collectedQuadMat0;
         _collected0Child0.SetActive(false);
         _collected0Child1 = _collected0.transform.GetChild(1).gameObject;
+        _collected0Child1.GetComponent<MeshRenderer>().material = _collectedQuadMat0;
         _collected0Child1.SetActive(false);
         _collected0Child2 = _collected0.transform.GetChild(2).gameObject;
+        _collected0Child2.GetComponent<MeshRenderer>().material = _collectedQuadMat0;
         _collected0Child2.SetActive(false);
         //1
         _collected1 = collected.transform.GetChild(1).gameObject;
         _collectedQuadMat1 = _collected1.transform.GetChild(0).GetComponent<MeshRenderer>().material;
         _collected1Child0 = _collected1.transform.GetChild(0).gameObject;
+        _collected1Child0.GetComponent<MeshRenderer>().material = _collectedQuadMat1;
         _collected1Child0.SetActive(false);
         _collected1Child1 = _collected1.transform.GetChild(1).gameObject;
+        _collected1Child1.GetComponent<MeshRenderer>().material = _collectedQuadMat1;
         _collected1Child1.SetActive(false);
         //2
         _collected2 = collected.transform.GetChild(2).gameObject;
@@ -128,41 +133,44 @@ public class SoundWaveManager : MonoBehaviour
 
     private void UpdatePlayerSoundWave()
     {
-        if (_listeningToCollected.Count == 1)
+        if (_listeningToCollected.Count != 0)
         {
-            //0
-            _collected0Child0.SetActive(true);
-            _collected0Child1.SetActive(false);
-            _collected0Child2.SetActive(false);
-            //1
-            _collected1Child0.SetActive(false);
-            _collected1Child1.SetActive(false);
-            //2
-            _collected2Child0.SetActive(false);
-        }
-        else if (_listeningToCollected.Count == 2)
-        {
-            //0
-            _collected0Child0.SetActive(false);
-            _collected0Child1.SetActive(true);
-            _collected0Child2.SetActive(false);
-            //1
-            _collected1Child0.SetActive(true);
-            _collected1Child1.SetActive(false);
-            //2
-            _collected2Child0.SetActive(false);
-        }
-        else if (_listeningToCollected.Count >= 3)
-        {
-            //0
-            _collected0Child0.SetActive(false);
-            _collected0Child1.SetActive(false);
-            _collected0Child2.SetActive(true);
-            //1
-            _collected1Child0.SetActive(false);
-            _collected1Child1.SetActive(true);
-            //2
-            _collected2Child0.SetActive(true);
+            if (_listeningToCollected.Count == 1)
+            {
+                //0
+                _collected0Child0.SetActive(true);
+                _collected0Child1.SetActive(false);
+                _collected0Child2.SetActive(false);
+                //1
+                _collected1Child0.SetActive(false);
+                _collected1Child1.SetActive(false);
+                //2
+                _collected2Child0.SetActive(false);
+            }
+            else if (_listeningToCollected.Count == 2)
+            {
+                //0
+                _collected0Child0.SetActive(false);
+                _collected0Child1.SetActive(true);
+                _collected0Child2.SetActive(false);
+                //1
+                _collected1Child0.SetActive(true);
+                _collected1Child1.SetActive(false);
+                //2
+                _collected2Child0.SetActive(false);
+            }
+            else if (_listeningToCollected.Count >= 3)
+            {
+                //0
+                _collected0Child0.SetActive(false);
+                _collected0Child1.SetActive(false);
+                _collected0Child2.SetActive(true);
+                //1
+                _collected1Child0.SetActive(false);
+                _collected1Child1.SetActive(true);
+                //2
+                _collected2Child0.SetActive(true);
+            }
         }
         else
         {
@@ -177,6 +185,7 @@ public class SoundWaveManager : MonoBehaviour
             _collected2Child0.SetActive(false);
         }
 
+        //Update Collected
         float[] subtractSpecturm = new float[SpectrumSize];
         for (int i = 0; i < _listeningToCollected.Count; i++)
         {
@@ -184,18 +193,21 @@ public class SoundWaveManager : MonoBehaviour
 
             if (i == 0)
             {
+                //0
                 DrawSpectrogram(_collectedQuadMat0, _individualOutputData, _collected0Column);
                 _collected0Column--;
                 if (_collected0Column <= 0) _collected0Column = _texWidth - 1;
             }
             else if (i == 1)
             {
+                //1
                 DrawSpectrogram(_collectedQuadMat1, _individualOutputData, _collected1Column);
                 _collected1Column--;
                 if (_collected1Column <= 0) _collected1Column = _texWidth - 1;
             }
             else if (i == 2)
             {
+                //2
                 DrawSpectrogram(_collectedQuadMat2, _individualOutputData, _collected2Column);
                 _collected2Column--;
                 if (_collected2Column <= 0) _collected2Column = _texWidth - 1;
