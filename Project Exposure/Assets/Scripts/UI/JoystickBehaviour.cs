@@ -66,17 +66,25 @@ public class JoystickBehaviour : MonoBehaviour, IDragHandler, IPointerUpHandler,
     public float Horizontal()
     {
         if (_inputVector.x < 0.15f && _inputVector.x > -0.15f)
-            return 0;
-        else
-            return _inputVector.x;
+            return 0.0f;
+        else if (_inputVector.x > 0.15f)
+            return _inputVector.x - 0.15f;
+        else if (_inputVector.x < -0.15f)
+            return _inputVector.x + 0.15f;
+
+        return 0.0f;
     }
 
     public float Vertical()
     {
         if (_inputVector.y < 0.15f && _inputVector.y > -0.15f)
-            return 0;
-        else
-            return _inputVector.y;
+            return 0.0f;
+        else if (_inputVector.y > 0.15f)
+            return _inputVector.y - 0.15f;
+        else if (_inputVector.y < -0.15f)
+            return _inputVector.y + 0.15f;
+
+        return 0.0f;
     }
 
     public float GetTimeIdle()
