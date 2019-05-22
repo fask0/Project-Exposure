@@ -21,6 +21,8 @@ public class FishZone : MonoBehaviour
     private Vector3 ZoneTransform = new Vector3();
     [SerializeField]
     private bool DrawZoneCube = true;
+    [SerializeField]
+    private bool AlwaysDraw = false;
 
     // Start is called before the first frame update
     void Start()
@@ -80,7 +82,16 @@ public class FishZone : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        if (DrawZoneCube)
+        if (DrawZoneCube && !AlwaysDraw)
+        {
+            Gizmos.color = new Color(0, 1, 0.8f, 0.5f);
+            Gizmos.DrawCube(transform.position, ZoneTransform);
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (AlwaysDraw)
         {
             Gizmos.color = new Color(0, 1, 0.8f, 0.5f);
             Gizmos.DrawCube(transform.position, ZoneTransform);
