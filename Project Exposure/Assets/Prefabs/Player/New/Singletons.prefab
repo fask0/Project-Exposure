@@ -130,6 +130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e001040e5ec55a44af0667dd9408f74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _currentScore: 0
 --- !u!1 &5164233925056157970
 GameObject:
   m_ObjectHideFlags: 0
@@ -175,7 +176,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _volume: 0.8
   _maxDistance: 8
+  _fishScriptableObjects:
+  - {fileID: 11400000, guid: c66105ec07718f141b98cc20be58111f, type: 2}
+  - {fileID: 11400000, guid: a486b23471550b5468b6c1cc9d7ea8b7, type: 2}
+  - {fileID: 11400000, guid: 78c5a6451a97d3541a24e2370533ef8f, type: 2}
+  - {fileID: 11400000, guid: 142e1c4253b103c4f8a969b98c333be0, type: 2}
   collectableAudioSources: []
+  _allAudioSources: []
 --- !u!1 &8605413665887928146
 GameObject:
   m_ObjectHideFlags: 0
