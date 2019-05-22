@@ -451,11 +451,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7571083932692498206}
     m_Modifications:
-    - target: {fileID: 7212815695244563492, guid: 9c86efe066a2e644d9c02b9d87b20bd5,
-        type: 3}
-      propertyPath: m_Name
-      value: WaterParticles
-      objectReference: {fileID: 0}
     - target: {fileID: 7212815695244563493, guid: 9c86efe066a2e644d9c02b9d87b20bd5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -510,6 +505,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7212815695244563492, guid: 9c86efe066a2e644d9c02b9d87b20bd5,
+        type: 3}
+      propertyPath: m_Name
+      value: WaterParticles
       objectReference: {fileID: 0}
     - target: {fileID: 7212815695244563495, guid: 9c86efe066a2e644d9c02b9d87b20bd5,
         type: 3}
