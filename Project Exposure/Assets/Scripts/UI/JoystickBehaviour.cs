@@ -9,18 +9,22 @@ public class JoystickBehaviour : MonoBehaviour, IDragHandler, IPointerUpHandler,
     private Vector3 _inputVector;
     private bool _isPressed;
     private float _timeIdle;
+    private float _timeAtZero;
 
     void Start()
     {
         _background = GetComponent<Image>();
         _button = transform.GetChild(0).GetComponent<Image>();
         _isPressed = false;
+        _timeAtZero = 0;
     }
 
     private void Update()
     {
         if (!_isPressed)
             _timeIdle += Time.deltaTime;
+        else if ((Horizontal() == 0 && Vertical() == 0) || Vertical() != 0)
+            _timeAtZero += Time.deltaTime;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -56,27 +60,41 @@ public class JoystickBehaviour : MonoBehaviour, IDragHandler, IPointerUpHandler,
         _inputVector = Vector3.zero;
         _button.rectTransform.anchoredPosition = _inputVector;
         _isPressed = false;
+        _timeAtZero = 0;
     }
 
     public float Horizontal()
     {
         if (_inputVector.x < 0.15f && _inputVector.x > -0.15f)
-            return 0;
-        else
-            return _inputVector.x;
+            return 0.0f;
+        else if (_inputVector.x > 0.15f)
+            return _inputVector.x - 0.15f;
+        else if (_inputVector.x < -0.15f)
+            return _inputVector.x + 0.15f;
+
+        return 0.0f;
     }
 
     public float Vertical()
     {
         if (_inputVector.y < 0.15f && _inputVector.y > -0.15f)
-            return 0;
-        else
-            return _inputVector.y;
+            return 0.0f;
+        else if (_inputVector.y > 0.15f)
+            return _inputVector.y - 0.15f;
+        else if (_inputVector.y < -0.15f)
+            return _inputVector.y + 0.15f;
+
+        return 0.0f;
     }
 
     public float GetTimeIdle()
     {
         return _timeIdle;
+    }
+
+    public float GetTimeAtZero()
+    {
+        return _timeAtZero;
     }
 
     public bool IsPressed()

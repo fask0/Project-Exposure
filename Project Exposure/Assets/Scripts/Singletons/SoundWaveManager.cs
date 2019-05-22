@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public class SoundWaveManager : MonoBehaviour
 {
@@ -10,27 +11,52 @@ public class SoundWaveManager : MonoBehaviour
 
     private const int SpectrumSize = 4096;
 
-    //PlayerSoundWave Fields
-    private GameObject _playerSoundWave;
-    private LineRenderer _playerLineRenderer;
-    private float _generalLineWidth;
-    private LineRenderer _playerCollectedLineRenderer0;
-    private Image _playerCollectedLineRendererBackground0;
-    private LineRenderer _playerCollectedLineRenderer1;
-    private Image _playerCollectedLineRendererBackground1;
-    private LineRenderer _playerCollectedLineRenderer2;
-    private Image _playerCollectedLineRendererBackground2;
-    private float[] _playerOutputData;
-    private float[] _subtractOutput;
+    ///Fields
+    //Spectrogram
+    private int _texWidth;
+    private int _texHeight;
+
+    //PlayerSoundWave
+    //Left
+    private GameObject _playerSoundWaveLeft;
+    private Material _playerLeftQuadMat;
+    private float[] _playerOutputDataLeft;
+    private int _playerLeftColumn;
+    //Right
+    private GameObject _playerSoundWaveRight;
+    private Mesh _playerRightQuadMesh;
+    private Material _playerRightQuadMat;
+    private int _playerRightColumn;
+    private float[] _playerOutputDataRight;
+    //CollectedSoundWave
+    //0
+    private GameObject _collected0;
+    private GameObject _collected0Child0;
+    private GameObject _collected0Child1;
+    private GameObject _collected0Child2;
+    private Material _collectedQuadMat0;
+    private int _collected0Column;
+    //1
+    private GameObject _collected1;
+    private GameObject _collected1Child0;
+    private GameObject _collected1Child1;
+    private Material _collectedQuadMat1;
+    private int _collected1Column;
+    //2
+    private GameObject _collected2;
+    private GameObject _collected2Child0;
+    private Material _collectedQuadMat2;
+    private int _collected2Column;
     private float[] _individualOutputData;
 
-    //TargetSoundWave Fields
+    //TargetSoundWave
     private GameObject _targetSoundWave;
     private AudioSource _targetAudioSource;
-    private LineRenderer _targetLineLineRenderer;
+    private Material _targetQuadMat;
+    private int _targetColumn;
     private float[] _targetOutputData;
 
-    //Scanning Fields
+    //Scanning
     private GameObject _currentScan;
     private Image _scanProgress;
     private float _scanDuration;
@@ -43,13 +69,17 @@ public class SoundWaveManager : MonoBehaviour
     {
         SingleTons.SoundWaveManager = this;
 
-        initPlayerSoundWave();
-        initTargetSoundWave();
+        InitPlayerSoundWave();
+        InitTargetSoundWave();
 
         _scanProgress = GameObject.Find("ScanProgress").GetComponent<Image>();
         _scanProgress.enabled = false;
         _scanDuration = 2.0f;
         _scanTimeLeft = _scanDuration;
+
+        _texWidth = _playerLeftQuadMat.mainTexture.width;
+        _texHeight = _playerLeftQuadMat.mainTexture.height;
+        _playerLeftColumn = 0;
     }
 
     void Update()
@@ -58,138 +88,220 @@ public class SoundWaveManager : MonoBehaviour
         UpdateTargetSoundWave();
     }
 
-    private void initPlayerSoundWave()
+    private void InitPlayerSoundWave()
     {
-        _playerSoundWave = GameObject.Find("PlayerSoundWave");
-        _playerLineRenderer = _playerSoundWave.GetComponent<LineRenderer>();
-        _playerCollectedLineRenderer0 = _playerLineRenderer.transform.GetChild(0).GetComponent<LineRenderer>();
-        _playerCollectedLineRendererBackground0 = _playerCollectedLineRenderer0.GetComponentInChildren<Image>();
-        _playerCollectedLineRenderer1 = _playerLineRenderer.transform.GetChild(1).GetComponent<LineRenderer>();
-        _playerCollectedLineRendererBackground1 = _playerCollectedLineRenderer1.GetComponentInChildren<Image>();
-        _playerCollectedLineRenderer2 = _playerLineRenderer.transform.GetChild(2).GetComponent<LineRenderer>();
-        _playerCollectedLineRendererBackground2 = _playerCollectedLineRenderer2.GetComponentInChildren<Image>();
-        _playerOutputData = new float[SpectrumSize];
+        //Left
+        _playerSoundWaveLeft = GameObject.Find("PlayerSoundWaveLeft");
+        _playerLeftQuadMat = _playerSoundWaveLeft.transform.GetChild(0).GetComponent<MeshRenderer>().material;
+        _playerOutputDataLeft = new float[SpectrumSize];
+        //Right
+        _playerSoundWaveRight = GameObject.Find("PlayerSoundWaveRight");
+        _playerRightQuadMat = _playerSoundWaveRight.transform.GetChild(0).GetComponent<MeshRenderer>().material;
+        _playerOutputDataRight = new float[SpectrumSize];
+
+        //Collected
+        GameObject collected = GameObject.Find("Collected");
+        //0
+        _collected0 = collected.transform.GetChild(0).gameObject;
+        _collectedQuadMat0 = _collected0.transform.GetChild(0).GetComponent<MeshRenderer>().material;
+        _collected0Child0 = _collected0.transform.GetChild(0).gameObject;
+        _collected0Child0.GetComponent<MeshRenderer>().material = _collectedQuadMat0;
+        _collected0Child0.SetActive(false);
+        _collected0Child1 = _collected0.transform.GetChild(1).gameObject;
+        _collected0Child1.GetComponent<MeshRenderer>().material = _collectedQuadMat0;
+        _collected0Child1.SetActive(false);
+        _collected0Child2 = _collected0.transform.GetChild(2).gameObject;
+        _collected0Child2.GetComponent<MeshRenderer>().material = _collectedQuadMat0;
+        _collected0Child2.SetActive(false);
+        //1
+        _collected1 = collected.transform.GetChild(1).gameObject;
+        _collectedQuadMat1 = _collected1.transform.GetChild(0).GetComponent<MeshRenderer>().material;
+        _collected1Child0 = _collected1.transform.GetChild(0).gameObject;
+        _collected1Child0.GetComponent<MeshRenderer>().material = _collectedQuadMat1;
+        _collected1Child0.SetActive(false);
+        _collected1Child1 = _collected1.transform.GetChild(1).gameObject;
+        _collected1Child1.GetComponent<MeshRenderer>().material = _collectedQuadMat1;
+        _collected1Child1.SetActive(false);
+        //2
+        _collected2 = collected.transform.GetChild(2).gameObject;
+        _collectedQuadMat2 = _collected2.transform.GetChild(0).GetComponent<MeshRenderer>().material;
+        _collected2Child0 = _collected2.transform.GetChild(0).gameObject;
+        _collected2Child0.SetActive(false);
+
         _individualOutputData = new float[SpectrumSize];
     }
 
     private void UpdatePlayerSoundWave()
     {
-        _playerCollectedLineRenderer0.enabled = false;
-        _playerCollectedLineRendererBackground0.enabled = false;
-        _playerCollectedLineRenderer1.enabled = false;
-        _playerCollectedLineRendererBackground1.enabled = false;
-        _playerCollectedLineRenderer2.enabled = false;
-        _playerCollectedLineRendererBackground2.enabled = false;
-        _subtractOutput = new float[SpectrumSize];
+        if (_listeningToCollected.Count != 0)
+        {
+            if (_listeningToCollected.Count == 1)
+            {
+                //0
+                _collected0Child0.SetActive(true);
+                _collected0Child1.SetActive(false);
+                _collected0Child2.SetActive(false);
+                //1
+                _collected1Child0.SetActive(false);
+                _collected1Child1.SetActive(false);
+                //2
+                _collected2Child0.SetActive(false);
+            }
+            else if (_listeningToCollected.Count == 2)
+            {
+                //0
+                _collected0Child0.SetActive(false);
+                _collected0Child1.SetActive(true);
+                _collected0Child2.SetActive(false);
+                //1
+                _collected1Child0.SetActive(true);
+                _collected1Child1.SetActive(false);
+                //2
+                _collected2Child0.SetActive(false);
+            }
+            else if (_listeningToCollected.Count >= 3)
+            {
+                //0
+                _collected0Child0.SetActive(false);
+                _collected0Child1.SetActive(false);
+                _collected0Child2.SetActive(true);
+                //1
+                _collected1Child0.SetActive(false);
+                _collected1Child1.SetActive(true);
+                //2
+                _collected2Child0.SetActive(true);
+            }
+        }
+        else
+        {
+            //0
+            _collected0Child0.SetActive(false);
+            _collected0Child1.SetActive(false);
+            _collected0Child2.SetActive(false);
+            //1
+            _collected1Child0.SetActive(false);
+            _collected1Child1.SetActive(false);
+            //2
+            _collected2Child0.SetActive(false);
+        }
 
+        //Update Collected
+        float[] subtractSpecturm = new float[SpectrumSize];
         for (int i = 0; i < _listeningToCollected.Count; i++)
         {
             _listeningToCollected[i].GetComponent<AudioSource>().GetSpectrumData(_individualOutputData, 0, FFTWindow.BlackmanHarris);
-            List<float> individualView = new List<float>();
-            FillListWithSamples(individualView, _individualOutputData);
 
             if (i == 0)
             {
-                float xScale = 0.0f;
-                float xPos = 0.0f;
-                if (_listeningToCollected.Count == 1)
-                {
-                    xScale = 1.0f;
-                    xPos = 1.0f;
-                }
-                else if (_listeningToCollected.Count == 2)
-                {
-                    xScale = 0.48f;
-                    xPos = 0.35f;
-                }
-                else if (_listeningToCollected.Count == 3)
-                {
-                    xScale = 0.32f;
-                    xPos = 0.15f;
-                }
-
-                _playerCollectedLineRenderer0.enabled = true;
-                _playerCollectedLineRendererBackground0.enabled = true;
-                _playerCollectedLineRenderer0.gameObject.transform.localScale = new Vector3(xScale, _playerCollectedLineRenderer0.gameObject.transform.localScale.y, 1);
-                _playerCollectedLineRenderer0.gameObject.transform.localPosition = new Vector3(-(_generalLineWidth * 0.5f) * (1 - xPos), _playerCollectedLineRenderer0.gameObject.transform.localPosition.y, 0);
-                SetLinePoints(individualView, _playerCollectedLineRenderer0, Vector3.zero);
+                //0
+                DrawSpectrogram(_collectedQuadMat0, _individualOutputData, _collected0Column);
+                _collected0Column--;
+                if (_collected0Column <= 0) _collected0Column = _texWidth - 1;
             }
             else if (i == 1)
             {
-                float xScale = 0.0f;
-                float xPos = 0.0f;
-                if (_listeningToCollected.Count == 2)
-                {
-                    xScale = 0.48f;
-                    xPos = 0.35f;
-                }
-                else if (_listeningToCollected.Count == 3)
-                {
-                    xScale = 0.32f;
-                    xPos = 1.0f;
-                }
-
-                _playerCollectedLineRenderer1.enabled = true;
-                _playerCollectedLineRendererBackground1.enabled = true;
-                _playerCollectedLineRenderer1.gameObject.transform.localScale = new Vector3(xScale, _playerCollectedLineRenderer1.gameObject.transform.localScale.y, 1);
-                _playerCollectedLineRenderer1.gameObject.transform.localPosition = new Vector3((_generalLineWidth * 0.5f) * (1 - xPos), _playerCollectedLineRenderer1.gameObject.transform.localPosition.y, 0);
-                SetLinePoints(individualView, _playerCollectedLineRenderer1, Vector3.zero);
+                //1
+                DrawSpectrogram(_collectedQuadMat1, _individualOutputData, _collected1Column);
+                _collected1Column--;
+                if (_collected1Column <= 0) _collected1Column = _texWidth - 1;
             }
             else if (i == 2)
             {
-                float xScale = 0.0f;
-                float xPos = 0.0f;
-                if (_listeningToCollected.Count == 3)
-                {
-                    xScale = 0.32f;
-                    xPos = 0.15f;
-                }
-
-                _playerCollectedLineRenderer2.enabled = true;
-                _playerCollectedLineRendererBackground2.enabled = true;
-                _playerCollectedLineRenderer2.gameObject.transform.localScale = new Vector3(xScale, _playerCollectedLineRenderer2.gameObject.transform.localScale.y, 1);
-                _playerCollectedLineRenderer2.gameObject.transform.localPosition = new Vector3((_generalLineWidth * 0.5f) * (1 - xPos), _playerCollectedLineRenderer2.gameObject.transform.localPosition.y, 0);
-                SetLinePoints(individualView, _playerCollectedLineRenderer2, Vector3.zero);
+                //2
+                DrawSpectrogram(_collectedQuadMat2, _individualOutputData, _collected2Column);
+                _collected2Column--;
+                if (_collected2Column <= 0) _collected2Column = _texWidth - 1;
             }
 
             for (int j = 0; j < SpectrumSize; j++)
-            {
-                _subtractOutput[j] += _individualOutputData[j];
-            }
+                subtractSpecturm[j] += _individualOutputData[j];
         }
 
-        AudioListener.GetSpectrumData(_playerOutputData, 0, FFTWindow.BlackmanHarris);
-        List<float> playerViewSpectrum = new List<float>();
-        FillListWithSamples(playerViewSpectrum, _playerOutputData, _subtractOutput);
-        SetLinePoints(playerViewSpectrum, _playerLineRenderer, Vector3.zero);
+        //Update Texture
+        AudioListener.GetSpectrumData(_playerOutputDataLeft, 0, FFTWindow.BlackmanHarris);
+        DrawSpectrogram(_playerLeftQuadMat, _playerOutputDataLeft, _playerLeftColumn, subtractSpecturm);
+        _playerLeftColumn--;
+        if (_playerLeftColumn <= 0) _playerLeftColumn = _texWidth - 1;
+
+        AudioListener.GetSpectrumData(_playerOutputDataRight, 1, FFTWindow.BlackmanHarris);
+        DrawSpectrogram(_playerRightQuadMat, _playerOutputDataRight, _playerRightColumn, subtractSpecturm);
+        _playerRightColumn--;
+        if (_playerRightColumn <= 0) _playerRightColumn = _texWidth - 1;
     }
 
-    private void initTargetSoundWave()
+    private void InitTargetSoundWave()
     {
         _targetSoundWave = GameObject.Find("TargetSoundWave");
-        _targetSoundWave.transform.localPosition += new Vector3(-625, 0, 0);
+        _targetQuadMat = _targetSoundWave.transform.GetChild(0).GetComponent<MeshRenderer>().material;
         _targetAudioSource = GameObject.Find("TargetSoundDummy").GetComponent<AudioSource>();
-        _targetLineLineRenderer = _targetSoundWave.GetComponent<LineRenderer>();
         _targetOutputData = new float[SpectrumSize];
     }
 
     private void UpdateTargetSoundWave()
     {
-        if (_targetAudioSource == null)
+        //Update Texture
+        _targetAudioSource.GetSpectrumData(_targetOutputData, 0, FFTWindow.BlackmanHarris);
+        DrawSpectrogram(_targetQuadMat, _targetOutputData, _targetColumn);
+        _targetColumn--;
+        if (_targetColumn <= 0) _targetColumn = _texWidth - 1;
+    }
+
+    /// <summary>
+    /// asd
+    /// </summary>
+    /// <param name="pMesh">Original mesh</param>
+    /// <param name="pMaterial">Original material</param>
+    /// <param name="pSpectrum">Linear spectrum</param>
+    private void DrawSpectrogram(Material pMaterial, float[] pSpectrum, int pColumn, float[] pSubtract = null)
+    {
+        // Transfer from Linear spectrum to an Exponential one:
+        float bandSize = 1.1f;
+        float crossover = bandSize;
+        float b = 0.0f;
+        List<float> exponentialSpectrum = new List<float>();
+        for (int i = 0; i < SpectrumSize; i++)
         {
-            float pointDistance = 0.001f;
-            float width = pointDistance * _targetLineLineRenderer.positionCount;
+            float d = 0.0f;
 
-            for (int i = 0; i < _targetLineLineRenderer.positionCount; i++)
-                _targetLineLineRenderer.SetPosition(i, new Vector3((-width / 2) + i * pointDistance, 0, 0));
+            if (pSubtract == null)
+                d = pSpectrum[i];
+            else
+                d = pSpectrum[i] - pSubtract[i];
 
-            return;
+            b = Mathf.Max(d, b);
+            if (i > crossover)
+            {
+                crossover *= bandSize;
+                exponentialSpectrum.Add(b);
+                b = 0;
+            }
         }
 
-        _targetAudioSource.GetSpectrumData(_targetOutputData, 0, FFTWindow.BlackmanHarris);
-        List<float> targetViewSpectrum = new List<float>();
-        FillListWithSamples(targetViewSpectrum, _targetOutputData);
-        SetLinePoints(targetViewSpectrum, _targetLineLineRenderer, Vector3.zero);
+        // Every pixel represents this many data points from the spectrum:
+        float segmentSize = (float)exponentialSpectrum.Count / (float)_texHeight;
+
+        // Draw the pixels and apply them to the original texture:
+        Texture2D newTex = pMaterial.mainTexture as Texture2D;
+        for (int y = 0; y < _texHeight; y++)
+        {
+            int x = _texWidth - 1 - pColumn;
+            newTex.SetPixel(x, y, GetGradient(exponentialSpectrum[(int)(y * segmentSize)] * _heightMultiplier));
+        }
+        newTex.Apply();
+        pMaterial.mainTexture = newTex;
+
+        // Offset the texture:
+        pMaterial.mainTextureOffset += new Vector2(1 / ((float)_texWidth - 1), 0);
+    }
+
+    /// <summary>
+    /// Returns a color for each value between 0 and 1, chosen from a smooth gradient
+    /// </summary>
+    /// <param name="pValue"></param>
+    /// <returns></returns>
+    Color GetGradient(float pValue)
+    {
+        return new Color(pValue * 10, pValue, 0);
     }
 
     public void ScanObject(GameObject pScannedObject)
@@ -211,6 +323,7 @@ public class SoundWaveManager : MonoBehaviour
                 }
                 else if (hit.transform.tag == "Collectable")
                 {
+                    if (pScannedObject != hit.transform.gameObject) return;
                     _currentScan = pScannedObject;
                     _scanTimeLeft -= Time.deltaTime;
                     if (_scanTimeLeft <= 0)
@@ -243,40 +356,6 @@ public class SoundWaveManager : MonoBehaviour
 
         _scanTimeLeft = _scanDuration;
         _scanProgress.enabled = false;
-    }
-
-    private void FillListWithSamples(List<float> pList, float[] pSamples, float[] pSubtract = null)
-    {
-        float bandSize = 1.1f;
-        float crossover = bandSize;
-        float b = 0.0f;
-        for (int i = 0; i < SpectrumSize; i++)
-        {
-            float d = 0;
-            if (pSubtract == null)
-                d = pSamples[i];
-            else
-                d = pSamples[i] - pSubtract[i];
-            b = Mathf.Max(d, b);
-            if (i > crossover - 3)
-            {
-                crossover *= bandSize;
-                pList.Add(b);
-                b = 0;
-            }
-            if (pSubtract != null)
-                pSamples[i] = 0;
-        }
-    }
-
-    private void SetLinePoints(List<float> pViewSpectrum, LineRenderer pLineRenderer, Vector3 pOffset)
-    {
-        float pointDistance = 0.001f;
-        float width = pointDistance * pViewSpectrum.Count;
-        _generalLineWidth = width;
-
-        pLineRenderer.positionCount = pViewSpectrum.Count;
-        pLineRenderer.SetPositions(pViewSpectrum.Select((x, i) => new Vector3((-width / 2) + i * pointDistance, (x * _heightMultiplier < 65) ? x * _heightMultiplier : 65, 0) + pOffset).ToArray());
     }
 
     public void AddSource(GameObject pGameObject)

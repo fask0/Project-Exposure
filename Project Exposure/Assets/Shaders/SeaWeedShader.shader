@@ -11,28 +11,32 @@
 		_Glossiness("Smoothness", Range(0,1)) = 0.5
 		_Metallic("Metallic", Range(0,1)) = 0.0
 
-		_WobbleSpeed("WobbleSpeed", Range(0, 1)) = 0.5
-		_WobbleDistance("WobbleDistance", Range(0, 1)) = 0.5
-		_WobbleCurve("WobbleCurve", Range(0, 1)) = 0.5
+		_PlayerDetectionRange("Player Detection Range", Range(0, 10)) = 1.5
+		_CurveHeight("Curve Height", Range(0, 10)) = 3
+		_CurveWidth("Curve Width", Range(0, 3)) = 1.5
 
-		_LeanDirection("LeanDirection", Vector) = (1, 0,0,0)
-		_LeanDistance("LeanDistance", Range(0, 10)) = 4
+		_WobbleSpeed("Wobble Speed", Range(0, 1)) = 0.5
+		_WobbleDistance("Wobble Distance", Range(0, 1)) = 0.5
+		_WobbleCurve("Wobble Curve", Range(0, 1)) = 0.5
+
+		_LeanDirection("Lean Direction", Vector) = (1, 0,0,0)
+		_LeanDistance("Lean Distance", Range(0, 10)) = 4
 		_Offset("Offset", float) = 0
 
 		_HighestY("HighestY", float) = 1
 		_LowestY("LowestY", float) = 0
 
 		_Cutoff("Alpha cutoff", Range(0,1)) = 0.5
+		_PlayerPos("Player position", Vector) = (0,0,0)
 	}
 		SubShader
 		{
 			Tags {"Queue" = "AlphaTest" "IgnoreProjector" = "True" "RenderType" = "TransparentCutout" }
-			/*Tags { "Queue" = "Transparent" "IgnoreProjector" = "True" "RenderType" = "Transparent" }*/
 			Cull Off
 
 			CGPROGRAM
 			// Physically based Standard lighting model, and enable shadows on all light types
-			#pragma surface surf Standard fullforwardshadows vertex:vert tessellate:tess /*alpha:fade*/  alphatest:_Cutoff addshadow
+			#pragma surface surf Standard fullforwardshadows vertex:vert tessellate:tess alphatest:_Cutoff addshadow
 
 			// Use shader model 3.0 target, to get nicer looking lighting
 			#pragma target 5.0
@@ -70,11 +74,16 @@
 			float _WobbleDistance;
 			float _WobbleCurve;
 
+			float _PlayerDetectionRange;
+			float _CurveHeight;
+			float _CurveWidth;
+
 			float2 _LeanDirection;
 			float _LeanDistance;
 			float _HighestY;
 			float _LowestY;
 			float _Offset;
+			float3 _PlayerPos;
 			sampler2D _NoiseTex;
 			void vert(inout appdata v)
 			{
@@ -84,16 +93,43 @@
 				float relativeYPos = ((wPos.y - _LowestY) / diff);
 
 				float4 v0 = wPos;
-				//The lean bois
-				v0.x += (relativeYPos * relativeYPos * _LeanDistance) * _LeanDirection.x;
-				v0.z += (relativeYPos * relativeYPos * _LeanDistance) * _LeanDirection.y;
+				float4 v1 = mul(unity_ObjectToWorld, float4(0, v.vertex.y, 0, v.vertex.w));
+				if (_Offset > 0)
+				{
+					//The lean bois
+					v0.x += (relativeYPos * relativeYPos * _LeanDistance) * _LeanDirection.x;
+					v0.z += (relativeYPos * relativeYPos * _LeanDistance) * _LeanDirection.y;
+					v1.x += (relativeYPos * relativeYPos * _LeanDistance) * _LeanDirection.x;
+					v1.z += (relativeYPos * relativeYPos * _LeanDistance) * _LeanDirection.y;
 
-				//The wobble wobble wobble
-				v0.x += ((snoise((_Time + _Offset) * _WobbleSpeed + relativeYPos * relativeYPos * _WobbleCurve)) * relativeYPos) * _WobbleDistance;
-				v0.z += ((snoise((_Time + _Offset / 2) * _WobbleSpeed + relativeYPos * relativeYPos * _WobbleCurve) + 0.5) * relativeYPos) * _WobbleDistance;
+					//The wobble wobble wobble
+					v0.x += ((snoise((_Time + _Offset) * _WobbleSpeed + relativeYPos * relativeYPos * _WobbleCurve)) * relativeYPos) * _WobbleDistance;
+					v0.z += ((snoise((_Time + _Offset / 2) * _WobbleSpeed + relativeYPos * relativeYPos * _WobbleCurve) + 0.5) * relativeYPos) * _WobbleDistance;
+					v1.x += ((snoise((_Time + _Offset) * _WobbleSpeed + relativeYPos * relativeYPos * _WobbleCurve)) * relativeYPos) * _WobbleDistance;
+					v1.z += ((snoise((_Time + _Offset / 2) * _WobbleSpeed + relativeYPos * relativeYPos * _WobbleCurve) + 0.5) * relativeYPos) * _WobbleDistance;
+				}
 
-				float4 test = mul(unity_WorldToObject, v0);
-				v.vertex.xyz = test;
+				//Bob n weave player
+				float4 middleObjPos = mul(unity_WorldToObject, v1);
+				float3 weedCenter = mul(unity_ObjectToWorld, float4(middleObjPos.x, 0, middleObjPos.z, 1));
+				float3 diff2 = weedCenter - float3(_PlayerPos.x, weedCenter.y, _PlayerPos.z);
+				float lengthVal = length(diff2);
+				float2 direction = float2(normalize(diff2).x, normalize(diff2).z);
+
+				float diffY = _CurveHeight - abs(max(min(_PlayerPos.y - v0.y, _CurveHeight), -_CurveHeight));
+				if (lengthVal < _PlayerDetectionRange)
+				{
+					direction = float2(-direction.x, -direction.y);
+					direction = direction * (_PlayerDetectionRange - lengthVal) * _CurveWidth;
+
+					v0.x += -direction.x * relativeYPos * diffY;
+					v0.z += -direction.y * relativeYPos * diffY;
+				}
+
+
+				//Return new pos
+				float4 objPos = mul(unity_WorldToObject, v0);
+				v.vertex.xyz = objPos;
 			}
 
 			half _Glossiness;

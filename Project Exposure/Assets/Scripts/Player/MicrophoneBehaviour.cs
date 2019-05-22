@@ -31,7 +31,7 @@ public class MicrophoneBehaviour : MonoBehaviour
 
             SingleTons.SoundWaveManager.GetListeningToAll.Add(other.transform.gameObject);
 
-            foreach (string key in SingleTons.CollectionsManager.CollectedAudioSources.Keys)
+            foreach (string key in SingleTons.CollectionsManager.collectedAudioSources.Keys)
             {
                 if (other.transform.name == key)
                 {
@@ -48,7 +48,7 @@ public class MicrophoneBehaviour : MonoBehaviour
         {
             other.GetComponent<AudioSource>().maxDistance = SingleTons.CollectionsManager.GetMaxDistance;
 
-            if (other.tag == string.Format("Target" + SingleTons.QuestManager.GetCurrentTargetIndex))
+            if (other.tag == string.Format("Target" + SingleTons.QuestManager.GetCurrentTargetIndex) || other.tag == "Collectable")
                 _soundWaveManager.HideProgress(other.transform.gameObject);
 
             SingleTons.SoundWaveManager.GetListeningToAll.Remove(other.transform.gameObject);

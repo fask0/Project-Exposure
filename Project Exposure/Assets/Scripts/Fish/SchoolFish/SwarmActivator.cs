@@ -22,6 +22,10 @@ public class SwarmActivator : MonoBehaviour
     private float _fishDisperseRange;
     [SerializeField]
     private float _fishSwarmRange;
+    [SerializeField]
+    private bool _onlyActivateOnce = false;
+
+    private bool _hasActivated = false;
 
     // Start is called before the first frame update
     void Start()
@@ -47,7 +51,15 @@ public class SwarmActivator : MonoBehaviour
         }
         else if (diff * diff < _fishSwarmRange * _fishSwarmRange)
         {
-            _swarmArea.SwarmArea(_fishZone);
+            if (_onlyActivateOnce && !_hasActivated)
+            {
+                _swarmArea.SwarmArea(_fishZone);
+                _hasActivated = true;
+            }
+            else if (!_onlyActivateOnce)
+            {
+                _swarmArea.SwarmArea(_fishZone);
+            }
         }
         else
         {
