@@ -45,8 +45,7 @@ public class DolphinParentBehaviour : MonoBehaviour
     {
         if (_dolphinBehaviour.GetDolphinState() == DolphinState.RandomStartingBehaviour)
         {
-            Vector3 diff = SingleTons.GameController.Player.transform.position - _startPathingBehaviour.transform.position;
-            if (diff.x * diff.x + diff.y * diff.y < _startPathingBehaviour.GetRadius() * _startPathingBehaviour.GetRadius())
+            if (Vector3.Distance(SingleTons.GameController.Player.transform.position, _startPathingBehaviour.transform.position) < _startPathingBehaviour.GetRadius())
             {
                 _dolphinBehaviour.SetDolphinState(DolphinState.PathingBehaviour);
             }

@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class SchoolFishLeaderBehaviour : FishBehaviour
 {
-    private FishZone _school;
+    protected FishZone _school;
     protected Vector3 _checkpoint;
 
-    private bool _hasAddedItselfToSchool = false;
+    protected bool _hasAddedItselfToSchool = false;
 
     [HideInInspector]
     public List<GameObject> _schoolFishWithLeader = new List<GameObject>();
     [HideInInspector]
     public List<SchoolFishBehaviour> _schoolFishWithLeaderBehaviours = new List<SchoolFishBehaviour>();
 
-    private int fishCheckingIndex = 0;
-    private int fishCheckingSubdivision = 10;
+    protected int fishCheckingIndex = 0;
+    protected int fishCheckingSubdivision = 10;
 
     // Start is called before the first frame update
     void Start()

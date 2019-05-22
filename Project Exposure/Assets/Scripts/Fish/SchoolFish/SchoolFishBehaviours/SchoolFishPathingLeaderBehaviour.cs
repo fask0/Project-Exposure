@@ -4,12 +4,6 @@ using UnityEngine;
 
 public class SchoolFishPathingLeaderBehaviour : SchoolFishLeaderBehaviour
 {
-    private FishZone _school;
-    private bool _hasAddedItselfToSchool = false;
-
-    private int fishCheckingIndex = 0;
-    private int fishCheckingSubdivision = 10;
-
     private LineRenderer _lineRenderer;
     private Vector3[] _pathPositions;
     private int _pathIndex = 0;
