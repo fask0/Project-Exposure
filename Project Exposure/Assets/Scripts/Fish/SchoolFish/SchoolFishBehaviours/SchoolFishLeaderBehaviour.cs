@@ -5,7 +5,7 @@ using UnityEngine;
 public class SchoolFishLeaderBehaviour : FishBehaviour
 {
     private FishZone _school;
-    private Vector3 _checkpoint;
+    protected Vector3 _checkpoint;
 
     private bool _hasAddedItselfToSchool = false;
 

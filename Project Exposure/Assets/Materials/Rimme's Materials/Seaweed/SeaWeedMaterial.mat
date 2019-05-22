@@ -65,6 +65,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BumpScale: 1
+    - _CurveHeight: 3.5
+    - _CurveWidth: 0.25
     - _Cutoff: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -72,9 +74,9 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
-    - _HighestY: -8.49
-    - _LeanDistance: 4
-    - _LowestY: 0
+    - _HighestY: -27.23653
+    - _LeanDistance: 0
+    - _LowestY: -35.706684
     - _MaxDist: 50
     - _MaxTess: 5
     - _Metallic: 0
@@ -84,8 +86,9 @@ Material:
     - _NoiseAmplification: 0.25
     - _NoiseSpeed: 0.52
     - _OcclusionStrength: 1
-    - _Offset: 269.3871
+    - _Offset: 0
     - _Parallax: 0.02
+    - _PlayerDetectionRange: 4
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -96,6 +99,7 @@ Material:
     - _WobbleSpeed: 0.2
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.30077425, g: 0.8490566, b: 0.14017433, a: 1}
+    - _Color: {r: 0.30077422, g: 0.8490566, b: 0.1401743, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _LeanDirection: {r: 0.3, g: 1, b: 0, a: 0}
+    - _PlayerPos: {r: -32.24, g: -30.16, b: 55.57, a: 0}
