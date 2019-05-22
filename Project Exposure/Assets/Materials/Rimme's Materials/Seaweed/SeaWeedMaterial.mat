@@ -74,9 +74,9 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
-    - _HighestY: -27.23653
-    - _LeanDistance: 0
-    - _LowestY: -35.706684
+    - _HighestY: -8.49
+    - _LeanDistance: 8.52
+    - _LowestY: 0
     - _MaxDist: 50
     - _MaxTess: 5
     - _Metallic: 0
@@ -92,14 +92,14 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _Tess: 5
+    - _Tess: 1
     - _UVSec: 0
     - _WobbleCurve: 0.38
     - _WobbleDistance: 1
-    - _WobbleSpeed: 0.2
+    - _WobbleSpeed: 0.437
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.30077422, g: 0.8490566, b: 0.1401743, a: 1}
+    - _Color: {r: 0.30077425, g: 0.8490566, b: 0.14017433, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _LeanDirection: {r: 0.3, g: 1, b: 0, a: 0}
-    - _PlayerPos: {r: -32.24, g: -30.16, b: 55.57, a: 0}
+    - _PlayerPos: {r: 0, g: 0, b: 0, a: 1}

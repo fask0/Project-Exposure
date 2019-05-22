@@ -83,7 +83,7 @@ Material:
     - _WaterSpeed: 1
     - _WaterSpeed2: 0.37
     - _WaveAmplitude: 0.4
-    - _WaveColorAmplifier: 0.05
+    - _WaveColorAmplifier: 0.04
     - _WaveLength: 6.9
     - _WaveSpeed: 23
     - _WaveSteepness: 0
