@@ -94,9 +94,9 @@ Material:
     - _SrcBlend: 1
     - _Tess: 1
     - _UVSec: 0
-    - _WobbleCurve: 0.38
+    - _WobbleCurve: 0.93
     - _WobbleDistance: 1
-    - _WobbleSpeed: 0.437
+    - _WobbleSpeed: 0.2
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 0.30077425, g: 0.8490566, b: 0.14017433, a: 1}
