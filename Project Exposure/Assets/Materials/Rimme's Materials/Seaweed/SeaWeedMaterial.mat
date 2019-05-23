@@ -94,12 +94,12 @@ Material:
     - _SrcBlend: 1
     - _Tess: 1
     - _UVSec: 0
-    - _WobbleCurve: 0.38
+    - _WobbleCurve: 0.93
     - _WobbleDistance: 1
-    - _WobbleSpeed: 0.437
+    - _WobbleSpeed: 0.2
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.30077425, g: 0.8490566, b: 0.14017433, a: 1}
+    - _Color: {r: 0.84435546, g: 0.9056604, b: 0.7048772, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _LeanDirection: {r: 0.3, g: 1, b: 0, a: 0}
     - _PlayerPos: {r: 0, g: 0, b: 0, a: 1}
