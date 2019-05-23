@@ -125,6 +125,8 @@ public class CollectionsManager : MonoBehaviour
 
     public void GotoDescription(GameObject pGameObject)
     {
+        _codexSubPlayButton.SetActive(true);
+        _codexSubStopButton.SetActive(false);
         for (int i = 0; i < _fishScriptableObjects.Count; i++)
         {
             if (_fishScriptableObjects[i].Name == pGameObject.name)
@@ -154,6 +156,83 @@ public class CollectionsManager : MonoBehaviour
         _codexSubSoundwave.clip = null;
         _codexSubDescription.text = "Unknown creature...";
         SingleTons.SoundWaveManager.ResetTexture(_codexSubSoundwave.gameObject.GetComponent<MeshRenderer>().material.mainTexture);
+    }
+
+    public void GotoDescription(string pFishName)
+    {
+        _codexSubPlayButton.SetActive(true);
+        _codexSubStopButton.SetActive(false);
+        for (int i = 0; i < _fishScriptableObjects.Count; i++)
+        {
+            if (_fishScriptableObjects[i].Name == pFishName)
+            {
+                if (IsCollected(pFishName))
+                {
+                    //Discovered Species
+                    _codexSubFishImage.sprite = _fishScriptableObjects[i].Sprite;
+                    _codexSubSoundwave.clip = _fishScriptableObjects[i].AudioClip;
+                    _codexSubDescription.text = _fishScriptableObjects[i].DescriptionFile.text;
+                    SingleTons.SoundWaveManager.ResetTexture(_codexSubSoundwave.gameObject.GetComponent<MeshRenderer>().material.mainTexture);
+                }
+                else
+                {
+                    //Undiscovered Species
+                    _codexSubFishImage.sprite = _undiscoveredSpeciesSprite;
+                    _codexSubSoundwave.clip = null;
+                    _codexSubDescription.text = "Unknown creature...";
+                    SingleTons.SoundWaveManager.ResetTexture(_codexSubSoundwave.gameObject.GetComponent<MeshRenderer>().material.mainTexture);
+                }
+                return;
+            }
+        }
+
+        //Undiscovered Species
+        _codexSubFishImage.sprite = _undiscoveredSpeciesSprite;
+        _codexSubSoundwave.clip = null;
+        _codexSubDescription.text = "Unknown creature...";
+        SingleTons.SoundWaveManager.ResetTexture(_codexSubSoundwave.gameObject.GetComponent<MeshRenderer>().material.mainTexture);
+    }
+
+    public void GotoDescriptionFromSpectrogram(List<GameObject> pSpectrogramAudioList, GameObject pButton)
+    {
+        switch (pButton.transform.parent.parent.name)
+        {
+            case "0":
+                AudioSource collected0 = pSpectrogramAudioList[0].GetComponent<AudioSource>();
+                foreach (KeyValuePair<string, AudioSource> entry in collectedAudioSources)
+                {
+                    if (entry.Value == collected0)
+                    {
+                        GotoDescription(entry.Key);
+                        break;
+                    }
+                }
+                break;
+
+            case "1":
+                AudioSource collected1 = pSpectrogramAudioList[1].GetComponent<AudioSource>();
+                foreach (KeyValuePair<string, AudioSource> entry in collectedAudioSources)
+                {
+                    if (entry.Value == collected1)
+                    {
+                        GotoDescription(entry.Key);
+                        break;
+                    }
+                }
+                break;
+
+            case "2":
+                AudioSource collected2 = pSpectrogramAudioList[2].GetComponent<AudioSource>();
+                foreach (KeyValuePair<string, AudioSource> entry in collectedAudioSources)
+                {
+                    if (entry.Value == collected2)
+                    {
+                        GotoDescription(entry.Key);
+                        break;
+                    }
+                }
+                break;
+        }
     }
 
     public void ReduceAllSound()

@@ -9,7 +9,8 @@ public class AddButtonListener : MonoBehaviour
         Stop,
         CreatureIcon,
         GoToMenu,
-        ExitMenu
+        ExitMenu,
+        SpectrogramToFish
     }
 
     [SerializeField] private ButtonState _buttonState;
@@ -34,6 +35,9 @@ public class AddButtonListener : MonoBehaviour
                 break;
             case ButtonState.ExitMenu:
                 button.onClick.AddListener(() => { SingleTons.CollectionsManager.IncreaseAllVolume(); });
+                break;
+            case ButtonState.SpectrogramToFish:
+                button.onClick.AddListener(() => { SingleTons.CollectionsManager.GotoDescriptionFromSpectrogram(SingleTons.SoundWaveManager.GetListeningToCollected, gameObject); });
                 break;
         }
     }
