@@ -24,7 +24,6 @@ public class SoundWaveManager : MonoBehaviour
     private int _playerLeftColumn;
     //Right
     private GameObject _playerSoundWaveRight;
-    private Mesh _playerRightQuadMesh;
     private Material _playerRightQuadMat;
     private int _playerRightColumn;
     private float[] _playerOutputDataRight;
@@ -56,6 +55,14 @@ public class SoundWaveManager : MonoBehaviour
     private int _targetColumn;
     private float[] _targetOutputData;
 
+    //CursomSoundWave
+    private GameObject _customSoundWave;
+    private AudioSource _customAudioSource;
+    private Material _customMaterial;
+    private int _customColumn;
+    private float[] _customOutputData;
+    private bool _shouldUpdateCustom;
+
     //Scanning
     private GameObject _currentScan;
     private Image _scanProgress;
@@ -86,6 +93,7 @@ public class SoundWaveManager : MonoBehaviour
     {
         UpdatePlayerSoundWave();
         UpdateTargetSoundWave();
+        UpdateCustomSoundWave();
     }
 
     private void InitPlayerSoundWave()
@@ -93,10 +101,12 @@ public class SoundWaveManager : MonoBehaviour
         //Left
         _playerSoundWaveLeft = GameObject.Find("PlayerSoundWaveLeft");
         _playerLeftQuadMat = _playerSoundWaveLeft.transform.GetChild(0).GetComponent<MeshRenderer>().material;
+        ResetTexture(_playerLeftQuadMat.mainTexture);
         _playerOutputDataLeft = new float[SpectrumSize];
         //Right
         _playerSoundWaveRight = GameObject.Find("PlayerSoundWaveRight");
         _playerRightQuadMat = _playerSoundWaveRight.transform.GetChild(0).GetComponent<MeshRenderer>().material;
+        ResetTexture(_playerRightQuadMat.mainTexture);
         _playerOutputDataRight = new float[SpectrumSize];
 
         //Collected
@@ -113,6 +123,7 @@ public class SoundWaveManager : MonoBehaviour
         _collected0Child2 = _collected0.transform.GetChild(2).gameObject;
         _collected0Child2.GetComponent<MeshRenderer>().material = _collectedQuadMat0;
         _collected0Child2.SetActive(false);
+        ResetTexture(_collectedQuadMat0.mainTexture);
         //1
         _collected1 = collected.transform.GetChild(1).gameObject;
         _collectedQuadMat1 = _collected1.transform.GetChild(0).GetComponent<MeshRenderer>().material;
@@ -122,11 +133,13 @@ public class SoundWaveManager : MonoBehaviour
         _collected1Child1 = _collected1.transform.GetChild(1).gameObject;
         _collected1Child1.GetComponent<MeshRenderer>().material = _collectedQuadMat1;
         _collected1Child1.SetActive(false);
+        ResetTexture(_collectedQuadMat1.mainTexture);
         //2
         _collected2 = collected.transform.GetChild(2).gameObject;
         _collectedQuadMat2 = _collected2.transform.GetChild(0).GetComponent<MeshRenderer>().material;
         _collected2Child0 = _collected2.transform.GetChild(0).gameObject;
         _collected2Child0.SetActive(false);
+        ResetTexture(_collectedQuadMat2.mainTexture);
 
         _individualOutputData = new float[SpectrumSize];
     }
@@ -233,6 +246,7 @@ public class SoundWaveManager : MonoBehaviour
     {
         _targetSoundWave = GameObject.Find("TargetSoundWave");
         _targetQuadMat = _targetSoundWave.transform.GetChild(0).GetComponent<MeshRenderer>().material;
+        ResetTexture(_targetQuadMat.mainTexture);
         _targetAudioSource = GameObject.Find("TargetSoundDummy").GetComponent<AudioSource>();
         _targetOutputData = new float[SpectrumSize];
     }
@@ -299,9 +313,48 @@ public class SoundWaveManager : MonoBehaviour
     /// </summary>
     /// <param name="pValue"></param>
     /// <returns></returns>
-    Color GetGradient(float pValue)
+    private Color GetGradient(float pValue)
     {
         return new Color(pValue * 10, pValue, 0);
+    }
+
+    private void UpdateCustomSoundWave()
+    {
+        if (!_shouldUpdateCustom) return;
+
+        _customAudioSource.GetSpectrumData(_customOutputData, 0, FFTWindow.BlackmanHarris);
+        DrawSpectrogram(_customMaterial, _customOutputData, _customColumn);
+        _customColumn--;
+        if (_customColumn <= 0) _customColumn = _texWidth - 1;
+    }
+
+    public void StartDrawingCustomSpectrogram(GameObject pGameObject, AudioSource pAudioSource)
+    {
+        _customSoundWave = pGameObject;
+        _customAudioSource = pAudioSource;
+        _customAudioSource.Play();
+        _customMaterial = _customSoundWave.GetComponent<MeshRenderer>().material;
+        _customMaterial.mainTextureOffset = new Vector2(0, 0);
+        _customColumn = 0;
+        _customOutputData = new float[SpectrumSize];
+
+        _shouldUpdateCustom = true;
+    }
+
+    public void StopDrawingCustomSpectrogram()
+    {
+        _customAudioSource.Stop();
+        _shouldUpdateCustom = false;
+    }
+
+    public void ResetTexture(Texture pTexture)
+    {
+        Texture2D tex = pTexture as Texture2D;
+        for (int x = 0; x < tex.width; x++)
+            for (int y = 0; y < tex.height; y++)
+                tex.SetPixel(x, y, Color.black);
+        tex.Apply();
+        pTexture = tex;
     }
 
     public void ScanObject(GameObject pScannedObject)
