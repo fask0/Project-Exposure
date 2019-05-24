@@ -1,13 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
 
 public class CollectionsManager : MonoBehaviour
 {
-    [SerializeField] [Range(0, 1)] private float _volume = 0.8f;
-    [SerializeField] [Range(0, 15)] private int _maxDistance = 8;
+    [SerializeField] [Range(0, 1)] private float _defaultAudioVolume = 0.8f;
+    [SerializeField] [Range(0, 20)] private int _defaultAudioDistanace = 8;
     [SerializeField] private List<FishScriptableObject> _fishScriptableObjects;
 
     [HideInInspector] public List<GameObject> collectableAudioSources = new List<GameObject>();
@@ -35,8 +34,8 @@ public class CollectionsManager : MonoBehaviour
             {
                 AudioSource aSource = gos[i].GetComponent<AudioSource>();
                 aSource.spatialBlend = 1.0f;
-                aSource.volume = _volume;
-                aSource.maxDistance = _maxDistance;
+                aSource.volume = _defaultAudioVolume;
+                aSource.maxDistance = _defaultAudioDistanace;
                 aSource.rolloffMode = AudioRolloffMode.Custom;
                 aSource.loop = true;
                 _allAudioSources.Add(gos[i]);
@@ -46,7 +45,7 @@ public class CollectionsManager : MonoBehaviour
             }
         }
 
-        GameObject codexMainMenu = GameObject.Find("CodexMainMenu");
+        GameObject codexMainMenu = Camera.main.transform.GetChild(0).GetChild(7).GetChild(1).gameObject;
         Image[] fishIcons = codexMainMenu.transform.GetChild(0).GetComponentsInChildren<Image>();
         for (int i = 0; i < fishIcons.Length; i++)
             _codexMainMenu.Add(fishIcons[i].gameObject.name, fishIcons[i]);
@@ -56,7 +55,7 @@ public class CollectionsManager : MonoBehaviour
             _fishImages.Add(fishSprites[i]);
 
         _undiscoveredSpeciesSprite = Resources.Load<Sprite>("CodexSprites/UndiscoveredSpecies");
-        GameObject codexSubMenu = GameObject.Find("CodexSubMenu");
+        GameObject codexSubMenu = Camera.main.transform.GetChild(0).GetChild(7).GetChild(3).gameObject;
         _codexSubFishImage = codexSubMenu.transform.GetChild(0).GetComponent<Image>();
         _codexSubPlayButton = codexSubMenu.transform.GetChild(1).gameObject;
         _codexSubStopButton = codexSubMenu.transform.GetChild(2).gameObject;
@@ -120,7 +119,7 @@ public class CollectionsManager : MonoBehaviour
 
     public int GetMaxDistance
     {
-        get { return _maxDistance; }
+        get { return _defaultAudioDistanace; }
     }
 
     public void GotoDescription(GameObject pGameObject)
@@ -137,7 +136,7 @@ public class CollectionsManager : MonoBehaviour
                     _codexSubFishImage.sprite = _fishScriptableObjects[i].Sprite;
                     _codexSubSoundwave.clip = _fishScriptableObjects[i].AudioClip;
                     _codexSubDescription.text = _fishScriptableObjects[i].DescriptionFile.text;
-                    SingleTons.SoundWaveManager.ResetTexture(_codexSubSoundwave.gameObject.GetComponent<MeshRenderer>().material.mainTexture);
+                    SingleTons.SoundWaveManager.ResetTexture(_codexSubSoundwave.gameObject.GetComponent<Image>().material);
                 }
                 else
                 {
@@ -145,7 +144,7 @@ public class CollectionsManager : MonoBehaviour
                     _codexSubFishImage.sprite = _undiscoveredSpeciesSprite;
                     _codexSubSoundwave.clip = null;
                     _codexSubDescription.text = "Unknown creature...";
-                    SingleTons.SoundWaveManager.ResetTexture(_codexSubSoundwave.gameObject.GetComponent<MeshRenderer>().material.mainTexture);
+                    SingleTons.SoundWaveManager.ResetTexture(_codexSubSoundwave.gameObject.GetComponent<Image>().material);
                 }
                 return;
             }
@@ -155,7 +154,7 @@ public class CollectionsManager : MonoBehaviour
         _codexSubFishImage.sprite = _undiscoveredSpeciesSprite;
         _codexSubSoundwave.clip = null;
         _codexSubDescription.text = "Unknown creature...";
-        SingleTons.SoundWaveManager.ResetTexture(_codexSubSoundwave.gameObject.GetComponent<MeshRenderer>().material.mainTexture);
+        SingleTons.SoundWaveManager.ResetTexture(_codexSubSoundwave.gameObject.GetComponent<Image>().material);
     }
 
     public void GotoDescription(string pFishName)
@@ -172,7 +171,7 @@ public class CollectionsManager : MonoBehaviour
                     _codexSubFishImage.sprite = _fishScriptableObjects[i].Sprite;
                     _codexSubSoundwave.clip = _fishScriptableObjects[i].AudioClip;
                     _codexSubDescription.text = _fishScriptableObjects[i].DescriptionFile.text;
-                    SingleTons.SoundWaveManager.ResetTexture(_codexSubSoundwave.gameObject.GetComponent<MeshRenderer>().material.mainTexture);
+                    SingleTons.SoundWaveManager.ResetTexture(_codexSubSoundwave.gameObject.GetComponent<Image>().material);
                 }
                 else
                 {
@@ -180,7 +179,7 @@ public class CollectionsManager : MonoBehaviour
                     _codexSubFishImage.sprite = _undiscoveredSpeciesSprite;
                     _codexSubSoundwave.clip = null;
                     _codexSubDescription.text = "Unknown creature...";
-                    SingleTons.SoundWaveManager.ResetTexture(_codexSubSoundwave.gameObject.GetComponent<MeshRenderer>().material.mainTexture);
+                    SingleTons.SoundWaveManager.ResetTexture(_codexSubSoundwave.gameObject.GetComponent<Image>().material);
                 }
                 return;
             }
@@ -190,7 +189,7 @@ public class CollectionsManager : MonoBehaviour
         _codexSubFishImage.sprite = _undiscoveredSpeciesSprite;
         _codexSubSoundwave.clip = null;
         _codexSubDescription.text = "Unknown creature...";
-        SingleTons.SoundWaveManager.ResetTexture(_codexSubSoundwave.gameObject.GetComponent<MeshRenderer>().material.mainTexture);
+        SingleTons.SoundWaveManager.ResetTexture(_codexSubSoundwave.gameObject.GetComponent<Image>().material);
     }
 
     public void GotoDescriptionFromSpectrogram(List<GameObject> pSpectrogramAudioList, GameObject pButton)
@@ -233,27 +232,29 @@ public class CollectionsManager : MonoBehaviour
                 }
                 break;
         }
+
+        ReduceAllSound();
     }
 
     public void ReduceAllSound()
     {
         for (int i = 0; i < _allAudioSources.Count; i++)
             if (_allAudioSources[i] != null)
-                _allAudioSources[i].GetComponent<AudioSource>().volume = _volume * 0.1f;
+                _allAudioSources[i].GetComponent<AudioSource>().volume = _defaultAudioVolume * 0.1f;
     }
 
     public void IncreaseAllVolume()
     {
         for (int i = 0; i < _allAudioSources.Count; i++)
             if (_allAudioSources[i] != null)
-                _allAudioSources[i].GetComponent<AudioSource>().volume = _volume;
+                _allAudioSources[i].GetComponent<AudioSource>().volume = _defaultAudioVolume;
     }
 
     public void PlayAudioSample()
     {
         if (_codexSubSoundwave.clip != null)
         {
-            SingleTons.SoundWaveManager.ResetTexture(_codexSubSoundwave.gameObject.GetComponent<MeshRenderer>().material.mainTexture);
+            SingleTons.SoundWaveManager.ResetTexture(_codexSubSoundwave.gameObject.GetComponent<Image>().material);
             SingleTons.SoundWaveManager.StartDrawingCustomSpectrogram(_codexSubSoundwave.gameObject, _codexSubSoundwave);
             _codexSubPlayButton.SetActive(false);
             _codexSubStopButton.SetActive(true);

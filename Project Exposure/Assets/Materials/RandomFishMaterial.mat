@@ -51,6 +51,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: ff3bf0671c617dd45a9076cfbc3dcd97, type: 3}
         m_Scale: {x: 10, y: 2}
         m_Offset: {x: 0, y: 0}
+    - _MainTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -62,6 +66,10 @@ Material:
     - _ParallaxMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ScanTex:
+        m_Texture: {fileID: 2800000, guid: b7bbe23887c107f4cbab598811bef0ce, type: 3}
+        m_Scale: {x: 1, y: 2}
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BumpScale: 1
@@ -75,11 +83,15 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.43
     - _GlossyReflections: 1
+    - _IsScanning: 0
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Offset: 0.78179777
     - _Parallax: 0.02
+    - _ScanLineWidth: 0.27
+    - _ScanLines: 4.9
+    - _ScanLinesFrequency: 1
     - _SmoothnessTextureChannel: 0
     - _Specular: 0
     - _SpecularHighlights: 1
@@ -90,5 +102,8 @@ Material:
     - _WobbleSpeed: 100
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0, g: 0.0323627, b: 1, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0.88638633, g: 0.9811321, b: 0.47668207, a: 1}
+    - _ScanColor: {r: 0.6273585, g: 0.8533471, b: 1, a: 1}
+    - _ScanInbetweenColor: {r: 0, g: 0, b: 0, a: 1}
+    - _ScanLineColor: {r: 0, g: 0.07460141, b: 1, a: 1}

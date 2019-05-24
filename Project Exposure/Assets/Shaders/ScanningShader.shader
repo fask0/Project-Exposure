@@ -1,4 +1,4 @@
-﻿Shader "Custom/FishShader"
+﻿Shader "Custom/ScanningShader"
 {
 	Properties
 	{
@@ -10,17 +10,17 @@
 		_Glossiness("Smoothness", Range(0,1)) = 0.5
 		_Metallic("Metallic", Range(0,1)) = 0.0
 
-		_WobbleSpeed("WobbleSpeed", Range(0, 1000)) = 0
-		_WobbleDistance("WobbleDistance", Range(0, 1)) = 0
-		_WobbleCurve("WobbleCurve", Range(0, 1000)) = 0
+		_WobbleSpeed("WobbleSpeed", Range(0, 1000)) = 3
+		_WobbleDistance("WobbleDistance", Range(0, 1)) = 1
+		_WobbleCurve("WobbleCurve", Range(0, 1000)) = 5
 
 		_Offset("Offset", Range(0, 1)) = 0
-		_FishLength("FishLength", Range(0, 10)) = 0
+		_FishLength("FishLength", Range(0, 10)) = 1
 		_Specular("Specular", Range(0, 1)) = 0
 
 		_IsScanning("IsScanning", Range(0,1)) = 0
 		_ScanLines("ScanLines", Range(0, 100)) = 1
-		_ScanLineWidth("ScanLineWidth", Range(0, 2)) = 2
+		_ScanLineWidth("ScanLineWidth", Range(0, 2)) = 1
 	}
 		SubShader
 		{
@@ -56,10 +56,10 @@
 			void vert(inout appdata_full v, out Input o)
 			{
 				//Move uvs
-				v.vertex.z += ((sin((_Time + _Offset) * _WobbleSpeed + (-v.vertex.x + _FishLength) * (-v.vertex.x + _FishLength) * _WobbleCurve)) * (-v.vertex.x + _FishLength)) * _WobbleDistance;
+				//v.vertex.z += ((sin((_Time + _Offset) * _WobbleSpeed + (-v.vertex.x + _FishLength) * (-v.vertex.x + _FishLength) * _WobbleCurve)) * (-v.vertex.x + _FishLength)) * _WobbleDistance;
 
 				UNITY_INITIALIZE_OUTPUT(Input, o);
-				o.vertexPos = v.vertex;
+				//o.vertexPos = v.vertex;
 			}
 
 			half _Glossiness;
@@ -72,7 +72,7 @@
 			float _Specular;
 			void surf(Input IN, inout SurfaceOutputStandard o)
 			{
-				fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
+				fixed4 c = _Color;
 				if(_IsScanning == 1)
 				{
 					for (int i = 0; i < _ScanLines; ++i)

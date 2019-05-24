@@ -1,25 +1,30 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 public class MicrophoneBehaviour : MonoBehaviour
 {
     private MeshCollider _collider;
     private SoundWaveManager _soundWaveManager;
     private Transform _playerTransform;
+    private PlayerMovementBehaviour _playerMovementBehaviour;
 
     void Start()
     {
         _collider = GetComponent<MeshCollider>();
         _soundWaveManager = SingleTons.SoundWaveManager;
-
-        _playerTransform = GameObject.Find("Player").transform;
+        _playerTransform = SingleTons.GameController.Player.transform;
+        _playerMovementBehaviour = _playerTransform.GetComponent<PlayerMovementBehaviour>();
     }
 
     void Update()
     {
-        transform.parent.rotation = Camera.main.transform.parent.rotation * Quaternion.Euler(0, 180, 0);
+        if (_playerMovementBehaviour.GetIsFollowing())
+        {
+            transform.parent.rotation = _playerTransform.rotation * Quaternion.Euler(0, 180, 0);
+        }
+        else
+        {
+            transform.parent.rotation = Camera.main.transform.parent.rotation * Quaternion.Euler(0, 180, 0);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -58,31 +63,6 @@ public class MicrophoneBehaviour : MonoBehaviour
                 if (other.transform.gameObject == SingleTons.SoundWaveManager.GetListeningToCollected[i])
                 {
                     SingleTons.SoundWaveManager.GetListeningToCollected.RemoveAt(i);
-                }
-            }
-        }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.layer == 10)
-        {
-            if (other.tag == string.Format("Target" + SingleTons.QuestManager.GetCurrentTargetIndex) || other.tag == "Collectable")
-            {
-                for (int i = 0; i < SingleTons.SoundWaveManager.GetListeningToCollected.Count; i++)
-                    if (SingleTons.SoundWaveManager.GetListeningToCollected[i] == other) return;
-
-                if ((_playerTransform.position - other.transform.position).magnitude <= 5.0f)
-                {
-                    if (!SingleTons.CollectionsManager.IsCollected(other.transform.name))
-                    {
-                        _soundWaveManager.ScanObject(other.transform.gameObject);
-                        _soundWaveManager.ShowProgress(other.transform.gameObject);
-                    }
-                }
-                else
-                {
-                    _soundWaveManager.HideProgress(other.transform.gameObject);
                 }
             }
         }
