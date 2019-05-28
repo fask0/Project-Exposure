@@ -337,7 +337,7 @@ public class SoundWaveManager : MonoBehaviour
         _customAudioSource = pAudioSource;
         _customAudioSource.Play();
         _customImageMaterial = _customSoundWave.GetComponent<Image>().material;
-        _customImageMaterial.mainTextureOffset = new Vector2(0, 0);
+        _customImageMaterial.mainTextureOffset = new Vector2(0, -0.0065f);
         _customColumn = 0;
         _customOutputData = new float[SpectrumSize];
 

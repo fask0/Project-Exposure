@@ -144,6 +144,7 @@ public class CollectionsManager : MonoBehaviour
     public void GotoDescription(GameObject pGameObject)
     {
         StopAudioSample();
+        _codexSubFishModel.transform.rotation = Quaternion.Euler(0, 180, 0);
         for (int i = 0; i < _fishScriptableObjects.Count; i++)
         {
             if (_fishScriptableObjects[i].Name.ToLower() == pGameObject.name.ToLower())
@@ -181,6 +182,7 @@ public class CollectionsManager : MonoBehaviour
     public void GotoDescription(string pFishName)
     {
         StopAudioSample();
+        _codexSubFishModel.transform.rotation = Quaternion.Euler(0, 180, 0);
         for (int i = 0; i < _fishScriptableObjects.Count; i++)
         {
             if (_fishScriptableObjects[i].Name == pFishName)

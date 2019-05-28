@@ -137,7 +137,7 @@ namespace AuraAPI
         /// </summary>
         private void SetupCullingGroup()
         {
-            if(HasRegistredObjects)
+            if (HasRegistredObjects)
             {
                 _cullingGroup.enabled = true;
                 _boundingSpheres = new BoundingSphere[_registredObjectsList.Count];
@@ -157,7 +157,7 @@ namespace AuraAPI
         /// <param name="candidate">The candidate object to be culled</param>
         public void Register(T candidate)
         {
-            if(!_registredObjectsList.Contains(candidate) && IsCullingGroupValid)
+            if (!_registredObjectsList.Contains(candidate) && IsCullingGroupValid)
             {
                 _registredObjectsList.Add(candidate);
                 SetupCullingGroup();
@@ -170,7 +170,7 @@ namespace AuraAPI
         /// <param name="volume"></param>
         public void Unregister(T volume)
         {
-            if(_registredObjectsList.Contains(volume) && IsCullingGroupValid)
+            if (_registredObjectsList.Contains(volume) && IsCullingGroupValid)
             {
                 _registredObjectsList.Remove(volume);
                 SetupCullingGroup();
@@ -182,16 +182,16 @@ namespace AuraAPI
         /// </summary>
         public void Update()
         {
-            if(HasRegistredObjects && _cullingGroup != null)
+            if (HasRegistredObjects && _cullingGroup != null)
             {
-                for(int i = 0; i < _registredObjectsList.Count; ++i)
+                for (int i = 0; i < _registredObjectsList.Count; ++i)
                 {
                     _boundingSpheres[i] = _registredObjectsList[i].BoundingSphere;
                 }
 
                 int visibleObjectsCount = _cullingGroup.QueryIndices(0, _visibleObjectsIndices, 0);
                 _visibleObjectsArray = new T[visibleObjectsCount];
-                for(int i = 0; i < visibleObjectsCount; ++i)
+                for (int i = 0; i < visibleObjectsCount; ++i)
                 {
                     _visibleObjectsArray[i] = _registredObjectsList[_visibleObjectsIndices[i]];
                 }
@@ -216,7 +216,7 @@ namespace AuraAPI
         /// </summary>
         private void Aura_onPreCullEvent()
         {
-            if(_cullingGroup == null)
+            if (_cullingGroup == null)
             {
                 Aura.OnPreCullEvent -= Aura_onPreCullEvent;
                 return;

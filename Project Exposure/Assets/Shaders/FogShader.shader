@@ -4,9 +4,11 @@
 	{
 		_MainTex("Texture", 2D) = "white" {}
 		_FogColor("Fog Color", Color) = (1,1,1,1)
+		_SilhouetteColor("Silhouette Color", Color) = (1,1,1,1)
 		_DepthStart("Depth Start", float) = 1
 		_DepthDistance("Depth Distance", float) = 1
-
+		_FadeDistance("Depth Fade Distance", Range(0, 1)) = 0.5
+		_FogBeforeFadeMultiplier("Fog Before Fade", Range(0, 1)) = 0.5
 	}
 		SubShader
 		{
@@ -23,8 +25,11 @@
 
 				sampler2D _CameraDepthTexture;
 				fixed4 _FogColor;
+				fixed4 _SilhouetteColor;
 				float _DepthStart;
 				float _DepthDistance;
+				float _FadeDistance;
+				float _FogBeforeFadeMultiplier;
 
 				struct appdata
 				{
@@ -53,11 +58,19 @@
 				fixed4 frag(v2f i) : COLOR
 				{
 					float depthValue = Linear01Depth(tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.scrPos)).r)* _ProjectionParams.z;
+					float depthValue2 = saturate((depthValue - _DepthDistance) / _DepthDistance * _FadeDistance);
 					depthValue = saturate((depthValue - _DepthStart) / _DepthDistance);
 					fixed4 fogColor = _FogColor * depthValue;
+					//fixed4 fogColor2 = _FogColor * depthValue2;
+					fixed4 fogColor2 = lerp(_FogColor, _SilhouetteColor, 1 - depthValue2);
 					fixed4 col = tex2Dproj(_MainTex, i.scrPos);
 
-					return lerp(col, fogColor, depthValue);
+					fixed4 newCol = lerp(col, fogColor, depthValue * _FogBeforeFadeMultiplier);
+					return lerp(newCol, fogColor2, depthValue);
+
+					//return fogColor2;
+
+					//return fixed4(depthValue, depthValue, depthValue, 1);
 				}
 				ENDCG
 		}

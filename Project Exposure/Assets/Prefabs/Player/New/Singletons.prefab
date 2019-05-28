@@ -131,6 +131,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentScore: 0
+  _maxDailyScoreEntries: 500
+  _maxYearlyScoreEntries: 50
 --- !u!1 &5164233925056157970
 GameObject:
   m_ObjectHideFlags: 0
@@ -174,8 +176,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7236318c03df23749bc5627913122ad2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _volume: 0.8
-  _maxDistance: 8
+  _defaultAudioVolume: 0.8
+  _defaultAudioDistanace: 15
   _fishScriptableObjects:
   - {fileID: 11400000, guid: c66105ec07718f141b98cc20be58111f, type: 2}
   - {fileID: 11400000, guid: a486b23471550b5468b6c1cc9d7ea8b7, type: 2}
