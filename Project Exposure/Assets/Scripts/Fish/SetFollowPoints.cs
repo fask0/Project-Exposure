@@ -11,20 +11,20 @@ public class SetFollowPoints : MonoBehaviour
         _followPointTransforms = GetComponentsInChildren<Transform>();
         _colliderBounds = GetComponent<MeshCollider>().bounds.extents;
         _playerColliderBounds = SingleTons.GameController.Player.GetComponent<CapsuleCollider>().bounds.extents;
-        _followPointTransforms[1].localPosition = new Vector3(-_colliderBounds.x * 3 - _playerColliderBounds.x * 2, 0, 0);
-        _followPointTransforms[1].localRotation = Quaternion.Euler(0, 90, 90);
-        _followPointTransforms[2].localPosition = new Vector3(_colliderBounds.x * 3 + _playerColliderBounds.x * 2, 0, 0);
-        _followPointTransforms[2].localRotation = Quaternion.Euler(0, 270, 270);
-        _followPointTransforms[3].localPosition = new Vector3(0, _colliderBounds.y * 3 + _playerColliderBounds.x * 2, 0);
-        _followPointTransforms[3].localRotation = Quaternion.Euler(90, 0, 0);
-        _followPointTransforms[4].localPosition = new Vector3(0, -_colliderBounds.y * 3 - _playerColliderBounds.x * 2, 0);
-        _followPointTransforms[4].localRotation = Quaternion.Euler(270, 180, 0);
+
+        float radius = Mathf.Max(_colliderBounds.x, _colliderBounds.y) * 2 + _playerColliderBounds.x * 5;
+        for (int i = 1; i < _followPointTransforms.Length; i++)
+        {
+            float angle = ((i - 1) * Mathf.PI * 2.0f) / (_followPointTransforms.Length - 1);
+            _followPointTransforms[i].localPosition = new Vector3(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius, 0);
+            _followPointTransforms[i].LookAt(transform, transform.forward);
+        }
     }
 
     public Transform GetClosestPoint(Transform pTransform)
     {
         int closestElement = 0;
-        float closest = 9999.0f;
+        float closest = float.MaxValue;
         for (int i = 1; i < _followPointTransforms.Length; i++)
         {
             float mag = 0.0f;

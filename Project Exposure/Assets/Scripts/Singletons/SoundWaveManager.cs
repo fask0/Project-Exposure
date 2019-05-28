@@ -100,12 +100,12 @@ public class SoundWaveManager : MonoBehaviour
     {
         //Left
         _playerSoundWaveLeft = Camera.main.transform.GetChild(0).GetChild(3).gameObject;
-        _playerLeftImageMaterial = _playerSoundWaveLeft.transform.GetChild(0).GetComponent<Image>().material;
+        _playerLeftImageMaterial = _playerSoundWaveLeft.transform.GetChild(2).GetChild(0).GetComponent<Image>().material;
         ResetTexture(_playerLeftImageMaterial);
         _playerOutputDataLeft = new float[SpectrumSize];
         //Right
         _playerSoundWaveRight = Camera.main.transform.GetChild(0).GetChild(4).gameObject;
-        _playerRightImageMaterial = _playerSoundWaveRight.transform.GetChild(0).GetComponent<Image>().material;
+        _playerRightImageMaterial = _playerSoundWaveRight.transform.GetChild(2).GetChild(0).GetComponent<Image>().material;
         ResetTexture(_playerRightImageMaterial);
         _playerOutputDataRight = new float[SpectrumSize];
 
@@ -113,30 +113,30 @@ public class SoundWaveManager : MonoBehaviour
         GameObject collected = Camera.main.transform.GetChild(0).GetChild(6).gameObject;
         //0
         _collected0 = collected.transform.GetChild(0).gameObject;
-        _collectedImageMaterial0 = _collected0.transform.GetChild(0).GetComponent<Image>().material;
+        _collectedImageMaterial0 = _collected0.transform.GetChild(0).GetChild(1).GetComponent<Image>().material;
         _collected0Child0 = _collected0.transform.GetChild(0).gameObject;
-        _collected0Child0.GetComponent<Image>().material = _collectedImageMaterial0;
+        _collected0Child0.transform.GetChild(1).GetComponent<Image>().material = _collectedImageMaterial0;
         _collected0Child0.SetActive(false);
         _collected0Child1 = _collected0.transform.GetChild(1).gameObject;
-        _collected0Child1.GetComponent<Image>().material = _collectedImageMaterial0;
+        _collected0Child1.transform.GetChild(1).GetComponent<Image>().material = _collectedImageMaterial0;
         _collected0Child1.SetActive(false);
         _collected0Child2 = _collected0.transform.GetChild(2).gameObject;
-        _collected0Child2.GetComponent<Image>().material = _collectedImageMaterial0;
+        _collected0Child2.transform.GetChild(1).GetComponent<Image>().material = _collectedImageMaterial0;
         _collected0Child2.SetActive(false);
         ResetTexture(_collectedImageMaterial0);
         //1
         _collected1 = collected.transform.GetChild(1).gameObject;
-        _collectedImageMaterial1 = _collected1.transform.GetChild(0).GetComponent<Image>().material;
+        _collectedImageMaterial1 = _collected1.transform.GetChild(0).GetChild(1).GetComponent<Image>().material;
         _collected1Child0 = _collected1.transform.GetChild(0).gameObject;
-        _collected1Child0.GetComponent<Image>().material = _collectedImageMaterial1;
+        _collected1Child0.transform.GetChild(1).GetComponent<Image>().material = _collectedImageMaterial1;
         _collected1Child0.SetActive(false);
         _collected1Child1 = _collected1.transform.GetChild(1).gameObject;
-        _collected1Child1.GetComponent<Image>().material = _collectedImageMaterial1;
+        _collected1Child1.transform.GetChild(1).GetComponent<Image>().material = _collectedImageMaterial1;
         _collected1Child1.SetActive(false);
         ResetTexture(_collectedImageMaterial1);
         //2
         _collected2 = collected.transform.GetChild(2).gameObject;
-        _collectedImageMaterial2 = _collected2.transform.GetChild(0).GetComponent<Image>().material;
+        _collectedImageMaterial2 = _collected2.transform.GetChild(0).GetChild(1).GetComponent<Image>().material;
         _collected2Child0 = _collected2.transform.GetChild(0).gameObject;
         _collected2Child0.SetActive(false);
         ResetTexture(_collectedImageMaterial2);
@@ -245,7 +245,7 @@ public class SoundWaveManager : MonoBehaviour
     private void InitTargetSoundWave()
     {
         _targetSoundWave = Camera.main.transform.GetChild(0).GetChild(5).gameObject;
-        _targetImageMaterial = _targetSoundWave.transform.GetChild(0).GetComponent<Image>().material;
+        _targetImageMaterial = _targetSoundWave.transform.GetChild(1).GetChild(0).GetComponent<Image>().material;
         ResetTexture(_targetImageMaterial);
         _targetAudioSource = transform.parent.GetChild(5).GetComponent<AudioSource>();
         _targetOutputData = new float[SpectrumSize];
@@ -299,7 +299,7 @@ public class SoundWaveManager : MonoBehaviour
         for (int y = 0; y < _texHeight; y++)
         {
             int x = _texWidth - 1 - pColumn;
-            newTex.SetPixel(x, y, GetGradient(exponentialSpectrum[(int)(y * segmentSize)] * _heightMultiplier));
+            newTex.SetPixel(x, y, GetGradient(exponentialSpectrum[(int)(y * segmentSize)] * _heightMultiplier, y));
         }
         newTex.Apply();
         pMaterial.mainTexture = newTex;
@@ -313,9 +313,12 @@ public class SoundWaveManager : MonoBehaviour
     /// </summary>
     /// <param name="pValue"></param>
     /// <returns></returns>
-    private Color GetGradient(float pValue)
+    private Color GetGradient(float pValue, float pIndex)
     {
-        return new Color(pValue * 10, pValue, 0);
+        if (pValue > 0.1f)
+            return new Color(1, 1 - (pIndex / _texHeight), 0);
+        else
+            return new Color(0, 0, 0, 0);
     }
 
     private void UpdateCustomSoundWave()
@@ -343,7 +346,8 @@ public class SoundWaveManager : MonoBehaviour
 
     public void StopDrawingCustomSpectrogram()
     {
-        _customAudioSource.Stop();
+        if (_customAudioSource != null)
+            _customAudioSource.Stop();
         _shouldUpdateCustom = false;
     }
 
@@ -352,10 +356,10 @@ public class SoundWaveManager : MonoBehaviour
         Texture2D tex = pMaterial.mainTexture as Texture2D;
         for (int x = 0; x < tex.width; x++)
             for (int y = 0; y < tex.height; y++)
-                tex.SetPixel(x, y, Color.black);
+                tex.SetPixel(x, y, new Color(0, 0, 0, 0));
         tex.Apply();
         pMaterial.mainTexture = tex;
-        pMaterial.mainTextureOffset = Vector2.zero;
+        pMaterial.mainTextureOffset = new Vector2(0, -0.0065f);
     }
 
     public void ScanCreature(GameObject pScannedCreature)

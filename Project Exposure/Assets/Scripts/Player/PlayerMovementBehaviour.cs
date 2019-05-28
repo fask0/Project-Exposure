@@ -50,7 +50,7 @@ public class PlayerMovementBehaviour : MonoBehaviour
                 transform.position = Vector3.Slerp(transform.position, _followPoint.position, Time.deltaTime * 3);
                 transform.rotation = Quaternion.Slerp(transform.rotation, _followPoint.rotation, Time.deltaTime * 3);
 
-                if (_joystickBehaviour.GetTimeAtZero() >= 0.5f || _joystickBehaviour.Vertical() != 0)
+                if (_joystickBehaviour.IsPressed())
                 {
                     _followTarget = null;
                     _isFollowing = false;
