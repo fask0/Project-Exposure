@@ -43,6 +43,7 @@ public class StunEnemy : MonoBehaviour
             if (Vector3.Distance(transform.position, _player.transform.position) < _stunRange)
             {
                 _playerMovementBehaviour.StunPlayer(_stunTimeInMs);
+                CameraShake.Shake(_stunTimeInMs * 0.001f, 0.75f);
                 _stunOnCooldown = true;
                 _continueStunTime = DateTime.Now.AddMilliseconds(_stunCooldownInMs);
             }
