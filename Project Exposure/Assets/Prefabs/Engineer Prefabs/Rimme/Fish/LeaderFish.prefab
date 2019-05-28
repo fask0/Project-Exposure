@@ -79,7 +79,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 126
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &2296780318633494099
 MonoBehaviour:
@@ -93,14 +93,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71eca943aeecbc7409177d0aede0f094, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _thisCreatureType: 7
+  _threatRange: 1.25
+  _threatFleeRange: 1.25
+  _threatLevel: 1
+  _drawRange: 0
   _minSpeed: 2.5
   _maxSpeed: 3.75
   _turningSpeed: 1
   _speedUpRate: 10
-  _threatRange: 1.25
-  _threatFleeRange: 1.25
-  _threatLevel: 1
   _dummy: {fileID: 2296780317675496468}
+  _creaturesToAvoid: 00000000
+  _schoolFishWithLeader: []
+  _schoolFishWithLeaderBehaviours: []
 --- !u!135 &812351312
 SphereCollider:
   m_ObjectHideFlags: 0
