@@ -8,6 +8,7 @@ public class PlayerMovementBehaviour : MonoBehaviour
 
     private JoystickBehaviour _joystickBehaviour;
     private Rigidbody _rigidbody;
+    private CapsuleCollider _collider;
 
     private Vector3 _direction = Vector3.zero;
 
@@ -18,11 +19,17 @@ public class PlayerMovementBehaviour : MonoBehaviour
     private bool _isStunned;
     private DateTime _stopStunTime;
 
+    //Following
+    private bool _isFollowing;
+    private GameObject _followTarget;
+    private Transform _followPoint;
+
     void Start()
     {
         _waterResistance = _acceleration * 0.5f;
         _rigidbody = GetComponent<Rigidbody>();
-        _joystickBehaviour = GameObject.Find("Joystick").GetComponent<JoystickBehaviour>();
+        _collider = GetComponent<CapsuleCollider>();
+        _joystickBehaviour = Camera.main.transform.GetChild(0).GetChild(1).GetComponent<JoystickBehaviour>();
 
         SingleTons.GameController.Player = this.gameObject;
     }
@@ -38,32 +45,56 @@ public class PlayerMovementBehaviour : MonoBehaviour
         }
         else
         {
-            //Rotation and movement
-            if (_joystickBehaviour.IsPressed())
+            if (_isFollowing)
             {
-                if (_joystickBehaviour.GetTimeAtZero() >= 0.5f || _joystickBehaviour.Vertical() != 0)
+                transform.position = Vector3.Slerp(transform.position, _followPoint.position, Time.deltaTime * 3);
+                transform.rotation = Quaternion.Slerp(transform.rotation, _followPoint.rotation, Time.deltaTime * 3);
+
+                if (_joystickBehaviour.IsPressed())
                 {
-                    _velocity += _acceleration * Time.deltaTime;
+                    _followTarget = null;
+                    _isFollowing = false;
+                }
+            }
+            else
+            {
+                //Rotation and movement
+                if (_joystickBehaviour.IsPressed())
+                {
+                    if (_joystickBehaviour.GetTimeAtZero() >= 0.5f || _joystickBehaviour.Vertical() != 0)
+                    {
+                        _velocity += _acceleration * Time.deltaTime;
+                    }
+                    else
+                    {
+                        _velocity -= _waterResistance * Time.deltaTime;
+                        _rigidbody.velocity = Vector3.zero;
+                    }
                 }
                 else
                 {
                     _velocity -= _waterResistance * Time.deltaTime;
                     _rigidbody.velocity = Vector3.zero;
                 }
-            }
-            else
-            {
-                _velocity -= _waterResistance * Time.deltaTime;
-                _rigidbody.velocity = Vector3.zero;
-            }
 
-            _velocity = Mathf.Clamp(_velocity, 0, _maxSpeed);
-            _direction = Camera.main.transform.forward;
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(90 * ((_velocity / _maxSpeed) - _joystickBehaviour.Vertical()),
-                                                                                       Camera.main.transform.parent.transform.rotation.eulerAngles.y + 90 * _joystickBehaviour.Horizontal(),
-                                                                                       0), 2 * Time.deltaTime);
-            transform.Translate(_direction * _velocity * Time.deltaTime, Space.World);
+                _direction = Camera.main.transform.forward;
+                _velocity = Mathf.Clamp(_velocity, 0, _maxSpeed);
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(90 * ((_velocity / _maxSpeed) - _joystickBehaviour.Vertical()),
+                                                                                           Camera.main.transform.parent.transform.rotation.eulerAngles.y + 90 * _joystickBehaviour.Horizontal(),
+                                                                                           0), 2 * Time.deltaTime);
+
+                transform.Translate(_direction * _velocity * Time.deltaTime, Space.World);
+            }
         }
+    }
+
+    public void StartFollowingGameObject(GameObject pGameObject)
+    {
+        if (_followTarget == pGameObject) return;
+
+        _isFollowing = true;
+        _followTarget = pGameObject;
+        _followPoint = pGameObject.GetComponent<SetFollowPoints>().GetClosestPoint(transform);
     }
 
     public float GetVelocity()
@@ -75,5 +106,23 @@ public class PlayerMovementBehaviour : MonoBehaviour
     {
         _isStunned = true;
         _stopStunTime = DateTime.Now.AddMilliseconds(stunTimeInMs);
+    }
+
+    public bool CheckIfFollowingGameObject(GameObject pGameObject)
+    {
+        if (pGameObject == _followTarget)
+            return true;
+
+        return false;
+    }
+
+    public GameObject GetFollowTarget()
+    {
+        return _followTarget;
+    }
+
+    public bool GetIsFollowing()
+    {
+        return _isFollowing;
     }
 }

@@ -6,6 +6,7 @@ public class DolphinBehaviour : FishBehaviour
 {
     private DolphinParentBehaviour _dolphinParent;
 
+    [SerializeField]
     private DolphinParentBehaviour.DolphinState _dolphinState = DolphinParentBehaviour.DolphinState.RandomStartingBehaviour;
 
     private bool _fishTooClose = false;

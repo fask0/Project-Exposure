@@ -24,7 +24,8 @@
 			Tags {"Queue" = "Transparent" "IgnoreProjector" = "True" "RenderType" = "Transparent" }
 			LOD 200
 			Cull Off
-			Zwrite Off
+			Zwrite On
+			//ZTest Greater
 
 			CGPROGRAM
 			// Physically based Standard lighting model, and enable shadows on all light types

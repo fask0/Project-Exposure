@@ -13,7 +13,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 3000
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -65,9 +65,9 @@ Material:
     - _GlossyReflections: 1
     - _Metallic: 0
     - _Mode: 0
-    - _NoiseAmplifier: 5.33
-    - _NoiseFrequency: 0.15
-    - _NoiseSpeed: 34.8
+    - _NoiseAmplifier: 2.48
+    - _NoiseFrequency: 0.3
+    - _NoiseSpeed: 5.3
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
@@ -75,13 +75,13 @@ Material:
     - _SrcBlend: 1
     - _Tess: 32
     - _UVSec: 0
-    - _WaveAmplitude: 2.83
+    - _WaveAmplitude: 0.5
     - _WaveColorAmplifier: 0.028
     - _WaveLength: 1.48
     - _WaveSpeed: 8.1
     - _WaveSteepness: 1.9
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.3632075, g: 0.47407758, b: 1, a: 1}
+    - _Color: {r: 0.2784314, g: 0.36078432, b: 0.94509804, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _WaveDirection: {r: 1, g: 0, b: 0.8, a: 0}

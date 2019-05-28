@@ -57,6 +57,11 @@ public class FishBehaviour : FishBehaviourParent
         return _dummy;
     }
 
+    public float GetCurrentSpeed()
+    {
+        return _currentSpeed;
+    }
+
     //public float GetThreatRange()
     //{
     //    return _threatRange;
