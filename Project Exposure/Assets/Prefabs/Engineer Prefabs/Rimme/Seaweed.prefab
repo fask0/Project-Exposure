@@ -22,8 +22,13 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: be947b545ff1b5c43adbb1199db4e7b6,
         type: 3}
       propertyPath: m_Name
-      value: seaweed_tall (1)
+      value: Seaweed
       objectReference: {fileID: 0}
+    - target: {fileID: -1504981713932161579, guid: be947b545ff1b5c43adbb1199db4e7b6,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: a366376c037d7bc459cfe4ac0529226e, type: 2}
     - target: {fileID: -4216859302048453862, guid: be947b545ff1b5c43adbb1199db4e7b6,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -79,11 +84,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -1504981713932161579, guid: be947b545ff1b5c43adbb1199db4e7b6,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: a366376c037d7bc459cfe4ac0529226e, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be947b545ff1b5c43adbb1199db4e7b6, type: 3}
 --- !u!1 &1731098929852704315 stripped

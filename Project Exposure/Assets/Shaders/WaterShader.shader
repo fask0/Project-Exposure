@@ -7,9 +7,9 @@
 		_Glossiness("Smoothness", Range(0,1)) = 0.5
 		_Metallic("Metallic", Range(0,1)) = 0.0
 
-		_NoiseSpeed("NoiseSpeed", Range(0, 10)) = 1
-		_NoiseAmplifier("NoiseAmplifier", Range(0, 1)) = 0.2
-		_NoiseFrequency("NoiseFrequency", Range(0, 1)) = 0.1
+		_NoiseSpeed("NoiseSpeed", Range(0, 100)) = 1
+		_NoiseAmplifier("NoiseAmplifier", Range(0, 10)) = 0.2
+		_NoiseFrequency("NoiseFrequency", Range(0, 10)) = 0.1
 
 		_WaveDirection("WaveDirection", Vector) = (0,0,0,0)
 		_WaveAmplitude("WaveAmplitude", Range(0, 10)) = 1
@@ -20,14 +20,16 @@
 	}
 		SubShader
 		{
-			Tags { "RenderType" = "Opaque" }
+			//Tags { "RenderType" = "Opaque" }
+			Tags {"Queue" = "Transparent" "IgnoreProjector" = "True" "RenderType" = "Transparent" }
 			LOD 200
 			Cull Off
-			//Zwrite Off
+			Zwrite On
+			//ZTest Greater
 
 			CGPROGRAM
 			// Physically based Standard lighting model, and enable shadows on all light types
-			#pragma surface surf Standard fullforwardshadows addshadow vertex:vert //alpha 
+			#pragma surface surf Standard fullforwardshadows addshadow vertex:vert alpha:fade
 
 			// Use shader model 3.0 target, to get nicer looking lighting
 			#pragma target 5.0
@@ -101,7 +103,7 @@
 				// Metallic and smoothness come from slider variables
 				o.Metallic = _Metallic;
 				o.Smoothness = _Glossiness;
-				o.Alpha = 0.8f;
+				o.Alpha = 0.5f;
 			}
 			ENDCG
 		}

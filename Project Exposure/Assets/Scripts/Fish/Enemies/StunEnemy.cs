@@ -40,7 +40,7 @@ public class StunEnemy : MonoBehaviour
         else
         {
             Vector3 diffVector = (transform.position - _player.transform.position);
-            if (diffVector.x * diffVector.x + diffVector.y * diffVector.y < _stunRange * _stunRange)
+            if (Vector3.Distance(transform.position, _player.transform.position) < _stunRange)
             {
                 _playerMovementBehaviour.StunPlayer(_stunTimeInMs);
                 _stunOnCooldown = true;

@@ -16,8 +16,8 @@
 		_CurveWidth("Curve Width", Range(0, 3)) = 1.5
 
 		_WobbleSpeed("Wobble Speed", Range(0, 1)) = 0.5
-		_WobbleDistance("Wobble Distance", Range(0, 1)) = 0.5
-		_WobbleCurve("Wobble Curve", Range(0, 1)) = 0.5
+		_WobbleDistance("Wobble Distance", Range(0, 10)) = 0.5
+		_WobbleCurve("Wobble Curve", Range(0, 10)) = 0.5
 
 		_LeanDirection("Lean Direction", Vector) = (1, 0,0,0)
 		_LeanDistance("Lean Distance", Range(0, 10)) = 4
@@ -31,7 +31,7 @@
 	}
 		SubShader
 		{
-			Tags {"Queue" = "AlphaTest" "IgnoreProjector" = "True" "RenderType" = "TransparentCutout" }
+			Tags {"Queue" = "AlphaTest" "IgnoreProjector" = "True" "RenderType" = "TreeTransparentCutout" }
 			Cull Off
 
 			CGPROGRAM
@@ -146,5 +146,5 @@
 			}
 			ENDCG
 		}
-			FallBack "Diffuse"
+			FallBack "Nature/Soft"
 }
