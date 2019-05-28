@@ -7,9 +7,9 @@
 		_Glossiness("Smoothness", Range(0,1)) = 0.5
 		_Metallic("Metallic", Range(0,1)) = 0.0
 
-		_NoiseSpeed("NoiseSpeed", Range(0, 10)) = 1
-		_NoiseAmplifier("NoiseAmplifier", Range(0, 1)) = 0.2
-		_NoiseFrequency("NoiseFrequency", Range(0, 1)) = 0.1
+		_NoiseSpeed("NoiseSpeed", Range(0, 100)) = 1
+		_NoiseAmplifier("NoiseAmplifier", Range(0, 10)) = 0.2
+		_NoiseFrequency("NoiseFrequency", Range(0, 10)) = 0.1
 
 		_WaveDirection("WaveDirection", Vector) = (0,0,0,0)
 		_WaveAmplitude("WaveAmplitude", Range(0, 10)) = 1
