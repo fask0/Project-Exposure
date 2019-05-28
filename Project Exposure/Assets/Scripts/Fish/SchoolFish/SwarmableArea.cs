@@ -29,17 +29,26 @@ public class SwarmableArea : MonoBehaviour
     private float _swarmSpeed = 1;
 
     private List<GameObject> _swarmingFish = new List<GameObject>();
+    private bool _hasSwarmedBefore = false;
 
     public void SwarmArea(List<GameObject> fish)
     {
-        _swarmingFish = fish;
-        ToggleBehaviours(true);
+        if (!_hasSwarmedBefore)
+        {
+            _swarmingFish = fish;
+            ToggleBehaviours(true);
+            _hasSwarmedBefore = true;
+        }
     }
 
     public void SwarmArea(FishZone fishZone)
     {
-        _swarmingFish = fishZone.GetSchoolFish();
-        ToggleBehaviours(true);
+        if (!_hasSwarmedBefore)
+        {
+            _swarmingFish = fishZone.GetSchoolFish();
+            ToggleBehaviours(true);
+            _hasSwarmedBefore = true;
+        }
     }
 
     public void StopSwarming()
