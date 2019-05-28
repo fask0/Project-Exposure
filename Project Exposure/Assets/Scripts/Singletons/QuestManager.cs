@@ -14,7 +14,7 @@ public class QuestManager : MonoBehaviour
     {
         SingleTons.QuestManager = this;
         _currentTargetIndex = 0;
-        _soundDummyAudioSource = GameObject.Find("TargetSoundDummy").GetComponent<AudioSource>();
+        _soundDummyAudioSource = transform.parent.GetChild(5).GetComponent<AudioSource>();
 
         for (int i = 0; i < 999; i++)
         {
@@ -30,6 +30,8 @@ public class QuestManager : MonoBehaviour
     public void SetTargetAudio(int pTargetIndex)
     {
         _currentTargetIndex = pTargetIndex;
+        if (_currentTargetIndex >= _allTargetsList.Count)
+            _currentTargetIndex = 0;
         _currentAudioTarget = _allTargetsList[_currentTargetIndex].GetComponent<AudioSource>();
         _soundDummyAudioSource.clip = _currentAudioTarget.clip;
         _currentAudioTarget.Stop();

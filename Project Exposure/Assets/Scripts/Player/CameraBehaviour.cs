@@ -10,46 +10,50 @@ public class CameraBehaviour : MonoBehaviour
     private float _rotY = 0.0f;
 
     private GameObject _target;
-    private Transform _playerTransform;
+    private PlayerMovementBehaviour _playerMovementBehaviour;
 
     private JoystickBehaviour _joystickBehaviour;
-
-    private void Awake()
-    {
-        _target = GameObject.Find("CameraFollowPoint");
-        transform.position = _target.transform.position;
-    }
+    private Vector3 _initialCamPointPos;
 
     void Start()
     {
-        _playerTransform = _target.transform.parent.transform;
-        _joystickBehaviour = GameObject.Find("Joystick").GetComponent<JoystickBehaviour>();
+        _target = SingleTons.GameController.Player.transform.parent.GetChild(1).gameObject;
+        _playerMovementBehaviour = SingleTons.GameController.Player.GetComponent<PlayerMovementBehaviour>();
+        transform.position = _target.transform.position;
+        _joystickBehaviour = Camera.main.transform.GetChild(0).GetChild(1).GetComponent<JoystickBehaviour>();
     }
 
     void Update()
     {
-        if (_joystickBehaviour.Vertical() != 0 || _joystickBehaviour.Horizontal() != 0)
+        if (_playerMovementBehaviour.GetIsFollowing())
         {
-            _rotX += -_joystickBehaviour.Vertical() * _inputSensitivity * Time.deltaTime;
-            _rotY += _joystickBehaviour.Horizontal() * _inputSensitivity * Time.deltaTime;
-
-            float clamp = _clampAngle * Mathf.Abs(_joystickBehaviour.Vertical());
-            _rotX = Mathf.Clamp(_rotX, -clamp, clamp);
-
-            Quaternion localRotation = Quaternion.Slerp(transform.localRotation, Quaternion.Euler(_rotX, _rotY, 0), Time.deltaTime * 2);
-            transform.rotation = localRotation;
+            transform.LookAt(_target.transform.position + _playerMovementBehaviour.gameObject.transform.up + _playerMovementBehaviour.gameObject.transform.forward * 0.35f);
         }
-
-        if (_joystickBehaviour.Vertical() == 0)
+        else
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, transform.eulerAngles.y, 0), Time.deltaTime);
-            _rotX = transform.rotation.eulerAngles.x;
-            _rotX = (_rotX > 180) ? _rotX - 360 : _rotX;
-        }
+            if (_joystickBehaviour.Vertical() != 0 || _joystickBehaviour.Horizontal() != 0)
+            {
+                _rotX += -_joystickBehaviour.Vertical() * _inputSensitivity * Time.deltaTime;
+                _rotY += _joystickBehaviour.Horizontal() * _inputSensitivity * Time.deltaTime;
 
-        if (_joystickBehaviour.Horizontal() == 0)
-        {
-            _rotY = transform.localRotation.eulerAngles.y;
+                float clamp = _clampAngle * Mathf.Abs(_joystickBehaviour.Vertical());
+                _rotX = Mathf.Clamp(_rotX, -clamp, clamp);
+
+                Quaternion localRotation = Quaternion.Slerp(transform.localRotation, Quaternion.Euler(_rotX, _rotY, 0), Time.deltaTime * 2);
+                transform.rotation = localRotation;
+            }
+
+            if (_joystickBehaviour.Vertical() == 0)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, transform.eulerAngles.y, 0), Time.deltaTime);
+                _rotX = transform.rotation.eulerAngles.x;
+                _rotX = (_rotX > 180) ? _rotX - 360 : _rotX;
+            }
+
+            if (_joystickBehaviour.Horizontal() == 0)
+            {
+                _rotY = transform.localRotation.eulerAngles.y;
+            }
         }
     }
 

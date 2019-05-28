@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class PlayerOxygen : MonoBehaviour
@@ -8,26 +7,24 @@ public class PlayerOxygen : MonoBehaviour
     [SerializeField]
     private float _maximumOxygen;
     [SerializeField]
-    private float _currentOxygen;
-
-    [SerializeField]
     private float _oxygenDrainRate;
     [SerializeField]
-    private GameObject _oxygenContainer;
+    private float _surviveTimeWithoutOxygen = 20.0f;
+
+    private float _currentOxygen;
+    private float _timeWithoutOxygen;
 
     private bool _oxygenDrainIsPaused = false;
     private DateTime _resumeTime;
 
-    private float _originalHeight;
-    private RectTransform _oxygenContainerRectTransform;
+    private Image _oxygenBarFill;
 
     // Start is called before the first frame update
     void Start()
     {
         _currentOxygen = _maximumOxygen;
 
-        _oxygenContainerRectTransform = _oxygenContainer.GetComponent<RectTransform>();
-        _originalHeight = _oxygenContainerRectTransform.rect.height;
+        _oxygenBarFill = Camera.main.transform.GetChild(0).GetChild(8).GetChild(0).GetChild(1).GetComponent<Image>();
     }
 
     // Update is called once per frame
@@ -37,7 +34,7 @@ public class PlayerOxygen : MonoBehaviour
         {
             _currentOxygen -= _oxygenDrainRate * Time.deltaTime;
 
-            UpdateContainerSize();
+            UpdateOxygen();
             CheckIfDed();
         }
         else
@@ -53,14 +50,18 @@ public class PlayerOxygen : MonoBehaviour
     {
         if (_currentOxygen <= 0)
         {
-            //DO the ded stuff
+            _timeWithoutOxygen += Time.deltaTime;
+            if (_timeWithoutOxygen >= _surviveTimeWithoutOxygen)
+            {
+                //DO the ded stuff
+            }
         }
     }
 
-    private void UpdateContainerSize()
+    private void UpdateOxygen()
     {
-        float percentage = (_currentOxygen / _maximumOxygen);
-        _oxygenContainerRectTransform.offsetMax = new Vector2(_oxygenContainerRectTransform.offsetMax.x, -_originalHeight + (_originalHeight * percentage));
+        float percentage = _currentOxygen / _maximumOxygen;
+        _oxygenBarFill.fillAmount = percentage;
     }
 
     public void PauseOxygenDrain(int pauseTimeInMs)

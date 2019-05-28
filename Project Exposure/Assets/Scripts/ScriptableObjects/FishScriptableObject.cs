@@ -8,6 +8,8 @@ public class FishScriptableObject : ScriptableObject
     public TextAsset DescriptionFile;
     public AudioClip AudioClip;
     public Sprite Sprite;
+    public Mesh Mesh;
+    public Texture Texture;
 
     private void OnEnable()
     {
