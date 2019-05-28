@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: FishMaterial
-  m_Shader: {fileID: 4800000, guid: f95512027f79a334c871dc462f2545b1, type: 3}
+  m_Name: FlatFishMaterial
+  m_Shader: {fileID: 4800000, guid: 03ba8bc50eff5e64f946bac2fa16ee41, type: 3}
   m_ShaderKeywords: _METALLICGLOSSMAP _NORMALMAP _PARALLAXMAP
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -40,11 +40,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _HeightMap:
-        m_Texture: {fileID: 2800000, guid: 68e5e43a35939e34995946b6b98627e9, type: 3}
+        m_Texture: {fileID: 2800000, guid: 0362027ecd750b843ba6a9915f7517d4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: d3b9492830995604a997bd5c9a0dd9df, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3a08b121f8047c749b9eb5fd46135b8e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -52,15 +52,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicTex:
-        m_Texture: {fileID: 2800000, guid: 18ecab4e529bec8469c42f9d514d8f22, type: 3}
+        m_Texture: {fileID: 2800000, guid: d6564c8768df6b4468cc9f282daeda58, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 2800000, guid: 6274c2fba64189342951e6324fd6cbae, type: 3}
+        m_Texture: {fileID: 2800000, guid: 16bba4ef4bdbbf4459ae1f57ba943863, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Occlusion:
-        m_Texture: {fileID: 2800000, guid: bb91be4a581d30441b103af4feb7e867, type: 3}
+        m_Texture: {fileID: 2800000, guid: 89032593f4003af4a9d4d07edd342de6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -76,7 +76,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _FishLength: 2.44
+    - _FishLength: 0.63
     - _GlossMapScale: 0.602
     - _Glossiness: 0.602
     - _GlossyReflections: 1
@@ -90,7 +90,7 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
-    - _WobbleCurve: 0.1
+    - _WobbleCurve: 1
     - _WobbleDistance: 0.053
     - _WobbleSpeed: 80
     - _ZWrite: 1

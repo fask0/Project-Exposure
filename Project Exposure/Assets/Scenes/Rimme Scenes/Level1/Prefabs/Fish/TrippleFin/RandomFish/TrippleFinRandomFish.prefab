@@ -26,13 +26,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4759948550040911171}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8747856068970502608}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &652710351779607910
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -40,7 +40,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4759948550040911171}
-  m_Mesh: {fileID: -3099183463934272234, guid: 6e8792d58658ebd45ba788fd18de6dbd, type: 3}
+  m_Mesh: {fileID: -8677485993036714586, guid: 75d9535c99e84f441bce4375088debe4, type: 3}
 --- !u!23 &6499378090341353887
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -58,8 +58,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 293e31ce4513f1d40b8cf7ffdf3839f9, type: 2}
-  - {fileID: 2100000, guid: ab0eb48f6a243684183a03a97145ee19, type: 2}
+  - {fileID: 2100000, guid: c715dd3d896ac6c4a8ced0e1a563657e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -132,10 +131,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8747856068970502608}
   - component: {fileID: 8747856068970502610}
-  - component: {fileID: 8747856068970502611}
   - component: {fileID: 8184956799059685847}
-  m_Layer: 0
-  m_Name: SchoolFish
+  - component: {fileID: 5104726287498326465}
+  m_Layer: 12
+  m_Name: TrippleFinRandomFish
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -148,7 +147,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8747856068970502609}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -21.276, y: 7.1931024, z: -1.405}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -171,31 +170,8 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 126
+  m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &8747856068970502611
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8747856068970502609}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d7b8f2b064b5a448aac504b50ccc4c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _thisCreatureType: 7
-  _threatRange: 0.75
-  _threatFleeRange: 1
-  _threatLevel: 1
-  _drawRange: 0
-  _minSpeed: 2.6
-  _maxSpeed: 5
-  _turningSpeed: 1
-  _speedUpRate: 10
-  _dummy: {fileID: 8747856068781857026}
-  _creaturesToAvoid: 
 --- !u!135 &8184956799059685847
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -209,3 +185,26 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.25
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5104726287498326465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8747856068970502609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4785e3fc300e3a446800d9907174cc2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _thisCreatureType: 7
+  _threatRange: 1.25
+  _threatFleeRange: 1.25
+  _threatLevel: 1
+  _drawRange: 0
+  _minSpeed: 1.25
+  _maxSpeed: 2.5
+  _turningSpeed: 1
+  _speedUpRate: 10
+  _dummy: {fileID: 8747856068781857026}
+  _creaturesToAvoid: 00000000

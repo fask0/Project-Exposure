@@ -1,15 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine.UI;
 using UnityEngine;
-using UnityEngine.Profiling;
 
 public class SoundWaveManager : MonoBehaviour
 {
     [SerializeField] private int _heightMultiplier = 300;
 
     private const int SpectrumSize = 4096;
+
+    public delegate void OnFishScan(GameObject pGameObject);
+    public event OnFishScan onFishScanEvent;
 
     ///Fields
     //Spectrogram
@@ -376,6 +377,9 @@ public class SoundWaveManager : MonoBehaviour
 
             if (_scanTimeLeft <= 0)
             {
+                if (onFishScanEvent != null)
+                    onFishScanEvent(pScannedCreature);
+
                 SingleTons.CollectionsManager.AddToCollection(pScannedCreature);
                 SingleTons.ScoreManager.AddScore(100);
 

@@ -52,6 +52,8 @@ public class SchoolFishLeaderBehaviour : FishBehaviour
 
     private void Update()
     {
+        _rigidBody.velocity = Vector3.zero;
+
         if (!_hasAddedItselfToSchool)
         {
             GetSchool();
