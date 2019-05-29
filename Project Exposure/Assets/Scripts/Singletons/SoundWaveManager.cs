@@ -365,7 +365,7 @@ public class SoundWaveManager : MonoBehaviour
 
     public void ScanCreature(GameObject pScannedCreature)
     {
-        Material mat = pScannedCreature.GetComponent<MeshRenderer>().material;
+        Material mat = pScannedCreature.GetComponentInChildren<Renderer>().material;
         if (Input.GetKey(KeyCode.Mouse0))
         {
             _currentScan = pScannedCreature;
@@ -408,7 +408,7 @@ public class SoundWaveManager : MonoBehaviour
 
     public void ScanTarget(GameObject pScannedTarget)
     {
-        Material mat = pScannedTarget.GetComponent<MeshRenderer>().material;
+        Material mat = pScannedTarget.GetComponentInChildren<Renderer>().material;
         if (Input.GetKey(KeyCode.Mouse0))
         {
             RaycastHit hit;
@@ -479,7 +479,7 @@ public class SoundWaveManager : MonoBehaviour
     {
         if (_currentScan == null || _currentScan != pCurrentScan) return;
 
-        Material mat = pCurrentScan.GetComponent<MeshRenderer>().material;
+        Material mat = pCurrentScan.GetComponent<Renderer>().material;
         mat.SetFloat("_IsScanning", 0);
         mat.SetFloat("_ScanLines", 0);
         mat.SetFloat("_ScanLineWidth", 0);

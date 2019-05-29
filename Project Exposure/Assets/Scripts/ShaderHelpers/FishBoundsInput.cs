@@ -7,13 +7,18 @@ public class FishBoundsInput : MonoBehaviour
     [SerializeField]
     [Range(0, 1)]
     private float _multiplier = 1;
+    [SerializeField]
+    private bool _hasAnimation;
 
     new Renderer renderer;
 
     // Start is called before the first frame update
     void Start()
     {
-        renderer = GetComponent<Renderer>();
+        if (!_hasAnimation)
+            renderer = GetComponent<Renderer>();
+        else
+            renderer = transform.GetChild(0).GetChild(0).GetComponent<Renderer>();
 
         float length;
         float rand;

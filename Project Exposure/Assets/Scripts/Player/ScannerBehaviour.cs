@@ -58,9 +58,6 @@ public class ScannerBehaviour : MonoBehaviour
                 _soundWaveManager.ScanTarget(other.gameObject);
                 _soundWaveManager.ShowProgress(other.gameObject);
             }
-            //if (other.tag == string.Format("Target" + SingleTons.QuestManager.GetCurrentTargetIndex) || other.tag == "Collectable")
-            //{
-            //}
         }
     }
 }

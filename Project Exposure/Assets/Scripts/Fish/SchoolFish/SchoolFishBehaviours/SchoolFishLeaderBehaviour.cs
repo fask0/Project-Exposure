@@ -15,7 +15,7 @@ public class SchoolFishLeaderBehaviour : FishBehaviour
     public List<SchoolFishBehaviour> _schoolFishWithLeaderBehaviours = new List<SchoolFishBehaviour>();
 
     protected int fishCheckingIndex = 0;
-    protected int fishCheckingSubdivision = 10;
+    protected int fishCheckingSubdivision = 8;
 
     // Start is called before the first frame update
     void Start()
@@ -52,6 +52,8 @@ public class SchoolFishLeaderBehaviour : FishBehaviour
 
     private void Update()
     {
+        _rigidBody.velocity = Vector3.zero;
+
         if (!_hasAddedItselfToSchool)
         {
             GetSchool();

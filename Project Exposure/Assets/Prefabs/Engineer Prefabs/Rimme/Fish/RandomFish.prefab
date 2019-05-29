@@ -90,6 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c783258434bee84c92f4727a82ac65b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _multiplier: 1
 --- !u!1 &8310648274108010064
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,9 +138,9 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &8310648274108010094
 MonoBehaviour:
@@ -153,14 +154,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4785e3fc300e3a446800d9907174cc2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _thisCreatureType: 7
+  _threatRange: 1.25
+  _threatFleeRange: 1.25
+  _threatLevel: 1
+  _drawRange: 0
   _minSpeed: 1.25
   _maxSpeed: 2.5
   _turningSpeed: 1
   _speedUpRate: 10
-  _threatRange: 1.25
-  _threatFleeRange: 1.25
-  _threatLevel: 1
   _dummy: {fileID: 8310648274735000283}
+  _creaturesToAvoid: 
 --- !u!135 &8857278857819374164
 SphereCollider:
   m_ObjectHideFlags: 0
