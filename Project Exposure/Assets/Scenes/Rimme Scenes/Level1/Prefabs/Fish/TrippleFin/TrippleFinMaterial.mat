@@ -90,7 +90,7 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
-    - _WobbleCurve: 1
+    - _WobbleCurve: 2
     - _WobbleDistance: 0.053
     - _WobbleSpeed: 80
     - _ZWrite: 1
