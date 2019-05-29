@@ -6,6 +6,8 @@ public class PlayerMovementBehaviour : MonoBehaviour
     [SerializeField] private float _maxSpeed = 5.0f;
     [SerializeField] private float _acceleration = 1.0f;
 
+    private Animator _animator;
+
     private JoystickBehaviour _joystickBehaviour;
     private Rigidbody _rigidbody;
     private CapsuleCollider _collider;
@@ -29,6 +31,7 @@ public class PlayerMovementBehaviour : MonoBehaviour
         _waterResistance = _acceleration * 0.5f;
         _rigidbody = GetComponent<Rigidbody>();
         _collider = GetComponent<CapsuleCollider>();
+        _animator = GetComponent<Animator>();
         _joystickBehaviour = Camera.main.transform.GetChild(0).GetChild(1).GetComponent<JoystickBehaviour>();
 
         SingleTons.GameController.Player = this.gameObject;
@@ -49,6 +52,8 @@ public class PlayerMovementBehaviour : MonoBehaviour
             {
                 transform.position = Vector3.Slerp(transform.position, _followPoint.position, Time.deltaTime * 3);
                 transform.rotation = Quaternion.Slerp(transform.rotation, _followPoint.rotation, Time.deltaTime * 3);
+                _animator.SetBool("IsIdle", false);
+                _animator.SetBool("IsSwimming", true);
 
                 if (_joystickBehaviour.IsPressed())
                 {
@@ -64,17 +69,27 @@ public class PlayerMovementBehaviour : MonoBehaviour
                     if (_joystickBehaviour.GetTimeAtZero() >= 0.5f || _joystickBehaviour.Vertical() != 0)
                     {
                         _velocity += _acceleration * Time.deltaTime;
+                        _animator.SetBool("IsIdle", false);
+                        _animator.SetBool("IsSwimming", true);
                     }
                     else
                     {
                         _velocity -= _waterResistance * Time.deltaTime;
                         _rigidbody.velocity = Vector3.zero;
+
+                        if (_velocity < 2)
+                        {
+                            _animator.SetBool("IsIdle", true);
+                            _animator.SetBool("IsSwimming", false);
+                        }
                     }
                 }
                 else
                 {
                     _velocity -= _waterResistance * Time.deltaTime;
                     _rigidbody.velocity = Vector3.zero;
+                    _animator.SetBool("IsIdle", true);
+                    _animator.SetBool("IsSwimming", false);
                 }
 
                 _direction = Camera.main.transform.forward;

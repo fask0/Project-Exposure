@@ -18,6 +18,14 @@
 		_Offset("Offset", Range(0, 1)) = 0
 		_FishLength("FishLength", Range(0, 10)) = 1
 		_Specular("Specular", Range(0, 1)) = 0
+
+		//Scan Fields
+		_ScanLineColor("ScanLineColor", color) = (1,1,1,1)
+		_ScanInbetweenColor("ScanInbetweenColor", Color) = (1,1,1,1)
+		_ScanTex("Scan (RGB)", 2D) = "white" {}
+		_IsScanning("IsScanning", Range(0,1)) = 0
+		_ScanLines("ScanLines", Range(0, 100)) = 1
+		_ScanLineWidth("ScanLineWidth", Range(0, 2)) = 2
 	}
 		SubShader
 		{
@@ -30,6 +38,7 @@
 
 			// Use shader model 3.0 target, to get nicer looking lighting
 			#pragma target 3.0
+			#include "noiseSimplex.cginc"
 
 			sampler2D _MainTex;
 
@@ -71,12 +80,42 @@
 			fixed4 _Color;
 			float _Specular;
 
+			//Scan Definition
+			fixed4 _ScanLineColor;
+			fixed4 _ScanInbetweenColor;
+			sampler2D _ScanTex;
+			float4 _ScanTex_ST;
+			float _IsScanning;
+			float _ScanLines;
+			float _ScanLineWidth;
+
 			sampler2D _MetallicTex;
 			sampler2D _Occlusion;
 			void surf(Input IN, inout SurfaceOutputStandard o)
 			{
 				// Albedo comes from a texture tinted by color
 				fixed4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
+
+				if(_IsScanning == 1)
+				{
+					for (int i = 0; i < _ScanLines; ++i)
+					{
+						if (IN.uv_MainTex.y > (_ScanTex_ST.y / _ScanLines) * i && IN.uv_MainTex.y < (_ScanTex_ST.y / _ScanLines) * i + _ScanLineWidth)
+						{
+							float perc = ((IN.uv_MainTex.y - (_ScanTex_ST.y / _ScanLines) * i) / _ScanLineWidth);
+							c = lerp(c + _ScanLineColor * 0.025f, _ScanLineColor, (perc * perc));
+							if (perc > 0.9f)
+								o.Emission = (perc - 0.9f) * 4;
+
+							o.Emission += ((snoise((IN.uv_MainTex * float2(20, 100)) + (_Time * 10.0f)) + 1) * 0.5f) * pow(perc, 5);
+						}
+						else
+						{
+							c += _ScanInbetweenColor * 0.025f;
+						}
+					}
+				}
+
 				o.Albedo = c.rgb;
 
 				// Metallic and smoothness come from slider variables
