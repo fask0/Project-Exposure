@@ -78,7 +78,7 @@ Material:
     - _DstBlend: 0
     - _FishLength: 2.44
     - _GlossMapScale: 0.602
-    - _Glossiness: 0.602
+    - _Glossiness: 0.452
     - _GlossyReflections: 1
     - _Metallic: 0
     - _Mode: 0

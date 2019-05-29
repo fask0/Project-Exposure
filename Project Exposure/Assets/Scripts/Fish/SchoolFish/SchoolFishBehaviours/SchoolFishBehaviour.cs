@@ -56,15 +56,12 @@ public class SchoolFishBehaviour : FishBehaviour
 
         if (!_fishTooClose)
         {
-            if (_isAvoiding)
+            //Iterate over creatures to avoid
+            foreach (FishManager.AvoidableCreatures creatureType in _creaturesToAvoid)
             {
-                //Iterate over creatures to avoid
-                foreach (FishManager.AvoidableCreatures creatureType in _creaturesToAvoid)
+                foreach (FishBehaviourParent fishBehaviour in SingleTons.FishManager.GetAvoidableCreatures(creatureType))
                 {
-                    foreach (FishBehaviourParent fishBehaviour in SingleTons.FishManager.GetAvoidableCreatures(creatureType))
-                    {
-                        AvoidFish(fishBehaviour);
-                    }
+                    AvoidFish(fishBehaviour);
                 }
             }
         }

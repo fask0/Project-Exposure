@@ -479,7 +479,7 @@ public class SoundWaveManager : MonoBehaviour
     {
         if (_currentScan == null || _currentScan != pCurrentScan) return;
 
-        Material mat = pCurrentScan.GetComponent<Renderer>().material;
+        Material mat = pCurrentScan.GetComponentInChildren<Renderer>().material;
         mat.SetFloat("_IsScanning", 0);
         mat.SetFloat("_ScanLines", 0);
         mat.SetFloat("_ScanLineWidth", 0);

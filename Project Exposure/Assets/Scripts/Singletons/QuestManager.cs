@@ -31,24 +31,36 @@ public class QuestManager : MonoBehaviour
     {
         _currentTargetIndex = pTargetIndex;
         if (_currentTargetIndex >= _allTargetsList.Count)
-            _currentTargetIndex = 0;
-        _currentAudioTarget = _allTargetsList[_currentTargetIndex].GetComponent<AudioSource>();
-        _soundDummyAudioSource.clip = _currentAudioTarget.clip;
-        _currentAudioTarget.Stop();
-        _soundDummyAudioSource.Play();
-        _currentAudioTarget.Play();
+        {
+            _currentAudioTarget.Stop();
+            _soundDummyAudioSource.Stop();
+        }
+        else
+        {
+            _currentAudioTarget = _allTargetsList[_currentTargetIndex].GetComponent<AudioSource>();
+            _soundDummyAudioSource.clip = _currentAudioTarget.clip;
+            _currentAudioTarget.Stop();
+            _soundDummyAudioSource.Play();
+            _currentAudioTarget.Play();
+        }
     }
 
     public void NextTargetAudio()
     {
         _currentTargetIndex++;
         if (_currentTargetIndex >= _allTargetsList.Count)
-            _currentTargetIndex = 0;
-        _currentAudioTarget = _allTargetsList[_currentTargetIndex].GetComponent<AudioSource>();
-        _soundDummyAudioSource.clip = _currentAudioTarget.clip;
-        _currentAudioTarget.Stop();
-        _soundDummyAudioSource.Play();
-        _currentAudioTarget.Play();
+        {
+            _currentAudioTarget.Stop();
+            _soundDummyAudioSource.Stop();
+        }
+        else
+        {
+            _currentAudioTarget = _allTargetsList[_currentTargetIndex].GetComponent<AudioSource>();
+            _soundDummyAudioSource.clip = _currentAudioTarget.clip;
+            _currentAudioTarget.Stop();
+            _soundDummyAudioSource.Play();
+            _currentAudioTarget.Play();
+        }
     }
 
     public int GetCurrentTargetIndex
