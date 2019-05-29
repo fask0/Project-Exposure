@@ -29,7 +29,6 @@ public class DolphinBehaviour : FishBehaviour
             enabled = false;
             return;
         }
-        GenerateNewCheckpoint();
 
         _pathPositions = new Vector3[_dolphinParent.GetGuidingPath().positionCount];
         for (int i = 0; i < _dolphinParent.GetGuidingPath().positionCount; i++)
@@ -37,6 +36,8 @@ public class DolphinBehaviour : FishBehaviour
             _pathPositions[i] = _dolphinParent.GetGuidingPath().GetPosition(i) + _dolphinParent.transform.position;
         }
         _dolphinParent.GetGuidingPath().enabled = false;
+
+        GenerateNewCheckpoint();
     }
 
     // Update is called once per frame

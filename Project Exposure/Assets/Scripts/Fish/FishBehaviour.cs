@@ -23,18 +23,17 @@ public class FishBehaviour : FishBehaviourParent
     [SerializeField]
     protected List<FishManager.AvoidableCreatures> _creaturesToAvoid = new List<FishManager.AvoidableCreatures>();
 
+    [SerializeField]
+    protected bool _alwaysAvoid = false;
+
+    public bool _isAvoiding = false;
+
     // Start is called before the first frame update
     void Start()
     {
         _currentSpeed = _minSpeed;
         SingleTons.FishManager.AddAvoidableCreature(_thisCreatureType, this);
         Debug.Log("Added " + gameObject.name + " to " + _thisCreatureType);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     public float GetMinSpeed()
@@ -61,28 +60,4 @@ public class FishBehaviour : FishBehaviourParent
     {
         return _currentSpeed;
     }
-
-    //public float GetThreatRange()
-    //{
-    //    return _threatRange;
-    //}
-
-    //public float GetThreatFleeRange()
-    //{
-    //    return _threatFleeRange;
-    //}
-
-    //public float GetThreatLevel()
-    //{
-    //    return _threatLevel;
-    //}
-
-    //private void OnDrawGizmosSelected()
-    //{
-    //    Gizmos.color = Color.blue;
-    //    Gizmos.DrawWireSphere(transform.position, _threatRange);
-
-    //    Gizmos.color = Color.cyan;
-    //    Gizmos.DrawWireSphere(transform.position, _threatFleeRange);
-    //}
 }

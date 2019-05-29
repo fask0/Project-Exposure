@@ -24,16 +24,15 @@ public class FishZone : MonoBehaviour
     [SerializeField]
     private bool AlwaysDraw = false;
 
+    private BoxCollider boxCollider;
+
     // Start is called before the first frame update
     void Start()
     {
         SingleTons.FishManager.AddFishZone(this);
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-
+        boxCollider = gameObject.AddComponent<BoxCollider>();
+        boxCollider.isTrigger = true;
     }
 
     public void AddFishToSchool(GameObject Fish, bool RandomFish = false, bool Leader = false)
@@ -95,6 +94,22 @@ public class FishZone : MonoBehaviour
         {
             Gizmos.color = new Color(0, 1, 0.8f, 0.5f);
             Gizmos.DrawCube(transform.position, ZoneTransform);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        foreach (SchoolFishBehaviour behaviour in _schoolFishBehaviours)
+        {
+            behaviour._isAvoiding = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        foreach (SchoolFishBehaviour behaviour in _schoolFishBehaviours)
+        {
+            behaviour._isAvoiding = false;
         }
     }
 }

@@ -13,6 +13,8 @@ public class MicrophoneBehaviour : MonoBehaviour
         _soundWaveManager = SingleTons.SoundWaveManager;
         _playerTransform = SingleTons.GameController.Player.transform;
         _playerMovementBehaviour = _playerTransform.GetComponent<PlayerMovementBehaviour>();
+
+        Physics.IgnoreLayerCollision(this.gameObject.layer, 9, true);
     }
 
     void Update()

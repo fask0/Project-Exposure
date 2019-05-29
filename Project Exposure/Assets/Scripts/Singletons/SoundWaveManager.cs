@@ -7,7 +7,7 @@ public class SoundWaveManager : MonoBehaviour
 {
     [SerializeField] private int _heightMultiplier = 300;
 
-    private const int SpectrumSize = 4096;
+    private const int SpectrumSize = 2048;// 4096;
 
     public delegate void OnFishScan(GameObject pGameObject);
     public event OnFishScan onFishScanEvent;

@@ -16,7 +16,9 @@ public class SchoolFishBehaviour : FishBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _rigidBody = GetComponent<Rigidbody>();
+        //_rigidBody = GetComponent<Rigidbody>();
+        if (_alwaysAvoid)
+            _isAvoiding = true;
     }
 
     private void GetSchool()
@@ -38,7 +40,7 @@ public class SchoolFishBehaviour : FishBehaviour
             _hasAddedItselfToSchool = true;
         }
 
-        _rigidBody.velocity = Vector3.zero;
+        //_rigidBody.velocity = Vector3.zero;
 
         if (!_fishTooClose)
         {
@@ -54,12 +56,15 @@ public class SchoolFishBehaviour : FishBehaviour
 
         if (!_fishTooClose)
         {
-            //Iterate over creatures to avoid
-            foreach (FishManager.AvoidableCreatures creatureType in _creaturesToAvoid)
+            if (_isAvoiding)
             {
-                foreach (FishBehaviourParent fishBehaviour in SingleTons.FishManager.GetAvoidableCreatures(creatureType))
+                //Iterate over creatures to avoid
+                foreach (FishManager.AvoidableCreatures creatureType in _creaturesToAvoid)
                 {
-                    AvoidFish(fishBehaviour);
+                    foreach (FishBehaviourParent fishBehaviour in SingleTons.FishManager.GetAvoidableCreatures(creatureType))
+                    {
+                        AvoidFish(fishBehaviour);
+                    }
                 }
             }
         }
@@ -106,7 +111,7 @@ public class SchoolFishBehaviour : FishBehaviour
         {
             _dummy.transform.LookAt(_schoolFishLeaderBehaviour.GetCheckPoint(), Vector3.up);
 
-            transform.rotation = Quaternion.Lerp(transform.rotation, _dummy.transform.rotation, Time.fixedDeltaTime * _turningSpeed);
+            transform.rotation = Quaternion.Lerp(transform.rotation, _dummy.transform.rotation, Time.deltaTime * _turningSpeed);
         }
     }
 
@@ -114,7 +119,7 @@ public class SchoolFishBehaviour : FishBehaviour
     {
         _dummy.transform.LookAt(Reflect(_schoolFishLeaderBehaviour.GetCheckPoint(), _fishThatsTooClose.transform.position), Vector3.up);
 
-        transform.rotation = Quaternion.Lerp(transform.rotation, _dummy.transform.rotation, Time.fixedDeltaTime * _turningSpeed);
+        transform.rotation = Quaternion.Lerp(transform.rotation, _dummy.transform.rotation, Time.deltaTime * _turningSpeed);
     }
 
     public void SetSchoolFishLeader(SchoolFishLeaderBehaviour schoolFishLeaderBehaviour)

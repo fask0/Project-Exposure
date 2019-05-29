@@ -203,7 +203,7 @@ MonoBehaviour:
   _threatFleeRange: 1.25
   _threatLevel: 1
   _drawRange: 0
-  _minSpeed: 2.5
+  _minSpeed: 5
   _maxSpeed: 10
   _turningSpeed: 1
   _speedUpRate: 10

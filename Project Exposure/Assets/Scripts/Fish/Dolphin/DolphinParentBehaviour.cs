@@ -35,9 +35,11 @@ public class DolphinParentBehaviour : MonoBehaviour
             enabled = false;
             return;
         }
-        _dolphinBehaviour.transform.position = _startingRandomZone.transform.position;
 
-        _dolphinBehaviour.gameObject.transform.position = _startingRandomZone.transform.position;
+        if (_dolphinBehaviour.GetDolphinState() == DolphinState.RandomStartingBehaviour)
+        {
+            _dolphinBehaviour.transform.position = _startingRandomZone.transform.position;
+        }
     }
 
     // Update is called once per frame

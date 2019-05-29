@@ -46,6 +46,8 @@ public class FishPathBehaviour : FishBehaviour
 
         //Get starting target
         GetNewTarget();
+
+        _rigidBody = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -67,6 +69,8 @@ public class FishPathBehaviour : FishBehaviour
 
         SpeedUpAndDown();
         transform.position += (transform.forward * Time.deltaTime * _currentSpeed);
+
+        _rigidBody.velocity = Vector3.zero;
 
         if (!_fishTooClose)
         {
