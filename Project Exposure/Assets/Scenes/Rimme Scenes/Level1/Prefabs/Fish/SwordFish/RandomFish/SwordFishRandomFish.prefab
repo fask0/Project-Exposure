@@ -198,13 +198,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _thisCreatureType: 7
-  _threatRange: 1.25
-  _threatFleeRange: 1.25
-  _threatLevel: 1
-  _drawRange: 0
-  _minSpeed: 1.25
-  _maxSpeed: 2.5
-  _turningSpeed: 1
+  _threatRange: 2.75
+  _threatFleeRange: 3.25
+  _threatLevel: 3
+  _drawRange: 1
+  _minSpeed: 4
+  _maxSpeed: 5
+  _turningSpeed: 1.5
   _speedUpRate: 10
   _dummy: {fileID: 8747856068781857026}
-  _creaturesToAvoid: 00000000
+  _creaturesToAvoid: 

@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4759948550040911171}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.41, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8747856068970502608}
@@ -202,8 +202,8 @@ MonoBehaviour:
   _threatFleeRange: 1.25
   _threatLevel: 1
   _drawRange: 0
-  _minSpeed: 1.25
-  _maxSpeed: 2.5
+  _minSpeed: 2
+  _maxSpeed: 3
   _turningSpeed: 1
   _speedUpRate: 10
   _dummy: {fileID: 8747856068781857026}

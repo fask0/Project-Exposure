@@ -198,12 +198,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _thisCreatureType: 7
-  _threatRange: 1.25
-  _threatFleeRange: 1.25
-  _threatLevel: 1
+  _threatRange: 2.2
+  _threatFleeRange: 2.5
+  _threatLevel: 3
   _drawRange: 0
-  _minSpeed: 2.5
-  _maxSpeed: 3.75
+  _minSpeed: 3.9
+  _maxSpeed: 5
   _turningSpeed: 1
   _speedUpRate: 10
   _dummy: {fileID: 8747856068781857026}

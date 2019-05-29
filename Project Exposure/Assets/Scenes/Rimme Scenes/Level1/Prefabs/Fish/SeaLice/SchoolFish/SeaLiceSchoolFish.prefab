@@ -191,7 +191,7 @@ MonoBehaviour:
   _threatLevel: 1
   _drawRange: 0
   _minSpeed: 2.6
-  _maxSpeed: 5
+  _maxSpeed: 10
   _turningSpeed: 1
   _speedUpRate: 10
   _dummy: {fileID: 8747856068781857026}
