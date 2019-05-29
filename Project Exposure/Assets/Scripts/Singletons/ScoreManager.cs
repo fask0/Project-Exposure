@@ -18,9 +18,9 @@ public class ScoreManager : MonoBehaviour
     private string _dateToday;
     private string _fileName;
 
-    private FileStream _fileStream;
-    private StreamReader _sReader;
-    private StreamWriter _sWriter;
+    //private FileStream _fileStream;
+    //private StreamReader _sReader;
+    //private StreamWriter _sWriter;
 
     private string _name = "Rimme :)";
     private int _difficultySetting = 1;
@@ -56,27 +56,27 @@ public class ScoreManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F6))
-        {
-            List<FileEntry> fileEntries = GetScoresToday(true);
-            foreach (FileEntry fileEntry in fileEntries)
-            {
-                Debug.Log(fileEntry.String);
-            }
-        }
-        if (Input.GetKey(KeyCode.F7))
-        {
-            _currentScore = UnityEngine.Random.Range(0, 1000);
-            SaveScoreToday();
-        }
-        if (Input.GetKeyDown(KeyCode.F8))
-        {
-            ClearFile(_path + _fileName + ".txt");
-        }
-        if (Input.GetKeyDown(KeyCode.F9))
-        {
-            DeleteFile(_path + _fileName + ".txt");
-        }
+        //if (Input.GetKeyDown(KeyCode.F6))
+        //{
+        //    List<FileEntry> fileEntries = GetScoresToday(true);
+        //    foreach (FileEntry fileEntry in fileEntries)
+        //    {
+        //        Debug.Log(fileEntry.String);
+        //    }
+        //}
+        //if (Input.GetKey(KeyCode.F7))
+        //{
+        //    _currentScore = UnityEngine.Random.Range(0, 1000);
+        //    SaveScoreToday();
+        //}
+        //if (Input.GetKeyDown(KeyCode.F8))
+        //{
+        //    ClearFile(_path + _fileName + ".txt");
+        //}
+        //if (Input.GetKeyDown(KeyCode.F9))
+        //{
+        //    DeleteFile(_path + _fileName + ".txt");
+        //}
     }
 
     public int GetScore()
@@ -101,126 +101,127 @@ public class ScoreManager : MonoBehaviour
     //-----------------------------//
     public void CreateFile(string fileName)
     {
-        if (!File.Exists(_path + fileName + ".txt"))
-        {
-            Debug.Log("File does not exist yet.. Creating file " + fileName + ".txt now");
-            _fileStream = new FileStream(_path + fileName + ".txt", FileMode.Create);
-            _fileStream.Close();
-        }
-        else
-        {
-            Debug.Log("File already exists");
-        }
+        //if (!File.Exists(_path + fileName + ".txt"))
+        //{
+        //    Debug.Log("File does not exist yet.. Creating file " + fileName + ".txt now");
+        //    _fileStream = new FileStream(_path + fileName + ".txt", FileMode.Create);
+        //    _fileStream.Close();
+        //}
+        //else
+        //{
+        //    Debug.Log("File already exists");
+        //}
     }
 
     public void DeleteFile(string path)
     {
-        File.Delete(path);
-        Debug.Log("Deleted file " + path);
+        //File.Delete(path);
+        //Debug.Log("Deleted file " + path);
     }
 
     public void ClearFile(string path)
     {
-        CloseAll();
-        _sWriter = new StreamWriter(path);
-        _sWriter.Close();
-        Debug.Log("Cleared file " + path);
+        //CloseAll();
+        //_sWriter = new StreamWriter(path);
+        //_sWriter.Close();
+        //Debug.Log("Cleared file " + path);
     }
 
     public void SaveScoreToday()
     {
-        CloseAll();
+        //CloseAll();
 
-        if (!File.Exists(_path + _fileName + ".txt"))
-            CreateFile(_fileName);
+        //if (!File.Exists(_path + _fileName + ".txt"))
+        //    CreateFile(_fileName);
 
-        _sWriter = new StreamWriter(_path + _fileName + ".txt", true);
-        _sWriter.WriteLine(string.Format("{0},{1},{2}:{3},{4},{5},{6},{7},{8}", _difficultySetting, _dateToday, DateTime.Now.TimeOfDay.Hours, DateTime.Now.TimeOfDay.Minutes, _name, _currentScore, _achievedLevel, _opinionOnTechnology, _increaseInAwareness));
-        _sWriter.Close();
+        //_sWriter = new StreamWriter(_path + _fileName + ".txt", true);
+        //_sWriter.WriteLine(string.Format("{0},{1},{2}:{3},{4},{5},{6},{7},{8}", _difficultySetting, _dateToday, DateTime.Now.TimeOfDay.Hours, DateTime.Now.TimeOfDay.Minutes, _name, _currentScore, _achievedLevel, _opinionOnTechnology, _increaseInAwareness));
+        //_sWriter.Close();
 
-        Debug.Log(string.Format("Wrote: \"{0},{1},{2}:{3},{4},{5},{6},{7},{8}\" to {9}{10}.txt", _difficultySetting, _dateToday, DateTime.Now.TimeOfDay.Hours, DateTime.Now.TimeOfDay.Minutes, _name, _currentScore, _achievedLevel, _opinionOnTechnology, _increaseInAwareness, _path, _fileName));
+        //Debug.Log(string.Format("Wrote: \"{0},{1},{2}:{3},{4},{5},{6},{7},{8}\" to {9}{10}.txt", _difficultySetting, _dateToday, DateTime.Now.TimeOfDay.Hours, DateTime.Now.TimeOfDay.Minutes, _name, _currentScore, _achievedLevel, _opinionOnTechnology, _increaseInAwareness, _path, _fileName));
 
-        CloseAll();
-        List<FileEntry> fileEntries = GetScoresToday(true);
-        if (fileEntries.Count > 500)
-        {
-            fileEntries.RemoveAt(fileEntries.Count - 1);
-        }
+        //CloseAll();
+        //List<FileEntry> fileEntries = GetScoresToday(true);
+        //if (fileEntries.Count > 500)
+        //{
+        //    fileEntries.RemoveAt(fileEntries.Count - 1);
+        //}
 
-        ClearFile(_path + _fileName + ".txt");
-        _sWriter = new StreamWriter(_path + _fileName + ".txt", true);
-        foreach (FileEntry fileEntry in fileEntries)
-        {
-            _sWriter.WriteLine(string.Format("{0},{1},{2},{3},{4},{5},{6},{7}", fileEntry.difficultySetting, fileEntry.date, fileEntry.time, fileEntry.name, fileEntry.score, fileEntry.achievedLevel, fileEntry.opinionOnTechnology, fileEntry.increaseInAwareness));
-        }
-        _sWriter.Close();
+        //ClearFile(_path + _fileName + ".txt");
+        //_sWriter = new StreamWriter(_path + _fileName + ".txt", true);
+        //foreach (FileEntry fileEntry in fileEntries)
+        //{
+        //    _sWriter.WriteLine(string.Format("{0},{1},{2},{3},{4},{5},{6},{7}", fileEntry.difficultySetting, fileEntry.date, fileEntry.time, fileEntry.name, fileEntry.score, fileEntry.achievedLevel, fileEntry.opinionOnTechnology, fileEntry.increaseInAwareness));
+        //}
+        //_sWriter.Close();
     }
 
     public string ReadScoreToday()
     {
-        if (File.Exists(_path + _fileName + ".txt"))
-        {
-            _sReader = new StreamReader(_path + _fileName + ".txt");
+        //if (File.Exists(_path + _fileName + ".txt"))
+        //{
+        //    _sReader = new StreamReader(_path + _fileName + ".txt");
 
-            string returnVal = _sReader.ReadToEnd();
-            Debug.Log(returnVal);
-            _sReader.Close();
+        //    string returnVal = _sReader.ReadToEnd();
+        //    Debug.Log(returnVal);
+        //    _sReader.Close();
 
-            return returnVal;
-        }
-        else
-        {
-            Debug.Log("A score file has yet to be created for today");
-            return "";
-        }
+        //    return returnVal;
+        //}
+        //else
+        //{
+        //    Debug.Log("A score file has yet to be created for today");
+        //    return "";
+        //}
+        return "";
     }
 
     public List<FileEntry> GetScoresToday(bool sortBeforeReturn)
     {
         List<FileEntry> returnList = new List<FileEntry>();
-        if (File.Exists(_path + _fileName + ".txt"))
-        {
-            _sReader = new StreamReader(_path + _fileName + ".txt");
+        //if (File.Exists(_path + _fileName + ".txt"))
+        //{
+        //    _sReader = new StreamReader(_path + _fileName + ".txt");
 
-            while (!_sReader.EndOfStream)
-            {
-                string line = _sReader.ReadLine();
-                if (line.Length > 0)
-                {
-                    string[] lineValues = line.Split(',');
+        //    while (!_sReader.EndOfStream)
+        //    {
+        //        string line = _sReader.ReadLine();
+        //        if (line.Length > 0)
+        //        {
+        //            string[] lineValues = line.Split(',');
 
-                    //Created file entry
-                    FileEntry fe = new FileEntry();
-                    fe.difficultySetting = Convert.ToInt32(lineValues[0]);
-                    fe.date = lineValues[1];
-                    fe.time = lineValues[2];
-                    fe.name = lineValues[3];
-                    fe.score = Convert.ToInt32(lineValues[4]);
-                    fe.achievedLevel = Convert.ToInt32(lineValues[5]);
-                    fe.opinionOnTechnology = Convert.ToInt32(lineValues[6]);
-                    fe.increaseInAwareness = Convert.ToInt32(lineValues[7]);
+        //            //Created file entry
+        //            FileEntry fe = new FileEntry();
+        //            fe.difficultySetting = Convert.ToInt32(lineValues[0]);
+        //            fe.date = lineValues[1];
+        //            fe.time = lineValues[2];
+        //            fe.name = lineValues[3];
+        //            fe.score = Convert.ToInt32(lineValues[4]);
+        //            fe.achievedLevel = Convert.ToInt32(lineValues[5]);
+        //            fe.opinionOnTechnology = Convert.ToInt32(lineValues[6]);
+        //            fe.increaseInAwareness = Convert.ToInt32(lineValues[7]);
 
-                    returnList.Add(fe);
-                }
-            }
+        //            returnList.Add(fe);
+        //        }
+        //    }
 
-            _sReader.Close();
+        //    _sReader.Close();
 
-            if (sortBeforeReturn)
-                returnList.Sort(new SortFileEntryDescending());
-        }
+        //    if (sortBeforeReturn)
+        //        returnList.Sort(new SortFileEntryDescending());
+        //}
 
         return returnList;
     }
 
     private void CloseAll()
     {
-        if (_fileStream != null)
-            _fileStream.Close();
-        if (_sWriter != null)
-            _sWriter.Close();
-        if (_sReader != null)
-            _sReader.Close();
+        //if (_fileStream != null)
+        //    _fileStream.Close();
+        //if (_sWriter != null)
+        //    _sWriter.Close();
+        //if (_sReader != null)
+        //    _sReader.Close();
     }
 
     private class SortFileEntryDescending : IComparer<FileEntry>
