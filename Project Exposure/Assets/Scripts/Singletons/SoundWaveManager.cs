@@ -452,6 +452,7 @@ public class SoundWaveManager : MonoBehaviour
                         mat.SetFloat("_ScanLineWidth", 0);
 
                         _scanTimeLeft = _scanDuration;
+                        onFishScanEvent(pScannedTarget);
                     }
                 }
             }
