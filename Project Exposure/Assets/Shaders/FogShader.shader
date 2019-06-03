@@ -61,16 +61,11 @@
 					float depthValue2 = saturate((depthValue - _DepthDistance) / _DepthDistance * _FadeDistance);
 					depthValue = saturate((depthValue - _DepthStart) / _DepthDistance);
 					fixed4 fogColor = _FogColor * depthValue;
-					//fixed4 fogColor2 = _FogColor * depthValue2;
 					fixed4 fogColor2 = lerp(_FogColor, _SilhouetteColor, 1 - depthValue2);
 					fixed4 col = tex2Dproj(_MainTex, i.scrPos);
 
 					fixed4 newCol = lerp(col, fogColor, depthValue * _FogBeforeFadeMultiplier);
 					return lerp(newCol, fogColor2, depthValue);
-
-					//return fogColor2;
-
-					//return fixed4(depthValue, depthValue, depthValue, 1);
 				}
 				ENDCG
 		}
