@@ -33,6 +33,7 @@
 		{
 			Tags {"Queue" = "AlphaTest" "IgnoreProjector" = "True" "RenderType" = "TreeTransparentCutout" }
 			Cull Off
+			LOD 200
 
 			CGPROGRAM
 			// Physically based Standard lighting model, and enable shadows on all light types

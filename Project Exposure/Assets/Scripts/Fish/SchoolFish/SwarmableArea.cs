@@ -33,22 +33,22 @@ public class SwarmableArea : MonoBehaviour
 
     public void SwarmArea(List<GameObject> fish)
     {
-        if (!_hasSwarmedBefore)
-        {
-            _swarmingFish = fish;
-            ToggleBehaviours(true);
-            _hasSwarmedBefore = true;
-        }
+        //if (!_hasSwarmedBefore)
+        //{
+        _swarmingFish = fish;
+        ToggleBehaviours(true);
+        _hasSwarmedBefore = true;
+        //}
     }
 
     public void SwarmArea(FishZone fishZone)
     {
-        if (!_hasSwarmedBefore)
-        {
-            _swarmingFish = fishZone.GetSchoolFish();
-            ToggleBehaviours(true);
-            _hasSwarmedBefore = true;
-        }
+        //if (!_hasSwarmedBefore)
+        //{
+        _swarmingFish = fishZone.GetSchoolFish();
+        ToggleBehaviours(true);
+        _hasSwarmedBefore = true;
+        //}
     }
 
     public void StopSwarming()

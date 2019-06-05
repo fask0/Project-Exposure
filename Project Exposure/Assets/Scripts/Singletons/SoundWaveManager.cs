@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using System;
 
 public class SoundWaveManager : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class SoundWaveManager : MonoBehaviour
     //Left
     private GameObject _playerSoundWaveLeft;
     private Material _playerLeftImageMaterial;
+
     private float[] _playerOutputDataLeft;
     private int _playerLeftColumn;
     //Right
