@@ -7,7 +7,7 @@
 	}
 		SubShader
 	{
-		Tags { "RenderType" = "Opaque" }
+		Tags { "RenderType" = "Transparent" }
 		LOD 200
 		//ZTest NotEqual
 

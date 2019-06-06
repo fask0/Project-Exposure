@@ -624,7 +624,7 @@ GameObject:
   - component: {fileID: 7000844326987169842}
   - component: {fileID: 4292772188420387682}
   m_Layer: 10
-  m_Name: Dolphin (1)
+  m_Name: Dolphin
   m_TagString: Collectable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

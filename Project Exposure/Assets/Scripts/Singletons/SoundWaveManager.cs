@@ -75,6 +75,8 @@ public class SoundWaveManager : MonoBehaviour
     private List<GameObject> _listeningToCollected = new List<GameObject>();
     private List<GameObject> _listeningToAll = new List<GameObject>();
 
+    private CameraBehaviour _cameraBehaviour;
+
     void Start()
     {
         SingleTons.SoundWaveManager = this;
@@ -90,6 +92,8 @@ public class SoundWaveManager : MonoBehaviour
         _texWidth = _playerLeftImageMaterial.mainTexture.width;
         _texHeight = _playerLeftImageMaterial.mainTexture.height;
         _playerLeftColumn = 0;
+
+        _cameraBehaviour = Camera.main.transform.parent.GetComponent<CameraBehaviour>();
     }
 
     void Update()
@@ -370,6 +374,8 @@ public class SoundWaveManager : MonoBehaviour
         Material mat = pScannedCreature.GetComponentInChildren<Renderer>().material;
         if (Input.GetKey(KeyCode.Mouse0))
         {
+            int score = 100;
+
             _currentScan = pScannedCreature;
             _scanTimeLeft -= Time.deltaTime;
 
@@ -383,7 +389,7 @@ public class SoundWaveManager : MonoBehaviour
                     onFishScanEvent(pScannedCreature);
 
                 SingleTons.CollectionsManager.AddToCollection(pScannedCreature);
-                SingleTons.ScoreManager.AddScore(100);
+                SingleTons.ScoreManager.AddScore(score);
 
                 mat.SetFloat("_IsScanning", 0);
                 mat.SetFloat("_ScanLines", 0);
@@ -418,15 +424,18 @@ public class SoundWaveManager : MonoBehaviour
             {
                 if (hit.transform.gameObject == pScannedTarget)
                 {
-                    int index = 0;
-                    int.TryParse(pScannedTarget.tag.Substring(6), out index);
-                    if (index < SingleTons.QuestManager.GetCurrentTargetIndex)
+                    _currentScan = pScannedTarget;
+                    if (hit.collider.isTrigger)
                     {
-                        Debug.Log("Backtracking!");
+                        HideProgress(pScannedTarget);
                         return;
                     }
 
-                    _currentScan = pScannedTarget;
+                    int index = 0;
+                    int.TryParse(pScannedTarget.tag.Substring(6), out index);
+                    int score = (int)(50 + 50 * index * 0.5f);
+
+                    _cameraBehaviour.StartScanningArtifact(pScannedTarget);
                     _scanTimeLeft -= Time.deltaTime;
 
                     mat.SetFloat("_IsScanning", 1);
@@ -438,16 +447,19 @@ public class SoundWaveManager : MonoBehaviour
                         if (pScannedTarget.tag == string.Format("Target" + SingleTons.QuestManager.GetCurrentTargetIndex))
                         {
                             SingleTons.QuestManager.NextTargetAudio();
-                            SingleTons.ScoreManager.AddScore(200);
+                            SingleTons.ScoreManager.AddScore(score);
                         }
                         else if (index > SingleTons.QuestManager.GetCurrentTargetIndex)
                         {
-                            for (int i = SingleTons.QuestManager.GetCurrentTargetIndex; i <= index; i++)
-                            {
-                                SingleTons.ScoreManager.AddScore(200);
-                            }
+                            SingleTons.ScoreManager.AddScore(score);
                             SingleTons.QuestManager.SetTargetAudio(index + 1);
                         }
+                        else if (index < SingleTons.QuestManager.GetCurrentTargetIndex)
+                        {
+                            SingleTons.ScoreManager.AddScore(score);
+                        }
+
+                        SingleTons.CollectionsManager.CollectArtifact(index);
 
                         mat.SetFloat("_IsScanning", 0);
                         mat.SetFloat("_ScanLines", 0);
@@ -455,8 +467,19 @@ public class SoundWaveManager : MonoBehaviour
 
                         _scanTimeLeft = _scanDuration;
                         onFishScanEvent(pScannedTarget);
+                        _cameraBehaviour.StopScanningArtifact();
                     }
                 }
+                else
+                {
+                    _cameraBehaviour.StopScanningArtifact();
+                    HideProgress(pScannedTarget);
+                }
+            }
+            else
+            {
+                _cameraBehaviour.StopScanningArtifact();
+                HideProgress(pScannedTarget);
             }
         }
         else
@@ -473,14 +496,14 @@ public class SoundWaveManager : MonoBehaviour
 
     public void ShowProgress(GameObject pCurrentScan)
     {
-        if (_currentScan == null || _currentScan != pCurrentScan) return;
+        if (_currentScan != null && _currentScan != pCurrentScan) return;
 
         _scanProgress.enabled = true;
     }
 
     public void HideProgress(GameObject pCurrentScan)
     {
-        if (_currentScan == null || _currentScan != pCurrentScan) return;
+        if (_currentScan != null && _currentScan != pCurrentScan) return;
 
         Material mat = pCurrentScan.GetComponentInChildren<Renderer>().material;
         mat.SetFloat("_IsScanning", 0);

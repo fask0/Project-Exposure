@@ -13,11 +13,12 @@ public class ScannerBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
+        if (other.isTrigger) return;
     }
 
     private void OnTriggerExit(Collider other)
     {
+        if (other.isTrigger) return;
         _soundWaveManager.HideProgress(other.gameObject);
     }
 
@@ -25,6 +26,8 @@ public class ScannerBehaviour : MonoBehaviour
     {
         if (other.gameObject.layer == 10)
         {
+            if (other.isTrigger) return;
+
             if (other.tag == "Collectable")
             {
                 if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -55,6 +58,8 @@ public class ScannerBehaviour : MonoBehaviour
             }
             else if (other.tag.Substring(0, 6) == "Target")
             {
+                if (SingleTons.CollectionsManager.HasTargetBeenScanned(other.tag)) return;
+
                 _soundWaveManager.ScanTarget(other.gameObject);
                 _soundWaveManager.ShowProgress(other.gameObject);
             }
