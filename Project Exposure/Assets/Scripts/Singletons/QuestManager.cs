@@ -67,4 +67,9 @@ public class QuestManager : MonoBehaviour
     {
         get { return _currentTargetIndex; }
     }
+
+    public GameObject GetCurrentTarget()
+    {
+        return _allTargetsList[_currentTargetIndex].gameObject;
+    }
 }
