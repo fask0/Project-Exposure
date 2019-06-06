@@ -15,6 +15,7 @@ public class CollectionsManager : MonoBehaviour
     [HideInInspector] public List<GameObject> _allAudioSources = new List<GameObject>();
 
     private List<GameObject> _codexMainMenu = new List<GameObject>();
+    private List<int> _collectedArtifacts = new List<int>();
 
     private Mesh _undiscoveredSpeciesMesh;
     private Texture _undiscoveredSpeciesTexture;
@@ -119,6 +120,17 @@ public class CollectionsManager : MonoBehaviour
         return false;
     }
 
+    public bool HasTargetBeenScanned(string pTag)
+    {
+        int index = 0;
+        int.TryParse(pTag.Substring(6), out index);
+        foreach (int targetIndex in _collectedArtifacts)
+            if (targetIndex == index)
+                return true;
+
+        return false;
+    }
+
     /// <summary>
     /// Add a gameObject.name and an AudioSource to a Dictionary
     /// </summary>
@@ -164,6 +176,14 @@ public class CollectionsManager : MonoBehaviour
         for (int i = collectableAudioSources.Count - 1; i >= 0; i--)
             if (collectableAudioSources[i].name == pGameObject.name)
                 collectableAudioSources.RemoveAt(i);
+    }
+
+    public void CollectArtifact(int pIndex)
+    {
+        foreach (int index in _collectedArtifacts)
+            if (index == pIndex) return;
+
+        _collectedArtifacts.Add(pIndex);
     }
 
     public int GetMaxDistance

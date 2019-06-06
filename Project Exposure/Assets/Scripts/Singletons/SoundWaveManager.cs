@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using System;
 
 public class SoundWaveManager : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class SoundWaveManager : MonoBehaviour
     //Left
     private GameObject _playerSoundWaveLeft;
     private Material _playerLeftImageMaterial;
+
     private float[] _playerOutputDataLeft;
     private int _playerLeftColumn;
     //Right
@@ -73,6 +75,8 @@ public class SoundWaveManager : MonoBehaviour
     private List<GameObject> _listeningToCollected = new List<GameObject>();
     private List<GameObject> _listeningToAll = new List<GameObject>();
 
+    private CameraBehaviour _cameraBehaviour;
+
     void Start()
     {
         SingleTons.SoundWaveManager = this;
@@ -88,6 +92,8 @@ public class SoundWaveManager : MonoBehaviour
         _texWidth = _playerLeftImageMaterial.mainTexture.width;
         _texHeight = _playerLeftImageMaterial.mainTexture.height;
         _playerLeftColumn = 0;
+
+        _cameraBehaviour = Camera.main.transform.parent.GetComponent<CameraBehaviour>();
     }
 
     void Update()
@@ -418,11 +424,18 @@ public class SoundWaveManager : MonoBehaviour
             {
                 if (hit.transform.gameObject == pScannedTarget)
                 {
+                    _currentScan = pScannedTarget;
+                    if (hit.collider.isTrigger)
+                    {
+                        HideProgress(pScannedTarget);
+                        return;
+                    }
+
                     int index = 0;
                     int.TryParse(pScannedTarget.tag.Substring(6), out index);
                     int score = (int)(50 + 50 * index * 0.5f);
 
-                    _currentScan = pScannedTarget;
+                    _cameraBehaviour.StartScanningArtifact(pScannedTarget);
                     _scanTimeLeft -= Time.deltaTime;
 
                     mat.SetFloat("_IsScanning", 1);
@@ -446,13 +459,27 @@ public class SoundWaveManager : MonoBehaviour
                             SingleTons.ScoreManager.AddScore(score);
                         }
 
+                        SingleTons.CollectionsManager.CollectArtifact(index);
+
                         mat.SetFloat("_IsScanning", 0);
                         mat.SetFloat("_ScanLines", 0);
                         mat.SetFloat("_ScanLineWidth", 0);
 
                         _scanTimeLeft = _scanDuration;
+                        onFishScanEvent(pScannedTarget);
+                        _cameraBehaviour.StopScanningArtifact();
                     }
                 }
+                else
+                {
+                    _cameraBehaviour.StopScanningArtifact();
+                    HideProgress(pScannedTarget);
+                }
+            }
+            else
+            {
+                _cameraBehaviour.StopScanningArtifact();
+                HideProgress(pScannedTarget);
             }
         }
         else
@@ -469,14 +496,14 @@ public class SoundWaveManager : MonoBehaviour
 
     public void ShowProgress(GameObject pCurrentScan)
     {
-        if (_currentScan == null || _currentScan != pCurrentScan) return;
+        if (_currentScan != null && _currentScan != pCurrentScan) return;
 
         _scanProgress.enabled = true;
     }
 
     public void HideProgress(GameObject pCurrentScan)
     {
-        if (_currentScan == null || _currentScan != pCurrentScan) return;
+        if (_currentScan != null && _currentScan != pCurrentScan) return;
 
         Material mat = pCurrentScan.GetComponentInChildren<Renderer>().material;
         mat.SetFloat("_IsScanning", 0);

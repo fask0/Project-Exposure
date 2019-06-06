@@ -14,6 +14,9 @@ public class FogEffect : MonoBehaviour
     public float _depthFadeDistance = 0.5f;
     [Range(0, 1)]
     public float _fogBeforeFadeMultiplier = 0.5f;
+    [Range(0.1f, 1)]
+    public float _fogStrength = 1.0f;
+    public bool _singleColor = false;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +33,12 @@ public class FogEffect : MonoBehaviour
         mat.SetFloat("_DepthDistance", _depthDistance);
         mat.SetFloat("_FadeDistance", _depthFadeDistance);
         mat.SetFloat("_FogBeforeFadeMultiplier", _fogBeforeFadeMultiplier);
+        mat.SetFloat("_FogStrength", _fogStrength);
+        if (_singleColor)
+            mat.SetFloat("_SingleColor", 1.0f);
+        else
+            mat.SetFloat("_SingleColor", 0.0f);
+
     }
 
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
