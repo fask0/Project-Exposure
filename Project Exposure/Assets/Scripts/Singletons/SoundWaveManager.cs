@@ -368,6 +368,8 @@ public class SoundWaveManager : MonoBehaviour
         Material mat = pScannedCreature.GetComponentInChildren<Renderer>().material;
         if (Input.GetKey(KeyCode.Mouse0))
         {
+            int score = 100;
+
             _currentScan = pScannedCreature;
             _scanTimeLeft -= Time.deltaTime;
 
@@ -381,7 +383,7 @@ public class SoundWaveManager : MonoBehaviour
                     onFishScanEvent(pScannedCreature);
 
                 SingleTons.CollectionsManager.AddToCollection(pScannedCreature);
-                SingleTons.ScoreManager.AddScore(100);
+                SingleTons.ScoreManager.AddScore(score);
 
                 mat.SetFloat("_IsScanning", 0);
                 mat.SetFloat("_ScanLines", 0);
@@ -418,11 +420,7 @@ public class SoundWaveManager : MonoBehaviour
                 {
                     int index = 0;
                     int.TryParse(pScannedTarget.tag.Substring(6), out index);
-                    if (index < SingleTons.QuestManager.GetCurrentTargetIndex)
-                    {
-                        Debug.Log("Backtracking!");
-                        return;
-                    }
+                    int score = (int)(50 + 50 * index * 0.5f);
 
                     _currentScan = pScannedTarget;
                     _scanTimeLeft -= Time.deltaTime;
@@ -436,15 +434,16 @@ public class SoundWaveManager : MonoBehaviour
                         if (pScannedTarget.tag == string.Format("Target" + SingleTons.QuestManager.GetCurrentTargetIndex))
                         {
                             SingleTons.QuestManager.NextTargetAudio();
-                            SingleTons.ScoreManager.AddScore(200);
+                            SingleTons.ScoreManager.AddScore(score);
                         }
                         else if (index > SingleTons.QuestManager.GetCurrentTargetIndex)
                         {
-                            for (int i = SingleTons.QuestManager.GetCurrentTargetIndex; i <= index; i++)
-                            {
-                                SingleTons.ScoreManager.AddScore(200);
-                            }
+                            SingleTons.ScoreManager.AddScore(score);
                             SingleTons.QuestManager.SetTargetAudio(index + 1);
+                        }
+                        else if (index < SingleTons.QuestManager.GetCurrentTargetIndex)
+                        {
+                            SingleTons.ScoreManager.AddScore(score);
                         }
 
                         mat.SetFloat("_IsScanning", 0);

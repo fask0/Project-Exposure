@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 123
   m_IsActive: 1
 --- !u!4 &1102653239652516951
 Transform:
@@ -73,6 +73,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: RoundSeaweed1 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1178252114452310447, guid: 5c239cf50d9f5ec4280efc894c09d614,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 123
+      objectReference: {fileID: 0}
     - target: {fileID: 2738936064690265020, guid: 5c239cf50d9f5ec4280efc894c09d614,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -128,6 +133,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3997088328540751741, guid: 5c239cf50d9f5ec4280efc894c09d614,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 123
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c239cf50d9f5ec4280efc894c09d614, type: 3}
 --- !u!4 &9063312015906321288 stripped
@@ -147,6 +157,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: RoundSeaweed2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3011027403391676211, guid: 687deb2d69bc37b4c9efbe4533b3b010,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 123
       objectReference: {fileID: 0}
     - target: {fileID: 2274890247407295776, guid: 687deb2d69bc37b4c9efbe4533b3b010,
         type: 3}
@@ -203,6 +218,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3172368441562910892, guid: 687deb2d69bc37b4c9efbe4533b3b010,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 123
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 687deb2d69bc37b4c9efbe4533b3b010, type: 3}
 --- !u!4 &8669634887482565271 stripped
@@ -222,6 +242,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: RoundSeaweed1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1178252114452310447, guid: 5c239cf50d9f5ec4280efc894c09d614,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 123
       objectReference: {fileID: 0}
     - target: {fileID: 2738936064690265020, guid: 5c239cf50d9f5ec4280efc894c09d614,
         type: 3}
@@ -278,6 +303,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3997088328540751741, guid: 5c239cf50d9f5ec4280efc894c09d614,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 123
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c239cf50d9f5ec4280efc894c09d614, type: 3}
 --- !u!4 &4743133500546644325 stripped
@@ -297,6 +327,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: RoundSeaweed0
+      objectReference: {fileID: 0}
+    - target: {fileID: 159794731062948365, guid: eb4223f8821a3b348954fa7337c2c663,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 123
       objectReference: {fileID: 0}
     - target: {fileID: 3777655523238379550, guid: eb4223f8821a3b348954fa7337c2c663,
         type: 3}
@@ -352,6 +387,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8865864480761289141, guid: eb4223f8821a3b348954fa7337c2c663,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 123
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb4223f8821a3b348954fa7337c2c663, type: 3}

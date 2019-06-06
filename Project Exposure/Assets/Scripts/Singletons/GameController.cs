@@ -36,4 +36,5 @@ public static class SingleTons
     public static SoundWaveManager SoundWaveManager;
     public static CollectionsManager CollectionsManager;
     public static ScoreManager ScoreManager;
+    public static MinimapManager MinimapManager;
 }

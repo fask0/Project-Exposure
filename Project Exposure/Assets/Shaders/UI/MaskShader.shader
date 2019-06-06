@@ -1,19 +1,19 @@
 ﻿Shader "Custom/MaskShader"
 {
-		SubShader
-		{
-			Tags { "RenderType" = "Geometry-1" }
-			ColorMask 0
-			ZWrite Off
+	SubShader
+	{
+		Tags { "RenderType" = "Geometry-1" }
+		ColorMask 0
+		ZWrite Off
 
-			Pass
+		Pass
+		{
+			Stencil
 			{
-				Stencil
-				{
-					Ref 1
-					Comp Always
-					Pass Replace
-				}
+				Ref 1
+				Comp Always
+				Pass Replace
 			}
 		}
+	}
 }

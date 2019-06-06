@@ -10,7 +10,10 @@ public class AddButtonListener : MonoBehaviour
         CreatureIcon,
         GoToMenu,
         ExitMenu,
-        SpectrogramToFish
+        SpectrogramToFish,
+        MinimapZoomIn,
+        MinimapZoomOut,
+        MinimizeMinimap
     }
 
     [SerializeField] private ButtonState _buttonState;
@@ -38,6 +41,15 @@ public class AddButtonListener : MonoBehaviour
                 break;
             case ButtonState.SpectrogramToFish:
                 button.onClick.AddListener(() => { SingleTons.CollectionsManager.GotoDescriptionFromSpectrogram(SingleTons.SoundWaveManager.GetListeningToCollected, gameObject); });
+                break;
+            case ButtonState.MinimapZoomIn:
+                button.onClick.AddListener(() => { SingleTons.MinimapManager.ZoomIn(); });
+                break;
+            case ButtonState.MinimapZoomOut:
+                button.onClick.AddListener(() => { SingleTons.MinimapManager.ZoomOut(); });
+                break;
+            case ButtonState.MinimizeMinimap:
+                button.onClick.AddListener(() => { SingleTons.MinimapManager.Minimize(); });
                 break;
         }
     }
