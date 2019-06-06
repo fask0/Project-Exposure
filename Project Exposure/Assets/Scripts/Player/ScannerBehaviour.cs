@@ -19,7 +19,8 @@ public class ScannerBehaviour : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (other.isTrigger) return;
-        _soundWaveManager.HideProgress(other.gameObject);
+        if (other.gameObject.layer == 10)
+            _soundWaveManager.HideProgress(other.gameObject);
     }
 
     private void OnTriggerStay(Collider other)
