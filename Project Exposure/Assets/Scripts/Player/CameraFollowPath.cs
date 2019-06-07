@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CameraFollowPath : MonoBehaviour
 {
@@ -28,6 +29,8 @@ public class CameraFollowPath : MonoBehaviour
     private bool _startCameraPath = false;
     [SerializeField]
     private int _standStillTimeInMs = 5000;
+
+    public UnityEvent PathEnd;
 
     // Start is called before the first frame update
     private void Start()
@@ -73,6 +76,8 @@ public class CameraFollowPath : MonoBehaviour
         _cameraState = CameraState.Still;
         _cameraBehaviour.SetTemporaryTarget(_pathPoints[_pathPoints.Length - 1], true, 0, 2.0f, 8.0f);
         _startBacktrackTime = DateTime.Now.AddMilliseconds(_standStillTimeInMs);
+
+        PathEnd.Invoke();
     }
 
     private void StartBacktracking()
