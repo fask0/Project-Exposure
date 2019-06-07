@@ -76,8 +76,8 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _PlayerPositionX: 726.8338
-    - _PlayerPositionY: 292.615
+    - _PlayerPositionX: 1449.5299
+    - _PlayerPositionY: 948.54535
     - _Radius: 100
     - _RadiusSquared: 10000
     - _SmoothnessTextureChannel: 0
