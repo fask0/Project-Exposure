@@ -28,7 +28,7 @@ Material:
     - _DepthStart: 25.8
     - _FadeDistance: 0.15
     - _FogBeforeFadeMultiplier: 0.15
-    - _FogStrength: 1
+    - _FogStrength: 0.7
     - _NoiseFrequency: 1
     - _NoiseScale: 1
     - _NoiseSpeed: 1
