@@ -51,7 +51,8 @@ public class MenuCanvas : MonoBehaviour
         else
         {
             _mainCanvas.SetActive(true);
-            _cameraBehaviour.SetToOriginalTarget();
+            if (_cameraBehaviour.GetTarget() == _menuBehaviour.GetCameraPoint())
+                _cameraBehaviour.SetToOriginalTarget();
         }
     }
 

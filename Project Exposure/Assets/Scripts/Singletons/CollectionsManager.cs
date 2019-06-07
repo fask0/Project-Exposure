@@ -32,25 +32,8 @@ public class CollectionsManager : MonoBehaviour
     void Start()
     {
         SingleTons.CollectionsManager = this;
-
-        //Normalize the sound of all objects that have an AudioSource
-        GameObject[] gos = GameObject.FindObjectsOfType<GameObject>();
-        for (int i = 0; i < gos.Length; i++)
-        {
-            if (gos[i].layer == 10)
-            {
-                AudioSource aSource = gos[i].GetComponent<AudioSource>();
-                aSource.spatialBlend = 1.0f;
-                aSource.volume = _defaultAudioVolume;
-                aSource.maxDistance = _defaultAudioDistanace;
-                aSource.rolloffMode = AudioRolloffMode.Custom;
-                aSource.loop = true;
-                _allAudioSources.Add(gos[i]);
-
-                if (gos[i].tag == "Collectable")
-                    collectableAudioSources.Add(gos[i]);
-            }
-        }
+        SingleTons.GameController.onSceneLoadEvent += GetAudioCourcesInScene;
+        GetAudioCourcesInScene("");
 
         //Save MainMenu Elements
         GameObject codexMainMenu = Camera.main.transform.GetChild(0).GetChild(7).GetChild(1).gameObject;
@@ -102,6 +85,29 @@ public class CollectionsManager : MonoBehaviour
         _codexSubFishModel.transform.localRotation = Quaternion.Slerp(_codexSubFishModel.transform.localRotation,
                                                                       Quaternion.Euler(30 * _codexSubMenuFishModelTilt.Vertical(), _angleToRotate, 0),
                                                                       Time.deltaTime * 5);
+    }
+
+    private void GetAudioCourcesInScene(string pSceneName)
+    {
+        //Normalize the sound of all objects that have an AudioSource in the scene
+        collectableAudioSources.Clear();
+        AudioSource[] gos = FindObjectsOfType<AudioSource>();
+        for (int i = 0; i < gos.Length; i++)
+        {
+            if (gos[i].gameObject.layer != 10) continue;
+
+            AudioSource aSource = gos[i];
+            aSource.spatialBlend = 1.0f;
+            aSource.volume = _defaultAudioVolume;
+            aSource.maxDistance = _defaultAudioDistanace;
+            aSource.rolloffMode = AudioRolloffMode.Linear;
+            aSource.loop = true;
+            _allAudioSources.Add(gos[i].gameObject);
+
+            if (gos[i].gameObject.tag == "Collectable")
+                if (!IsCollected(gos[i].gameObject.name))
+                    collectableAudioSources.Add(gos[i].gameObject);//fu :)
+        }
     }
 
     /// <summary>
