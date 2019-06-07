@@ -17,12 +17,16 @@ public class CameraBehaviour : MonoBehaviour
     private JoystickBehaviour _joystickBehaviour;
     private Vector3 _initialCamPointPos;
     private GameObject _dummyGO;
+    private GameObject _dummyGOGO;
     private GameObject _artifact;
     private Quaternion _dummyRotation;
     private Vector2 _clamp = Vector2.zero;
 
     private float _currentFollowSpeed;
     private bool _isScanningArtifact;
+    private bool _targetIsFollowPath = false;
+    private float _turnSpeed = 4.0f;
+    private float _positionTurnSpeed = 4.0f;
 
     void Start()
     {
@@ -33,13 +37,18 @@ public class CameraBehaviour : MonoBehaviour
         _joystickBehaviour = Camera.main.transform.GetChild(0).GetChild(1).GetComponent<JoystickBehaviour>();
         _currentFollowSpeed = _followSpeed;
         _dummyGO = new GameObject();
+        _dummyGO.transform.SetParent(transform);
+        _dummyGO.transform.position = Vector3.zero;
+        _dummyGOGO = new GameObject();
+        _dummyGOGO.transform.SetParent(_dummyGO.transform);
     }
 
     void Update()
     {
         if (_target != _originalTarget)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, _target.transform.rotation, Time.deltaTime * 4);
+            _dummyGO.transform.localPosition = Vector3.zero;
+            transform.rotation = Quaternion.Slerp(transform.rotation, _target.transform.rotation, Time.deltaTime * _turnSpeed);
         }
         else
         {
@@ -88,19 +97,35 @@ public class CameraBehaviour : MonoBehaviour
 
     private void LateUpdate()
     {
-        transform.position = Vector3.Slerp(transform.position, _target.transform.position, _currentFollowSpeed * Time.deltaTime);
+        if (_target != _originalTarget && Vector3.Distance(transform.position, _target.transform.position) > 0.1f && _targetIsFollowPath)
+        {
+            _dummyGOGO.transform.LookAt(_target.transform);
+            _dummyGO.transform.rotation = Quaternion.Slerp(_dummyGO.transform.rotation, _dummyGOGO.transform.rotation, Time.deltaTime * _positionTurnSpeed);
+            transform.position += _dummyGO.transform.forward * _currentFollowSpeed * Time.deltaTime;
+        }
+        else
+            transform.position = Vector3.Slerp(transform.position, _target.transform.position, _currentFollowSpeed * Time.deltaTime);
     }
 
-    public void SetTemporaryTarget(GameObject gameObject)
+    public void SetTemporaryTarget(GameObject gameObject, bool isFollowPath = false, float followSpeedMultiplier = 1.0f, float turnSpeed = 4.0f, float posTurnSpeed = 4.0f)
     {
         _target = gameObject;
-        _currentFollowSpeed = _menuFollowSpeed;
+        _targetIsFollowPath = isFollowPath;
+        _currentFollowSpeed = _menuFollowSpeed * followSpeedMultiplier;
+        _turnSpeed = turnSpeed;
+        _positionTurnSpeed = posTurnSpeed;
     }
 
     public void SetToOriginalTarget()
     {
         _target = _originalTarget;
         _currentFollowSpeed = _followSpeed;
+        _targetIsFollowPath = false;
+    }
+
+    public GameObject GetTarget()
+    {
+        return _target;
     }
 
     public void StartScanningArtifact(GameObject pGameObject)
