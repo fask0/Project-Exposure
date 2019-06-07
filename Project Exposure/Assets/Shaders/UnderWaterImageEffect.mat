@@ -27,7 +27,7 @@ Material:
     - _DepthDistance: 8
     - _DepthStart: 0
     - _NoiseFrequency: 2.5
-    - _NoiseScale: 4.43
+    - _NoiseScale: 3.6
     - _NoiseSpeed: 10.2
     - _PixelOffset: 0.014
     m_Colors: []
