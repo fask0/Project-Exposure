@@ -30,7 +30,14 @@ public class CameraFollowPath : MonoBehaviour
     [SerializeField]
     private int _standStillTimeInMs = 5000;
 
-    public UnityEvent PathEnd;
+    [SerializeField]
+    private float _cameraLookSpeed = 2.0f;
+    [SerializeField]
+    private float _cameraPathTurnSpeed = 8.0f;
+
+    public UnityEvent StillEvent;
+    public UnityEvent StartEvent;
+    public UnityEvent EndEvent;
 
     // Start is called before the first frame update
     private void Start()
@@ -69,15 +76,17 @@ public class CameraFollowPath : MonoBehaviour
         {
             _pathPoints[i].transform.rotation = Quaternion.Slerp(_camera.transform.rotation, _pathPoints[_pathPoints.Length - 1].transform.rotation, (float)i / (float)(_pathPoints.Length - 1));
         }
+
+        StartEvent.Invoke();
     }
 
     private void StartStill()
     {
         _cameraState = CameraState.Still;
-        _cameraBehaviour.SetTemporaryTarget(_pathPoints[_pathPoints.Length - 1], true, 0, 2.0f, 8.0f);
+        _cameraBehaviour.SetTemporaryTarget(_objectToFocusOn, true, 0, 5.0f, 8.0f);
         _startBacktrackTime = DateTime.Now.AddMilliseconds(_standStillTimeInMs);
 
-        PathEnd.Invoke();
+        StillEvent.Invoke();
     }
 
     private void StartBacktracking()
@@ -90,6 +99,7 @@ public class CameraFollowPath : MonoBehaviour
     {
         _cameraState = CameraState.None;
         _cameraBehaviour.SetToOriginalTarget();
+        EndEvent.Invoke();
     }
 
     private void ActOnState()
@@ -114,9 +124,9 @@ public class CameraFollowPath : MonoBehaviour
     {
         if (_pathPointIndex < _pathPoints.Length)
         {
-            if (Vector3.Distance(_camera.transform.position, _pathPoints[_pathPointIndex].transform.position) > 5.0f)
+            if (Vector3.Distance(_camera.transform.position, _pathPoints[_pathPointIndex].transform.position) > 13.0f)
             {
-                _cameraBehaviour.SetTemporaryTarget(_pathPoints[_pathPointIndex], true, 6.0f, 2.0f, 8.0f);
+                _cameraBehaviour.SetTemporaryTarget(_pathPoints[_pathPointIndex], true, 6.0f, _cameraLookSpeed, _cameraPathTurnSpeed, _objectToFocusOn);
             }
             else
             {
@@ -131,9 +141,9 @@ public class CameraFollowPath : MonoBehaviour
     {
         if (_pathPointIndex > 0)
         {
-            if (Vector3.Distance(_camera.transform.position, _pathPoints[_pathPointIndex].transform.position) > 5.0f)
+            if (Vector3.Distance(_camera.transform.position, _pathPoints[_pathPointIndex].transform.position) > 13.0f)
             {
-                _cameraBehaviour.SetTemporaryTarget(_pathPoints[_pathPointIndex], true, 6.0f, 2.0f, 8.0f);
+                _cameraBehaviour.SetTemporaryTarget(_pathPoints[_pathPointIndex], true, 6.0f, _cameraLookSpeed, _cameraPathTurnSpeed, _objectToFocusOn);
             }
             else
             {

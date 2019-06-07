@@ -18,6 +18,7 @@ public class CameraBehaviour : MonoBehaviour
     private Vector3 _initialCamPointPos;
     private GameObject _dummyGO;
     private GameObject _dummyGOGO;
+    private GameObject _dummyGOGOGO;
     private GameObject _artifact;
     private Quaternion _dummyRotation;
     private Vector2 _clamp = Vector2.zero;
@@ -27,6 +28,7 @@ public class CameraBehaviour : MonoBehaviour
     private bool _targetIsFollowPath = false;
     private float _turnSpeed = 4.0f;
     private float _positionTurnSpeed = 4.0f;
+    private GameObject _endTarget = null;
 
     void Start()
     {
@@ -37,18 +39,33 @@ public class CameraBehaviour : MonoBehaviour
         _joystickBehaviour = Camera.main.transform.GetChild(0).GetChild(1).GetComponent<JoystickBehaviour>();
         _currentFollowSpeed = _followSpeed;
         _dummyGO = new GameObject();
-        _dummyGO.transform.SetParent(transform);
-        _dummyGO.transform.position = Vector3.zero;
+        _dummyGO.transform.SetParent(transform.GetChild(0));
+        _dummyGO.transform.position = new Vector3(0, 0, 0);
         _dummyGOGO = new GameObject();
         _dummyGOGO.transform.SetParent(_dummyGO.transform);
+        _dummyGOGO.transform.localPosition = Vector3.zero;
+        _dummyGOGOGO = new GameObject();
+        _dummyGOGOGO.transform.SetParent(transform.GetChild(0));
     }
 
     void Update()
     {
         if (_target != _originalTarget)
         {
-            _dummyGO.transform.localPosition = Vector3.zero;
-            transform.rotation = Quaternion.Slerp(transform.rotation, _target.transform.rotation, Time.deltaTime * _turnSpeed);
+            _dummyGO.transform.localPosition = new Vector3(0, 0, 0);
+            _dummyGOGO.transform.localPosition = Vector3.zero;
+            _dummyGOGOGO.transform.localPosition = Vector3.zero;
+            if (!_targetIsFollowPath)
+                transform.rotation = Quaternion.Slerp(transform.rotation, _target.transform.rotation, Time.deltaTime * _turnSpeed);
+            else
+            {
+                if (_endTarget != null)
+                    _dummyGOGOGO.transform.LookAt(_endTarget.transform);
+
+                else
+                    _dummyGOGOGO.transform.LookAt(_target.transform);
+                transform.rotation = Quaternion.Slerp(transform.rotation, _dummyGOGOGO.transform.rotation, Time.deltaTime * _turnSpeed);
+            }
         }
         else
         {
@@ -107,13 +124,14 @@ public class CameraBehaviour : MonoBehaviour
             transform.position = Vector3.Slerp(transform.position, _target.transform.position, _currentFollowSpeed * Time.deltaTime);
     }
 
-    public void SetTemporaryTarget(GameObject gameObject, bool isFollowPath = false, float followSpeedMultiplier = 1.0f, float turnSpeed = 4.0f, float posTurnSpeed = 4.0f)
+    public void SetTemporaryTarget(GameObject gameObject, bool isFollowPath = false, float followSpeedMultiplier = 1.0f, float turnSpeed = 4.0f, float posTurnSpeed = 4.0f, GameObject endTarget = null)
     {
         _target = gameObject;
         _targetIsFollowPath = isFollowPath;
         _currentFollowSpeed = _menuFollowSpeed * followSpeedMultiplier;
         _turnSpeed = turnSpeed;
         _positionTurnSpeed = posTurnSpeed;
+        _endTarget = endTarget;
     }
 
     public void SetToOriginalTarget()
@@ -121,6 +139,7 @@ public class CameraBehaviour : MonoBehaviour
         _target = _originalTarget;
         _currentFollowSpeed = _followSpeed;
         _targetIsFollowPath = false;
+        _endTarget = null;
     }
 
     public GameObject GetTarget()
