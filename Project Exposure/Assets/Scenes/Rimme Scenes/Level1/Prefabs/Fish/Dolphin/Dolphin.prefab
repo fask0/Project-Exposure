@@ -117,6 +117,8 @@ MonoBehaviour:
   _speedUpRate: 10
   _dummy: {fileID: 2364912315136644117}
   _creaturesToAvoid: 
+  _alwaysAvoid: 0
+  _isAvoiding: 0
   _dolphinState: 0
 --- !u!1 &2364912316238423790
 GameObject:
@@ -209,6 +211,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _multiplier: 0.2
+  _hasAnimation: 0
 --- !u!1 &4366550854504737755
 GameObject:
   m_ObjectHideFlags: 0
@@ -454,7 +457,7 @@ GameObject:
   - component: {fileID: 4366550855657322923}
   - component: {fileID: 4366550855657322922}
   m_Layer: 0
-  m_Name: Dolphin (1)
+  m_Name: Dolphin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

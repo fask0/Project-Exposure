@@ -144,7 +144,7 @@ namespace AuraAPI
         /// </summary>
         public void ComputeData()
         {
-            if(!_hasInitializedBuffers)
+            if (!_hasInitializedBuffers)
             {
                 CreateBuffers(settings.resolution);
             }
@@ -164,7 +164,7 @@ namespace AuraAPI
             #endregion
 
             #region Occlusion culling
-            if(settings.HasFlags(FrustumParametersEnum.EnableOcclusionCulling))
+            if (settings.HasFlags(FrustumParametersEnum.EnableOcclusionCulling))
             {
                 Profiler.BeginSample("Aura : Compute occlusion culling data");
 
@@ -175,7 +175,7 @@ namespace AuraAPI
                 _computeMaximumDepthComputeShader.Dispatch((int)settings.occlusionCullingAccuracy, settings.resolution.x, settings.resolution.y, 1); //Par blocks puis repasser en resolution
                 _buffers.OcclusionTexture.Swap();
 
-                if(_processOcclusionMapMaterial == null)
+                if (_processOcclusionMapMaterial == null)
                 {
                     _processOcclusionMapMaterial = new Material(_processOcclusionMapShader);
                 }
@@ -221,12 +221,12 @@ namespace AuraAPI
             #endregion
 
             #region Volumes Injection
-            if(settings.HasFlags(FrustumParametersEnum.EnableVolumes))
+            if (settings.HasFlags(FrustumParametersEnum.EnableVolumes))
             {
                 _computeDataComputeShader.SetInt("volumeCount", Aura.VolumesManager.Buffer.count);
                 _computeDataComputeShader.SetBuffer(settings.GetId(), "volumeDataBuffer", Aura.VolumesManager.Buffer);
-            
-                if(settings.HasFlags(FrustumParametersEnum.EnableVolumesTextureMask))
+
+                if (settings.HasFlags(FrustumParametersEnum.EnableVolumesTextureMask))
                 {
                     _computeDataComputeShader.SetTexture(settings.GetId(), "volumeMaskTexture", Aura.VolumesManager.VolumeTexture); // TODO : USE EVENT TO SET TEXTURES
                 }
@@ -234,18 +234,18 @@ namespace AuraAPI
             #endregion
 
             #region Directional lights
-            if(settings.HasFlags(FrustumParametersEnum.EnableDirectionalLights))
+            if (settings.HasFlags(FrustumParametersEnum.EnableDirectionalLights))
             {
                 _computeDataComputeShader.SetInt("directionalLightCount", Aura.LightsManager.DirectionalLightsManager.DataBuffer.count);
                 _computeDataComputeShader.SetBuffer(settings.GetId(), "directionalLightDataBuffer", Aura.LightsManager.DirectionalLightsManager.DataBuffer);
 
-                if(settings.HasFlags(FrustumParametersEnum.EnableDirectionalLightsShadows))
+                if (settings.HasFlags(FrustumParametersEnum.EnableDirectionalLightsShadows))
                 {
                     _computeDataComputeShader.SetTexture(settings.GetId(), "directionalShadowMapsArray", Aura.LightsManager.DirectionalLightsManager.ShadowMapsArray); // TODO : USE EVENT TO SET TEXTURES
                     _computeDataComputeShader.SetTexture(settings.GetId(), "directionalShadowDataArray", Aura.LightsManager.DirectionalLightsManager.ShadowDataArray); // TODO : USE EVENT TO SET TEXTURES
                 }
 
-                if(settings.HasFlags(FrustumParametersEnum.EnableLightsCookies) && Aura.LightsManager.DirectionalLightsManager.HasCookieCasters)
+                if (settings.HasFlags(FrustumParametersEnum.EnableLightsCookies) && Aura.LightsManager.DirectionalLightsManager.HasCookieCasters)
                 {
                     _computeDataComputeShader.SetTexture(settings.GetId(), "directionalCookieMapsArray", Aura.LightsManager.DirectionalLightsManager.CookieMapsArray); // TODO : USE EVENT TO SET TEXTURES
                 }
@@ -253,17 +253,17 @@ namespace AuraAPI
             #endregion
 
             #region Spot lights
-            if(settings.HasFlags(FrustumParametersEnum.EnableSpotLights))
+            if (settings.HasFlags(FrustumParametersEnum.EnableSpotLights))
             {
                 _computeDataComputeShader.SetInt("spotLightCount", Aura.LightsManager.SpotLightsManager.DataBuffer.count);
                 _computeDataComputeShader.SetBuffer(settings.GetId(), "spotLightDataBuffer", Aura.LightsManager.SpotLightsManager.DataBuffer);
-            
-                if(settings.HasFlags(FrustumParametersEnum.EnableSpotLightsShadows))
+
+                if (settings.HasFlags(FrustumParametersEnum.EnableSpotLightsShadows))
                 {
                     _computeDataComputeShader.SetTexture(settings.GetId(), "spotShadowMapsArray", Aura.LightsManager.SpotLightsManager.ShadowMapsArray); // TODO : USE EVENT TO SET TEXTURES
                 }
-            
-                if(settings.HasFlags(FrustumParametersEnum.EnableLightsCookies) && Aura.LightsManager.SpotLightsManager.HasCookieCasters)
+
+                if (settings.HasFlags(FrustumParametersEnum.EnableLightsCookies) && Aura.LightsManager.SpotLightsManager.HasCookieCasters)
                 {
                     _computeDataComputeShader.SetTexture(settings.GetId(), "spotCookieMapsArray", Aura.LightsManager.SpotLightsManager.CookieMapsArray); // TODO : USE EVENT TO SET TEXTURES
                 }
@@ -271,17 +271,17 @@ namespace AuraAPI
             #endregion
 
             #region Point lights
-            if(settings.HasFlags(FrustumParametersEnum.EnablePointLights))
+            if (settings.HasFlags(FrustumParametersEnum.EnablePointLights))
             {
                 _computeDataComputeShader.SetInt("pointLightCount", Aura.LightsManager.PointLightsManager.DataBuffer.count);
                 _computeDataComputeShader.SetBuffer(settings.GetId(), "pointLightDataBuffer", Aura.LightsManager.PointLightsManager.DataBuffer);
-            
-                if(settings.HasFlags(FrustumParametersEnum.EnablePointLightsShadows))
+
+                if (settings.HasFlags(FrustumParametersEnum.EnablePointLightsShadows))
                 {
                     _computeDataComputeShader.SetTexture(settings.GetId(), "pointShadowMapsArray", Aura.LightsManager.PointLightsManager.ShadowMapsArray); // TODO : USE EVENT TO SET TEXTURES
                 }
-            
-                if(settings.HasFlags(FrustumParametersEnum.EnableLightsCookies) && Aura.LightsManager.PointLightsManager.HasCookieCasters)
+
+                if (settings.HasFlags(FrustumParametersEnum.EnableLightsCookies) && Aura.LightsManager.PointLightsManager.HasCookieCasters)
                 {
                     _computeDataComputeShader.SetTexture(settings.GetId(), "pointCookieMapsArray", Aura.LightsManager.PointLightsManager.CookieMapsArray); // TODO : USE EVENT TO SET TEXTURES
                 }
@@ -334,7 +334,7 @@ namespace AuraAPI
         /// <param name="resolution">The desired resolution</param>
         public void SetResolution(Vector3Int resolution)
         {
-            if(Aura.HasInstance)
+            if (Aura.HasInstance)
             {
                 uint threadSizeX;
                 uint threadSizeY;
@@ -347,9 +347,9 @@ namespace AuraAPI
 
                 settings.resolution = resolution;
 
-                if(_buffers == null || resolution != _buffers.Resolution)
+                if (_buffers == null || resolution != _buffers.Resolution)
                 {
-                    if(_buffers != null)
+                    if (_buffers != null)
                     {
                         _buffers.ReleaseBuffers();
                     }

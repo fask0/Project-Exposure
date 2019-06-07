@@ -92,6 +92,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _multiplier: 1
+  _hasAnimation: 0
 --- !u!1 &8747856068781857026
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,5 +210,7 @@ MonoBehaviour:
   _speedUpRate: 10
   _dummy: {fileID: 8747856068781857026}
   _creaturesToAvoid: 00000000
+  _alwaysAvoid: 0
+  _isAvoiding: 0
   _schoolFishWithLeader: []
   _schoolFishWithLeaderBehaviours: []

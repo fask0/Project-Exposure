@@ -25,6 +25,8 @@ public class PlayerMovementBehaviour : MonoBehaviour
     private bool _isFollowing;
     private GameObject _followTarget;
     private Transform _followPoint;
+    private bool _inFollowPosition;
+    private float _timeToGoInFollowPosition;
 
     void Start()
     {
@@ -35,10 +37,13 @@ public class PlayerMovementBehaviour : MonoBehaviour
         _joystickBehaviour = Camera.main.transform.GetChild(0).GetChild(1).GetComponent<JoystickBehaviour>();
 
         SingleTons.GameController.Player = this.gameObject;
+
+        transform.parent.rotation = Quaternion.identity;
     }
 
     void Update()
     {
+        _rigidbody.velocity = Vector3.zero;
         if (_isStunned)
         {
             if (DateTime.Now >= _stopStunTime)
@@ -50,16 +55,17 @@ public class PlayerMovementBehaviour : MonoBehaviour
         {
             if (_isFollowing)
             {
-                transform.position = Vector3.Slerp(transform.position, _followPoint.position, Time.deltaTime * 3);
-                transform.rotation = Quaternion.Slerp(transform.rotation, _followPoint.rotation, Time.deltaTime * 3);
+                _timeToGoInFollowPosition += Time.deltaTime;
+                transform.position = Vector3.Slerp(transform.position, _followPoint.position, Time.deltaTime * 2);
+                transform.rotation = Quaternion.Slerp(transform.rotation, _followPoint.rotation, Time.deltaTime * 2);
                 _animator.SetBool("IsIdle", false);
                 _animator.SetBool("IsSwimming", true);
 
+                if (_timeToGoInFollowPosition > 0.5f)
+                    _inFollowPosition = true;
+
                 if (_joystickBehaviour.IsPressed())
-                {
-                    _followTarget = null;
-                    _isFollowing = false;
-                }
+                    StopFollowingGameObject(_followTarget);
             }
             else
             {
@@ -75,7 +81,6 @@ public class PlayerMovementBehaviour : MonoBehaviour
                     else
                     {
                         _velocity -= _waterResistance * Time.deltaTime;
-                        _rigidbody.velocity = Vector3.zero;
 
                         if (_velocity < 2)
                         {
@@ -108,8 +113,17 @@ public class PlayerMovementBehaviour : MonoBehaviour
         if (_followTarget == pGameObject) return;
 
         _isFollowing = true;
+        _inFollowPosition = false;
         _followTarget = pGameObject;
         _followPoint = pGameObject.GetComponent<SetFollowPoints>().GetClosestPoint(transform);
+        Physics.IgnoreCollision(pGameObject.GetComponent<MeshCollider>(), GetComponent<CapsuleCollider>(), true);
+    }
+
+    public void StopFollowingGameObject(GameObject pGameObject)
+    {
+        _isFollowing = false;
+        _followTarget = null;
+        Physics.IgnoreCollision(pGameObject.GetComponent<MeshCollider>(), GetComponent<CapsuleCollider>(), false);
     }
 
     public float GetVelocity()
@@ -125,7 +139,7 @@ public class PlayerMovementBehaviour : MonoBehaviour
 
     public bool CheckIfFollowingGameObject(GameObject pGameObject)
     {
-        if (pGameObject == _followTarget)
+        if (pGameObject == _followTarget && _inFollowPosition)
             return true;
 
         return false;

@@ -16,8 +16,13 @@ public class CameraBehaviour : MonoBehaviour
 
     private JoystickBehaviour _joystickBehaviour;
     private Vector3 _initialCamPointPos;
+    private GameObject _dummyGO;
+    private GameObject _artifact;
+    private Quaternion _dummyRotation;
+    private Vector2 _clamp = Vector2.zero;
 
     private float _currentFollowSpeed;
+    private bool _isScanningArtifact;
 
     void Start()
     {
@@ -27,6 +32,7 @@ public class CameraBehaviour : MonoBehaviour
         transform.position = _target.transform.position;
         _joystickBehaviour = Camera.main.transform.GetChild(0).GetChild(1).GetComponent<JoystickBehaviour>();
         _currentFollowSpeed = _followSpeed;
+        _dummyGO = new GameObject();
     }
 
     void Update()
@@ -43,21 +49,31 @@ public class CameraBehaviour : MonoBehaviour
             }
             else
             {
-                if (_joystickBehaviour.Vertical() != 0 || _joystickBehaviour.Horizontal() != 0)
+                if (_isScanningArtifact)
                 {
-                    _rotX += -_joystickBehaviour.Vertical() * _inputSensitivity * Time.deltaTime;
-                    _rotY += _joystickBehaviour.Horizontal() * _inputSensitivity * Time.deltaTime;
+                    _dummyGO.transform.position = transform.position;
+                    _dummyGO.transform.LookAt(_artifact.transform);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, _dummyGO.transform.rotation, Time.deltaTime);
+                }
+                else if (_joystickBehaviour.IsPressed())
+                {
+                    if (_joystickBehaviour.Vertical() != 0)
+                        _rotX += -_joystickBehaviour.Vertical() * _inputSensitivity * Time.deltaTime;
+                    if (_joystickBehaviour.Horizontal() != 0)
+                        _rotY += _joystickBehaviour.Horizontal() * _inputSensitivity * Time.deltaTime * 1.5f;
 
-                    float clamp = _clampAngle * Mathf.Abs(_joystickBehaviour.Vertical());
-                    _rotX = Mathf.Clamp(_rotX, -clamp, clamp);
+                    _clamp = Vector2.Lerp(_clamp, new Vector2(_clampAngle * Mathf.Abs(_joystickBehaviour.Vertical()), 0), Time.deltaTime * 3);
+                    _rotX = Mathf.Clamp(_rotX, -_clamp.x, _clamp.x);
 
                     Quaternion localRotation = Quaternion.Slerp(transform.localRotation, Quaternion.Euler(_rotX, _rotY, 0), Time.deltaTime * 2);
                     transform.rotation = localRotation;
+
+                    _dummyRotation = transform.rotation;
                 }
 
                 if (_joystickBehaviour.Vertical() == 0)
                 {
-                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, transform.eulerAngles.y, 0), Time.deltaTime);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(((_dummyRotation.eulerAngles.x > 180) ? _dummyRotation.eulerAngles.x - 360 : _dummyRotation.eulerAngles.x) * 0.66f, transform.eulerAngles.y, 0), Time.deltaTime);
                     _rotX = transform.rotation.eulerAngles.x;
                     _rotX = (_rotX > 180) ? _rotX - 360 : _rotX;
                 }
@@ -85,5 +101,16 @@ public class CameraBehaviour : MonoBehaviour
     {
         _target = _originalTarget;
         _currentFollowSpeed = _followSpeed;
+    }
+
+    public void StartScanningArtifact(GameObject pGameObject)
+    {
+        _isScanningArtifact = true;
+        _artifact = pGameObject;
+    }
+
+    public void StopScanningArtifact()
+    {
+        _isScanningArtifact = false;
     }
 }
