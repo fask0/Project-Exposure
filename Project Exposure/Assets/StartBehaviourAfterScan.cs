@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class StartBehaviourAfterScan : MonoBehaviour
 {
-
     private FishBehaviour fishBehaviour;
 
     // Start is called before the first frame update
@@ -14,11 +13,10 @@ public class StartBehaviourAfterScan : MonoBehaviour
         SingleTons.SoundWaveManager.onFishScanEvent += StartFishBehaviour;
     }
 
-    //// Update is called once per frame
-    //void Update()
-    //{
-
-    //}
+    private void OnDisable()
+    {
+        SingleTons.SoundWaveManager.onFishScanEvent -= StartFishBehaviour;
+    }
 
     void StartFishBehaviour(GameObject obj)
     {
