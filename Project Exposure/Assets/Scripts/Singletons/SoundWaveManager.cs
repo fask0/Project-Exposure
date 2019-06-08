@@ -417,6 +417,14 @@ public class SoundWaveManager : MonoBehaviour
     public void ScanTarget(GameObject pScannedTarget)
     {
         Material mat = pScannedTarget.GetComponentInChildren<Renderer>().material;
+        List<Material> mats = new List<Material>();
+        foreach (Renderer renderer in pScannedTarget.GetComponentsInChildren<Renderer>())
+        {
+            foreach (Material material in renderer.materials)
+            {
+                mats.Add(material);
+            }
+        }
         if (Input.GetKey(KeyCode.Mouse0))
         {
             RaycastHit hit;
@@ -438,9 +446,12 @@ public class SoundWaveManager : MonoBehaviour
                     _cameraBehaviour.StartScanningArtifact(pScannedTarget);
                     _scanTimeLeft -= Time.deltaTime;
 
-                    mat.SetFloat("_IsScanning", 1);
-                    mat.SetFloat("_ScanLines", (_scanDuration - _scanTimeLeft) * 20);
-                    mat.SetFloat("_ScanLineWidth", _scanDuration - _scanTimeLeft);
+                    foreach (Material material in mats)
+                    {
+                        material.SetFloat("_IsScanning", 1);
+                        material.SetFloat("_ScanLines", (_scanDuration - _scanTimeLeft) * 20);
+                        material.SetFloat("_ScanLineWidth", _scanDuration - _scanTimeLeft);
+                    }
 
                     if (_scanTimeLeft <= 0)
                     {
@@ -458,12 +469,15 @@ public class SoundWaveManager : MonoBehaviour
                         {
                             SingleTons.ScoreManager.AddScore(score);
                         }
-
                         SingleTons.CollectionsManager.CollectArtifact(index);
 
-                        mat.SetFloat("_IsScanning", 0);
-                        mat.SetFloat("_ScanLines", 0);
-                        mat.SetFloat("_ScanLineWidth", 0);
+
+                        foreach (Material material in mats)
+                        {
+                            material.SetFloat("_IsScanning", 0);
+                            material.SetFloat("_ScanLines", 0);
+                            material.SetFloat("_ScanLineWidth", 0);
+                        }
 
                         _scanTimeLeft = _scanDuration;
                         onFishScanEvent(pScannedTarget);
@@ -484,9 +498,12 @@ public class SoundWaveManager : MonoBehaviour
         }
         else
         {
-            mat.SetFloat("_IsScanning", 0);
-            mat.SetFloat("_ScanLines", 0);
-            mat.SetFloat("_ScanLineWidth", 0);
+            foreach (Material material in mats)
+            {
+                material.SetFloat("_IsScanning", 0);
+                material.SetFloat("_ScanLines", 0);
+                material.SetFloat("_ScanLineWidth", 0);
+            }
 
             _scanTimeLeft = _scanDuration;
         }
