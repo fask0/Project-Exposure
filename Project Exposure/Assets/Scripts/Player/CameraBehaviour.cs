@@ -80,9 +80,12 @@ public class CameraBehaviour : MonoBehaviour
                     _dummyGO.transform.position = transform.position;
                     _dummyGO.transform.LookAt(_artifact.transform);
                     transform.rotation = Quaternion.Slerp(transform.rotation, _dummyGO.transform.rotation, Time.deltaTime);
+                    _dummyRotation = transform.rotation;
                 }
-                else if (_joystickBehaviour.IsPressed())
+
+                if (_joystickBehaviour.IsPressed())
                 {
+                    _isScanningArtifact = false;
                     if (_joystickBehaviour.Vertical() != 0)
                         _rotX += -_joystickBehaviour.Vertical() * _inputSensitivity * Time.deltaTime;
                     if (_joystickBehaviour.Horizontal() != 0)

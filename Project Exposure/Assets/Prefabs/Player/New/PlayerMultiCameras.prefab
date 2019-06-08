@@ -57,7 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: 1ce19c1bea51d55488eda652259b5832, type: 2}
+  m_Material: {fileID: 2100000, guid: f7b0ea848a32e8049961d81ce1002fe5, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_OnCullStateChanged:
@@ -10411,6 +10411,7 @@ MonoBehaviour:
   _followSpeed: 2
   _clampAngle: 80
   _inputSensitivity: 80
+  _menuFollowSpeed: 6
 --- !u!1 &5841782006877768845
 GameObject:
   m_ObjectHideFlags: 0
@@ -10581,7 +10582,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5841782006877768845}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6ffba64488d242a4ebf0203bc905f517, type: 3}
   m_Name: 
@@ -10600,7 +10601,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5841782006877768845}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0de9551c9dea0a443a12c9ff4e0d6e12, type: 3}
   m_Name: 
@@ -10612,6 +10613,8 @@ MonoBehaviour:
   _depthDistance: 160
   _depthFadeDistance: 0.5
   _fogBeforeFadeMultiplier: 1
+  _fogStrength: 1
+  _singleColor: 0
 --- !u!1 &7419157249373640356
 GameObject:
   m_ObjectHideFlags: 0
