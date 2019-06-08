@@ -6,7 +6,7 @@ using TMPro;
 public class CollectionsManager : MonoBehaviour
 {
     [SerializeField] [Range(0, 1)] private float _defaultAudioVolume = 0.8f;
-    [SerializeField] [Range(0, 20)] private int _defaultAudioDistanace = 8;
+    [SerializeField] [Range(0, 50)] private int _defaultAudioDistanace = 8;
     [SerializeField] private float _subCodexMenuModelScaleMultiplier = 2.5f;
     [SerializeField] private List<FishScriptableObject> _fishScriptableObjects;
 
@@ -15,6 +15,7 @@ public class CollectionsManager : MonoBehaviour
     [HideInInspector] public List<GameObject> _allAudioSources = new List<GameObject>();
 
     private List<GameObject> _codexMainMenu = new List<GameObject>();
+    private List<int> _collectedArtifacts = new List<int>();
 
     private Mesh _undiscoveredSpeciesMesh;
     private Texture _undiscoveredSpeciesTexture;
@@ -31,25 +32,8 @@ public class CollectionsManager : MonoBehaviour
     void Start()
     {
         SingleTons.CollectionsManager = this;
-
-        //Normalize the sound of all objects that have an AudioSource
-        GameObject[] gos = GameObject.FindObjectsOfType<GameObject>();
-        for (int i = 0; i < gos.Length; i++)
-        {
-            if (gos[i].layer == 10)
-            {
-                AudioSource aSource = gos[i].GetComponent<AudioSource>();
-                aSource.spatialBlend = 1.0f;
-                aSource.volume = _defaultAudioVolume;
-                aSource.maxDistance = _defaultAudioDistanace;
-                aSource.rolloffMode = AudioRolloffMode.Custom;
-                aSource.loop = true;
-                _allAudioSources.Add(gos[i]);
-
-                if (gos[i].tag == "Collectable")
-                    collectableAudioSources.Add(gos[i]);
-            }
-        }
+        SingleTons.GameController.onSceneLoadEvent += GetAudioCourcesInScene;
+        GetAudioCourcesInScene("");
 
         //Save MainMenu Elements
         GameObject codexMainMenu = Camera.main.transform.GetChild(0).GetChild(7).GetChild(1).gameObject;
@@ -61,14 +45,14 @@ public class CollectionsManager : MonoBehaviour
             _codexMainMenu.Add(fish[i].gameObject);
         }
         //Save Default Mesh/Texture
-        _undiscoveredSpeciesMesh = fish[0].gameObject.GetComponent<MeshFilter>().mesh;
+        _undiscoveredSpeciesMesh = fish[0].sharedMesh;
         _undiscoveredSpeciesTexture = fish[0].gameObject.GetComponent<MeshRenderer>().material.mainTexture;
 
         //Save SubMenu Elements
         GameObject codexSubMenu = Camera.main.transform.GetChild(0).GetChild(7).GetChild(2).gameObject;
         //Main Model
         _codexSubFishModel = codexSubMenu.transform.GetChild(1).gameObject;
-        _codexSubFishModel.GetComponent<MeshFilter>().mesh = _undiscoveredSpeciesMesh;
+        _codexSubFishModel.GetComponent<MeshFilter>().sharedMesh = _undiscoveredSpeciesMesh;
         _codexSubFishModel.GetComponent<MeshRenderer>().material.mainTexture = _undiscoveredSpeciesTexture;
         SetScale(_codexSubFishModel, _subCodexMenuModelScaleMultiplier * 0.5f);
         //Main Model Overlay
@@ -103,6 +87,29 @@ public class CollectionsManager : MonoBehaviour
                                                                       Time.deltaTime * 5);
     }
 
+    private void GetAudioCourcesInScene(string pSceneName)
+    {
+        //Normalize the sound of all objects that have an AudioSource in the scene
+        collectableAudioSources.Clear();
+        AudioSource[] gos = FindObjectsOfType<AudioSource>();
+        for (int i = 0; i < gos.Length; i++)
+        {
+            if (gos[i].gameObject.layer != 10) continue;
+
+            AudioSource aSource = gos[i];
+            aSource.spatialBlend = 1.0f;
+            aSource.volume = _defaultAudioVolume;
+            aSource.maxDistance = _defaultAudioDistanace;
+            aSource.rolloffMode = AudioRolloffMode.Linear;
+            aSource.loop = true;
+            _allAudioSources.Add(gos[i].gameObject);
+
+            if (gos[i].gameObject.tag == "Collectable")
+                if (!IsCollected(gos[i].gameObject.name))
+                    collectableAudioSources.Add(gos[i].gameObject);//fu :)
+        }
+    }
+
     /// <summary>
     /// Checks whether an object is already collected
     /// </summary>
@@ -115,6 +122,17 @@ public class CollectionsManager : MonoBehaviour
             if (key == pGameObjectName)
                 return true;
         }
+
+        return false;
+    }
+
+    public bool HasTargetBeenScanned(string pTag)
+    {
+        int index = 0;
+        int.TryParse(pTag.Substring(6), out index);
+        foreach (int targetIndex in _collectedArtifacts)
+            if (targetIndex == index)
+                return true;
 
         return false;
     }
@@ -142,7 +160,7 @@ public class CollectionsManager : MonoBehaviour
                         {
                             if (_codexMainMenu[j].transform.parent.name.ToLower() == _fishScriptableObjects[k].name.ToLower())
                             {
-                                _codexMainMenu[j].GetComponent<MeshFilter>().mesh = _fishScriptableObjects[k].Mesh;
+                                _codexMainMenu[j].GetComponent<MeshFilter>().sharedMesh = _fishScriptableObjects[k].Mesh;
                                 _codexMainMenu[j].GetComponent<MeshRenderer>().material.mainTexture = _fishScriptableObjects[k].Texture;
                                 SetScale(_codexMainMenu[j]);
                                 break;
@@ -166,6 +184,14 @@ public class CollectionsManager : MonoBehaviour
                 collectableAudioSources.RemoveAt(i);
     }
 
+    public void CollectArtifact(int pIndex)
+    {
+        foreach (int index in _collectedArtifacts)
+            if (index == pIndex) return;
+
+        _collectedArtifacts.Add(pIndex);
+    }
+
     public int GetMaxDistance
     {
         get { return _defaultAudioDistanace; }
@@ -181,7 +207,7 @@ public class CollectionsManager : MonoBehaviour
                 if (IsCollected(pGameObject.name))
                 {
                     //Discovered Species
-                    _codexSubFishModel.GetComponent<MeshFilter>().mesh = _fishScriptableObjects[i].Mesh;
+                    _codexSubFishModel.GetComponent<MeshFilter>().sharedMesh = _fishScriptableObjects[i].Mesh;
                     _codexSubFishModel.GetComponent<MeshRenderer>().material.mainTexture = _fishScriptableObjects[i].Texture;
                     SetScale(_codexSubFishModel, _subCodexMenuModelScaleMultiplier);
                     _codexSubSoundwave.clip = _fishScriptableObjects[i].AudioClip;
@@ -191,7 +217,7 @@ public class CollectionsManager : MonoBehaviour
                 else
                 {
                     //Undiscovered Species
-                    _codexSubFishModel.GetComponent<MeshFilter>().mesh = _undiscoveredSpeciesMesh;
+                    _codexSubFishModel.GetComponent<MeshFilter>().sharedMesh = _undiscoveredSpeciesMesh;
                     _codexSubFishModel.GetComponent<MeshRenderer>().material.mainTexture = _undiscoveredSpeciesTexture;
                     SetScale(_codexSubFishModel, _subCodexMenuModelScaleMultiplier * 0.5f);
                     _codexSubSoundwave.clip = null;
@@ -203,7 +229,7 @@ public class CollectionsManager : MonoBehaviour
         }
 
         //Undiscovered Species
-        _codexSubFishModel.GetComponent<MeshFilter>().mesh = _undiscoveredSpeciesMesh;
+        _codexSubFishModel.GetComponent<MeshFilter>().sharedMesh = _undiscoveredSpeciesMesh;
         _codexSubFishModel.GetComponent<MeshRenderer>().material.mainTexture = _undiscoveredSpeciesTexture;
         SetScale(_codexSubFishModel, _subCodexMenuModelScaleMultiplier * 0.5f);
         _codexSubSoundwave.clip = null;
@@ -221,7 +247,7 @@ public class CollectionsManager : MonoBehaviour
                 if (IsCollected(pFishName))
                 {
                     //Discovered Species
-                    _codexSubFishModel.GetComponent<MeshFilter>().mesh = _fishScriptableObjects[i].Mesh;
+                    _codexSubFishModel.GetComponent<MeshFilter>().sharedMesh = _fishScriptableObjects[i].Mesh;
                     _codexSubFishModel.GetComponent<MeshRenderer>().material.mainTexture = _fishScriptableObjects[i].Texture;
                     SetScale(_codexSubFishModel, _subCodexMenuModelScaleMultiplier);
                     _codexSubSoundwave.clip = _fishScriptableObjects[i].AudioClip;
@@ -231,7 +257,7 @@ public class CollectionsManager : MonoBehaviour
                 else
                 {
                     //Undiscovered Species
-                    _codexSubFishModel.GetComponent<MeshFilter>().mesh = _undiscoveredSpeciesMesh;
+                    _codexSubFishModel.GetComponent<MeshFilter>().sharedMesh = _undiscoveredSpeciesMesh;
                     _codexSubFishModel.GetComponent<MeshRenderer>().material.mainTexture = _undiscoveredSpeciesTexture;
                     SetScale(_codexSubFishModel, _subCodexMenuModelScaleMultiplier * 0.5f);
                     _codexSubSoundwave.clip = null;
@@ -243,7 +269,7 @@ public class CollectionsManager : MonoBehaviour
         }
 
         //Undiscovered Species
-        _codexSubFishModel.GetComponent<MeshFilter>().mesh = _undiscoveredSpeciesMesh;
+        _codexSubFishModel.GetComponent<MeshFilter>().sharedMesh = _undiscoveredSpeciesMesh;
         _codexSubFishModel.GetComponent<MeshRenderer>().material.mainTexture = _undiscoveredSpeciesTexture;
         SetScale(_codexSubFishModel, _subCodexMenuModelScaleMultiplier * 0.5f);
         _codexSubSoundwave.clip = null;
@@ -335,7 +361,7 @@ public class CollectionsManager : MonoBehaviour
 
     private void SetScale(GameObject pGameObject, float pMultiplier = 1)
     {
-        Vector3 bounds = pGameObject.GetComponent<MeshFilter>().mesh.bounds.extents;
+        Vector3 bounds = pGameObject.GetComponent<MeshFilter>().sharedMesh.bounds.extents;
         float heighestExtent = Mathf.Max(Mathf.Max(bounds.x, bounds.y), bounds.z);
         float maxScale = 100 * pMultiplier;
         float ratio = maxScale / heighestExtent;

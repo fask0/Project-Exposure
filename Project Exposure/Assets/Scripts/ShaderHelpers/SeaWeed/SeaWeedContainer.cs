@@ -1,25 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SeaWeedContainer : MonoBehaviour
 {
-    private List<Renderer> _seaWeedRenderers = new List<Renderer>();
+    private Renderer[] _renderers;
 
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            _seaWeedRenderers.Add(transform.GetChild(i).GetComponent<Renderer>());
-        }
+        _renderers = GetComponentsInChildren<Renderer>();
     }
 
     private void OnTriggerStay(Collider other)
     {
-        foreach (Renderer renderer in _seaWeedRenderers)
+        if (other.tag != "Player") return;
+        for (int i = 0; i < _renderers.Length; i++)
         {
-            renderer.material.SetVector("_PlayerPos", SingleTons.GameController.Player.transform.position);
+            _renderers[i].material.SetVector("_PlayerPos", SingleTons.GameController.Player.transform.position);
         }
     }
 }

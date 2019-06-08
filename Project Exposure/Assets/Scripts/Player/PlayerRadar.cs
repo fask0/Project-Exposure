@@ -10,6 +10,7 @@ public class PlayerRadar : MonoBehaviour
     [SerializeField]
     private int _activateAfterSeconds;
 
+    private GameObject _target;
     private DateTime _activationTime = DateTime.MaxValue;
     private bool _hasBeenActivated = false;
 
@@ -18,6 +19,7 @@ public class PlayerRadar : MonoBehaviour
     {
         _activationTime = DateTime.Now.AddSeconds(_activateAfterSeconds);
         SingleTons.SoundWaveManager.onFishScanEvent += ResetRadar;
+        SetTarget(SingleTons.QuestManager.GetCurrentTarget());
     }
 
     private void ResetRadar(GameObject pGameObject)
@@ -27,12 +29,21 @@ public class PlayerRadar : MonoBehaviour
             _activationTime = DateTime.Now.AddSeconds(_activateAfterSeconds);
             _objToActivate.SetActive(false);
             _hasBeenActivated = false;
+            SetTarget(SingleTons.QuestManager.GetCurrentTarget());
         }
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (SingleTons.QuestManager.GetCurrentTarget() == null)
+        {
+            _activationTime = DateTime.Now.AddSeconds(_activateAfterSeconds);
+            _objToActivate.SetActive(false);
+            _hasBeenActivated = false;
+            return;
+        }
+
         if (DateTime.Now > _activationTime)
         {
             if (!_hasBeenActivated)
@@ -41,7 +52,17 @@ public class PlayerRadar : MonoBehaviour
                 _hasBeenActivated = true;
             }
 
-            transform.LookAt(SingleTons.QuestManager.GetCurrentTarget().transform);
+            transform.LookAt(_target.transform);
         }
+    }
+
+    public void SetTarget(GameObject pTarget)
+    {
+        _target = pTarget;
+    }
+
+    public GameObject GetTarget()
+    {
+        return _target;
     }
 }

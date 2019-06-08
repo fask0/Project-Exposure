@@ -88,7 +88,7 @@ Material:
     - _OcclusionStrength: 1
     - _Offset: 0
     - _Parallax: 0.02
-    - _PlayerDetectionRange: 4
+    - _PlayerDetectionRange: 10
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
