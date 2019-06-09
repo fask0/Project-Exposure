@@ -63,7 +63,7 @@ public class ScannerBehaviour : MonoBehaviour
             else if (other.tag.Substring(0, 6) == "Target")
             {
                 if (SingleTons.CollectionsManager.HasTargetBeenScanned(other.tag)) return;
-                print(other.name);
+                //print(other.name);
                 _soundWaveManager.ScanTarget(other.gameObject);
                 _soundWaveManager.ShowProgress(other.gameObject);
             }

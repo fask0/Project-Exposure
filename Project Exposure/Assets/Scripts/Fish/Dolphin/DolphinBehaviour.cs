@@ -23,6 +23,7 @@ public class DolphinBehaviour : FishBehaviour
         _dolphinParent = transform.parent.GetComponent<DolphinParentBehaviour>();
         _rigidBody = GetComponent<Rigidbody>();
 
+        _dolphinParent.GetGuidingPath().enabled = true;
         if (_dolphinParent == null)
         {
             Debug.Log("The parent of the dolphin needs to have a DolphinParentBehaviour script attached to it");
