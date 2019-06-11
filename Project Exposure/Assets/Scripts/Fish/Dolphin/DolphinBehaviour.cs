@@ -16,12 +16,14 @@ public class DolphinBehaviour : FishBehaviour
 
     private int _pathIndex = 0;
     private Vector3[] _pathPositions;
+    private Animator _animator;
 
     // Start is called before the first frame update
     void Start()
     {
         _dolphinParent = transform.parent.GetComponent<DolphinParentBehaviour>();
         _rigidBody = GetComponent<Rigidbody>();
+        _animator = GetComponent<Animator>();
 
         _dolphinParent.GetGuidingPath().enabled = true;
         if (_dolphinParent == null)
@@ -107,6 +109,12 @@ public class DolphinBehaviour : FishBehaviour
                 _checkpoint = _dolphinParent.GetEndingFishZone().GenerateNewCheckPoint(transform.position);
                 break;
         }
+
+        if (_animator == null) return;
+        if (Vector3.Dot(transform.forward, _checkpoint - transform.position) > 0)
+            _animator.SetTrigger("_TurnRight");
+        else
+            _animator.SetTrigger("_TurnLeft");
     }
 
     private void AvoidFish(FishBehaviourParent fish)

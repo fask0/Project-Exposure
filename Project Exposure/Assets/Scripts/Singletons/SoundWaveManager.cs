@@ -301,7 +301,7 @@ public class SoundWaveManager : MonoBehaviour
         float bandSize = 1.1f;
         float crossover = bandSize;
         float b = 0.0f;
-        List<float> exponentialSpectrum = new List<float>();
+        List<float> exponentialSpectrum = new List<float>(); // TODO: array, field
         for (int i = 0; i < SpectrumSize; i++)
         {
             float d = 0.0f;

@@ -29,9 +29,9 @@
 	}
 		SubShader
 			{
-				Tags { "RenderType" = "Opaque" "Queue" = "Geometry-1000"}
+				Tags { "RenderType" = "Opaque" }
 				LOD 200
-				ZTest Always
+				//ZTest Always
 				ZWrite On
 
 				CGPROGRAM
