@@ -68,7 +68,7 @@ public class CameraFollowPath : MonoBehaviour
         ActOnState();
     }
 
-    private void StartPathFollow()
+    public void StartPathFollow()
     {
         _cameraState = CameraState.FollowingPath;
         _pathPoints[_pathPoints.Length - 1].transform.LookAt(_objectToFocusOn.transform);
@@ -124,7 +124,7 @@ public class CameraFollowPath : MonoBehaviour
     {
         if (_pathPointIndex < _pathPoints.Length)
         {
-            if (Vector3.Distance(_camera.transform.position, _pathPoints[_pathPointIndex].transform.position) > 13.0f)
+            if (Vector3.Distance(_camera.transform.GetChild(0).position, _pathPoints[_pathPointIndex].transform.position) > 3.0f)
             {
                 _cameraBehaviour.SetTemporaryTarget(_pathPoints[_pathPointIndex], true, 6.0f, _cameraLookSpeed, _cameraPathTurnSpeed, _objectToFocusOn);
             }
@@ -141,7 +141,7 @@ public class CameraFollowPath : MonoBehaviour
     {
         if (_pathPointIndex > 0)
         {
-            if (Vector3.Distance(_camera.transform.position, _pathPoints[_pathPointIndex].transform.position) > 13.0f)
+            if (Vector3.Distance(_camera.transform.GetChild(0).position, _pathPoints[_pathPointIndex].transform.position) > 3.0f)
             {
                 _cameraBehaviour.SetTemporaryTarget(_pathPoints[_pathPointIndex], true, 6.0f, _cameraLookSpeed, _cameraPathTurnSpeed, _objectToFocusOn);
             }

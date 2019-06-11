@@ -54,7 +54,7 @@ public class CameraBehaviour : MonoBehaviour
         {
             _dummyGO.transform.localPosition = new Vector3(0, 0, 0);
             _dummyGOGO.transform.localPosition = Vector3.zero;
-            _dummyGOGOGO.transform.localPosition = Vector3.zero;
+            _dummyGOGOGO.transform.localPosition = new Vector3(0, 0, -8);
             if (!_targetIsFollowPath)
                 transform.rotation = Quaternion.Slerp(transform.rotation, _target.transform.rotation, Time.deltaTime * _turnSpeed);
             else
