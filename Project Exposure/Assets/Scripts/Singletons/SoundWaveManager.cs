@@ -1,15 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
-using System;
 using UnityEngine.Events;
 
 public class SoundWaveManager : MonoBehaviour
 {
     [SerializeField] private int _heightMultiplier = 300;
 
-    private const int SpectrumSize = 2048;// 4096;
+    private const int SpectrumSize = 2048;
 
     public delegate void OnFishScan(GameObject pGameObject);
     public event OnFishScan onFishScanEvent;
