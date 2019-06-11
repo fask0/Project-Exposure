@@ -31,36 +31,49 @@ public class ScannerBehaviour : MonoBehaviour
 
             if (other.tag == "Collectable")
             {
-                if (Input.GetKeyDown(KeyCode.Mouse0))
+                bool isClickingTarget = false;
+                if (Input.GetKey(KeyCode.Mouse0))
                 {
-                    RaycastHit hit;
-                    if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 20.0f, ~(1 << 8)))
+                    RaycastHit[] hit;
+                    hit = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition), 30.0f, ~(1 << 8));
+                    for (int i = 0; i < hit.Length; i++)
                     {
-                        Transform[] trs = hit.transform.GetComponentsInChildren<Transform>();
-                        for (int i = 0; i < trs.Length; i++)
+                        if (hit[i].collider.isTrigger) continue;
+
+                        Transform[] trs = hit[i].transform.GetComponentsInChildren<Transform>();
+                        for (int j = 0; j < trs.Length; j++)
                         {
-                            if (trs[i].gameObject == other.gameObject)
+                            if (trs[j].gameObject == other.gameObject)
                             {
-                                _playerMovementBehaviour.StartFollowingGameObject(other.gameObject);
+                                isClickingTarget = true;
+                                if (Input.GetKeyDown(KeyCode.Mouse0))
+                                    _playerMovementBehaviour.StartFollowingGameObject(other.gameObject);
                                 break;
                             }
                         }
                     }
                 }
 
-                if (_playerMovementBehaviour.CheckIfFollowingGameObject(other.gameObject))
+                if (isClickingTarget)
                 {
-                    for (int i = 0; i < SingleTons.SoundWaveManager.GetListeningToCollected.Count; i++)
-                        if (SingleTons.SoundWaveManager.GetListeningToCollected[i] == other.gameObject) return;
+                    if (_playerMovementBehaviour.CheckIfFollowingGameObject(other.gameObject) &&
+                        !SingleTons.CollectionsManager.IsCollected(other.gameObject.name))
+                    {
+                        for (int i = 0; i < SingleTons.SoundWaveManager.GetListeningToCollected.Count; i++)
+                            if (SingleTons.SoundWaveManager.GetListeningToCollected[i] == other.gameObject) return;
 
-                    _soundWaveManager.ScanCreature(other.gameObject);
-                    _soundWaveManager.ShowProgress(other.gameObject);
+                        _soundWaveManager.ScanCreature(other.gameObject);
+                        _soundWaveManager.ShowProgress(other.gameObject);
+                    }
+                }
+                else
+                {
+                    _soundWaveManager.HideProgress(other.gameObject);
                 }
             }
             else if (other.tag.Substring(0, 6) == "Target")
             {
                 if (SingleTons.CollectionsManager.HasTargetBeenScanned(other.tag)) return;
-
                 _soundWaveManager.ScanTarget(other.gameObject);
                 _soundWaveManager.ShowProgress(other.gameObject);
             }

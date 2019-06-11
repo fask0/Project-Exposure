@@ -27,6 +27,7 @@ public class PlayerMovementBehaviour : MonoBehaviour
     private Transform _followPoint;
     private bool _inFollowPosition;
     private float _timeToGoInFollowPosition;
+    private bool _followeeDoesntHaveFollowPoints;
 
     void Start()
     {
@@ -112,10 +113,20 @@ public class PlayerMovementBehaviour : MonoBehaviour
     {
         if (_followTarget == pGameObject) return;
 
-        _isFollowing = true;
-        _inFollowPosition = false;
         _followTarget = pGameObject;
         _followPoint = pGameObject.GetComponent<SetFollowPoints>().GetClosestPoint(transform);
+        if (_followPoint == null)
+        {
+            _followeeDoesntHaveFollowPoints = true;
+            return;
+        }
+        else
+        {
+            _followeeDoesntHaveFollowPoints = false;
+        }
+
+        _isFollowing = true;
+        _inFollowPosition = false;
         Physics.IgnoreCollision(pGameObject.GetComponent<MeshCollider>(), GetComponent<CapsuleCollider>(), true);
     }
 
@@ -123,6 +134,7 @@ public class PlayerMovementBehaviour : MonoBehaviour
     {
         _isFollowing = false;
         _followTarget = null;
+        _followeeDoesntHaveFollowPoints = false;
         Physics.IgnoreCollision(pGameObject.GetComponent<MeshCollider>(), GetComponent<CapsuleCollider>(), false);
     }
 
@@ -141,8 +153,8 @@ public class PlayerMovementBehaviour : MonoBehaviour
     {
         if (pGameObject == _followTarget && _inFollowPosition)
             return true;
-
-        return false;
+        else
+            return _followeeDoesntHaveFollowPoints;
     }
 
     public GameObject GetFollowTarget()
