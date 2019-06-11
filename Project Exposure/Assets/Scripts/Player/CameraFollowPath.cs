@@ -126,7 +126,7 @@ public class CameraFollowPath : MonoBehaviour
         {
             if (Vector3.Distance(_camera.transform.GetChild(0).position, _pathPoints[_pathPointIndex].transform.position) > 3.0f)
             {
-                _cameraBehaviour.SetTemporaryTarget(_pathPoints[_pathPointIndex], true, 6.0f, _cameraLookSpeed, _cameraPathTurnSpeed, _objectToFocusOn);
+                _cameraBehaviour.SetTemporaryTarget(_pathPoints[_pathPointIndex], true, 3.0f, _cameraLookSpeed, _cameraPathTurnSpeed, _objectToFocusOn);
             }
             else
             {
@@ -143,7 +143,7 @@ public class CameraFollowPath : MonoBehaviour
         {
             if (Vector3.Distance(_camera.transform.GetChild(0).position, _pathPoints[_pathPointIndex].transform.position) > 3.0f)
             {
-                _cameraBehaviour.SetTemporaryTarget(_pathPoints[_pathPointIndex], true, 6.0f, _cameraLookSpeed, _cameraPathTurnSpeed, _objectToFocusOn);
+                _cameraBehaviour.SetTemporaryTarget(_pathPoints[_pathPointIndex], true, 3.0f, _cameraLookSpeed, _cameraPathTurnSpeed, _objectToFocusOn);
             }
             else
             {

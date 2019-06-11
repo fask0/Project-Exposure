@@ -167,6 +167,11 @@ public class SoundWaveManager : MonoBehaviour
             if (_listeningToCollected.Count == 1)
             {
                 //0
+                if (!_collected0Child0.activeSelf)
+                {
+                    ResetTexture(_collectedImageMaterial0);
+                    _collected0Column = _texWidth - 1;
+                }
                 _collected0Child0.SetActive(true);
                 _collected0Child1.SetActive(false);
                 _collected0Child2.SetActive(false);
@@ -183,6 +188,11 @@ public class SoundWaveManager : MonoBehaviour
                 _collected0Child1.SetActive(true);
                 _collected0Child2.SetActive(false);
                 //1
+                if (!_collected1Child0.activeSelf)
+                {
+                    ResetTexture(_collectedImageMaterial1);
+                    _collected1Column = _texWidth - 1;
+                }
                 _collected1Child0.SetActive(true);
                 _collected1Child1.SetActive(false);
                 //2
@@ -198,6 +208,11 @@ public class SoundWaveManager : MonoBehaviour
                 _collected1Child0.SetActive(false);
                 _collected1Child1.SetActive(true);
                 //2
+                if (!_collected2Child0.activeSelf)
+                {
+                    ResetTexture(_collectedImageMaterial2);
+                    _collected2Column = _texWidth - 1;
+                }
                 _collected2Child0.SetActive(true);
             }
         }
@@ -427,7 +442,7 @@ public class SoundWaveManager : MonoBehaviour
                     onFishScanEvent(pScannedCreature);
                 foreach (KeyValuePair<GameObject, UnityEvent> unityEvent in scanEvents)
                 {
-                    if(unityEvent.Key == pScannedCreature)
+                    if (unityEvent.Key == pScannedCreature)
                     {
                         unityEvent.Value.Invoke();
                     }
@@ -549,7 +564,7 @@ public class SoundWaveManager : MonoBehaviour
 
                 if (onFishScanEvent != null)
                     onFishScanEvent(pScannedTarget);
-                
+
             }
         }
         else

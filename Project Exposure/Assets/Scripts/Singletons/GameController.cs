@@ -6,6 +6,9 @@ public class GameController : MonoBehaviour
     public delegate void OnSceneLoad(string SceneName);
     public event OnSceneLoad onSceneLoadEvent;
 
+    public delegate void OnAllSceneLoad(string SceneName);
+    public event OnAllSceneLoad onAllSceneLoadEvent;
+
     //[HideInInspector]
     public GameObject Player;
 
@@ -20,6 +23,13 @@ public class GameController : MonoBehaviour
             Load("Level0D");
             Load("Level0E");
             Load("Level0F Last");
+            Load("Level0Transition");
+        }
+        else if (SceneManager.GetActiveScene().name == "DemoMainScene")
+        {
+            Load("Level0A");
+            Load("Level0B");
+            Load("Level0C Last");
             Load("Level0Transition");
         }
     }
@@ -68,6 +78,9 @@ public class GameController : MonoBehaviour
         if (pScene.name.Contains("Last"))
             if (onSceneLoadEvent != null)
                 onSceneLoadEvent(pScene.name);
+
+        if (onAllSceneLoadEvent != null)
+            onAllSceneLoadEvent(pScene.name);
     }
 }
 

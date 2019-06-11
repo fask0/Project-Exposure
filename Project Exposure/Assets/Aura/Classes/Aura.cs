@@ -31,7 +31,6 @@ namespace AuraAPI
     ///     Main component to assign on a GameObject with a Camera component
     /// </summary>
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(Camera))]
     [AddComponentMenu("Aura/Aura Main Component", 0)]
     [ExecuteInEditMode]
     public class Aura : MonoBehaviour
@@ -83,8 +82,8 @@ namespace AuraAPI
         /// </summary>
         private Material _postProcessMaterial;
 #if UNITY_EDITOR /// <summary>
-/// Custom time used during edition
-/// </summary>
+        /// Custom time used during edition
+        /// </summary>
         private static double editorTime;
         /// <summary>
         /// Custom delta time used during edition
@@ -111,7 +110,7 @@ namespace AuraAPI
         #region Monobehavious functions
         private void Reset()
         {
-            if(!Aura.CheckCompatibility())
+            if (!Aura.CheckCompatibility())
             {
                 enabled = false;
                 return;
@@ -119,7 +118,7 @@ namespace AuraAPI
 
             SetupFrustum();
 
-            if(!_hasBeenAssigned)
+            if (!_hasBeenAssigned)
             {
                 Initialize();
                 _hasBeenAssigned = true;
@@ -128,13 +127,13 @@ namespace AuraAPI
 
         private void OnEnable()
         {
-            if(!Aura.CheckCompatibility())
+            if (!Aura.CheckCompatibility())
             {
                 enabled = false;
                 return;
             }
 
-            if(_hasBeenAssigned && !Aura.IsInitialized)
+            if (_hasBeenAssigned && !Aura.IsInitialized)
             {
                 Initialize();
             }
@@ -154,7 +153,7 @@ namespace AuraAPI
 
         private void OnPreCull()
         {
-            if(Aura.OnPreCullEvent != null)
+            if (Aura.OnPreCullEvent != null)
             {
                 Aura.OnPreCullEvent();
             }
@@ -162,7 +161,7 @@ namespace AuraAPI
 
         private void OnPreRender()
         {
-            if(Aura.OnPreRenderEvent != null)
+            if (Aura.OnPreRenderEvent != null)
             {
                 Aura.OnPreRenderEvent(Aura.CameraComponent);
             }
@@ -175,7 +174,7 @@ namespace AuraAPI
             UpdateEditorTimeData();
 #endif
 
-            if(Aura.OnRenderImageEvent != null)
+            if (Aura.OnRenderImageEvent != null)
             {
                 Aura.OnRenderImageEvent();
             }
@@ -186,7 +185,7 @@ namespace AuraAPI
 
             UpdateFrustrum();
 
-            if(applyAsPostProcess)
+            if (applyAsPostProcess)
             {
                 Profiler.BeginSample("Aura : Post process");
                 Graphics.Blit(src, dest, _postProcessMaterial);
@@ -382,8 +381,8 @@ namespace AuraAPI
     }
 
 #if UNITY_EDITOR /// <summary>
-/// Custom Gizmo drawer for Aura component
-/// </summary>
+    /// Custom Gizmo drawer for Aura component
+    /// </summary>
     public class AuraGizmoDrawer
     {
         [DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.NonSelected | GizmoType.NotInSelectionHierarchy | GizmoType.Selected)]
@@ -394,7 +393,7 @@ namespace AuraAPI
 
             Matrix4x4 tmp = Gizmos.matrix;
             Gizmos.matrix = component.GetComponent<Camera>().transform.localToWorldMatrix;
-            Gizmos.color = new Color( 0, 1, 1, opacity);
+            Gizmos.color = new Color(0, 1, 1, opacity);
             Gizmos.DrawFrustum(Vector3.zero, component.GetComponent<Camera>().fieldOfView, component.frustum.settings.farClipPlaneDistance, component.GetComponent<Camera>().nearClipPlane, component.GetComponent<Camera>().aspect);
             Gizmos.matrix = tmp;
         }
