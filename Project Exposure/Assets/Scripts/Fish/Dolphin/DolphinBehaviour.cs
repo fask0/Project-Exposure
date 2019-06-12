@@ -111,7 +111,7 @@ public class DolphinBehaviour : FishBehaviour
         }
 
         if (_animator == null) return;
-        if (Vector3.Dot(transform.forward, _checkpoint - transform.position) > 0)
+        if (Vector3.Dot(transform.right, _checkpoint - transform.position) > 0)
             _animator.SetTrigger("_TurnRight");
         else
             _animator.SetTrigger("_TurnLeft");

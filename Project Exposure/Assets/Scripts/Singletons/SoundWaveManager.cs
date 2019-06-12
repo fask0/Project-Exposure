@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.Profiling;
 using UnityEngine.Events;
 
 public class SoundWaveManager : MonoBehaviour
 {
     [SerializeField] private int _heightMultiplier = 300;
 
-    private const int SpectrumSize = 2048;
+    private const int SpectrumSize = 4096;
 
     public delegate void OnFishScan(GameObject pGameObject);
     public event OnFishScan onFishScanEvent;
@@ -18,6 +20,8 @@ public class SoundWaveManager : MonoBehaviour
     //Spectrogram
     private int _texWidth;
     private int _texHeight;
+    private float[] _subtractSpecturm;
+    private float[] _exponentialSpectrum;
 
     //PlayerSoundWave
     //Left
@@ -77,6 +81,7 @@ public class SoundWaveManager : MonoBehaviour
     private List<GameObject> _listeningToAll = new List<GameObject>();
 
     private CameraBehaviour _cameraBehaviour;
+    private int _frameCount;
 
     void Start()
     {
@@ -84,6 +89,20 @@ public class SoundWaveManager : MonoBehaviour
 
         InitPlayerSoundWave();
         InitTargetSoundWave();
+        _subtractSpecturm = new float[SpectrumSize];
+
+        int exponentialSize = 0;
+        float bandSize = 1.1f;
+        float crossover = bandSize;
+        for (int i = 0; i < SpectrumSize; i++)
+        {
+            if (i > crossover)
+            {
+                crossover *= bandSize;
+                exponentialSize++;
+            }
+        }
+        _exponentialSpectrum = new float[exponentialSize];
 
         _scanProgress = Camera.main.transform.GetChild(0).GetChild(2).GetComponent<Image>();
         _scanProgress.enabled = false;
@@ -100,6 +119,9 @@ public class SoundWaveManager : MonoBehaviour
 
     void Update()
     {
+        _frameCount++;
+
+        UpdateCollectedSoundWaves();
         UpdatePlayerSoundWave();
         UpdateTargetSoundWave();
         UpdateCustomSoundWave();
@@ -158,63 +180,9 @@ public class SoundWaveManager : MonoBehaviour
         _individualOutputData = new float[SpectrumSize];
     }
 
-    private void UpdatePlayerSoundWave()
+    private void UpdateCollectedSoundWaves()
     {
-        if (_listeningToCollected.Count != 0)
-        {
-            if (_listeningToCollected.Count == 1)
-            {
-                //0
-                if (!_collected0Child0.activeSelf)
-                {
-                    ResetTexture(_collectedImageMaterial0);
-                    _collected0Column = _texWidth - 1;
-                }
-                _collected0Child0.SetActive(true);
-                _collected0Child1.SetActive(false);
-                _collected0Child2.SetActive(false);
-                //1
-                _collected1Child0.SetActive(false);
-                _collected1Child1.SetActive(false);
-                //2
-                _collected2Child0.SetActive(false);
-            }
-            else if (_listeningToCollected.Count == 2)
-            {
-                //0
-                _collected0Child0.SetActive(false);
-                _collected0Child1.SetActive(true);
-                _collected0Child2.SetActive(false);
-                //1
-                if (!_collected1Child0.activeSelf)
-                {
-                    ResetTexture(_collectedImageMaterial1);
-                    _collected1Column = _texWidth - 1;
-                }
-                _collected1Child0.SetActive(true);
-                _collected1Child1.SetActive(false);
-                //2
-                _collected2Child0.SetActive(false);
-            }
-            else if (_listeningToCollected.Count >= 3)
-            {
-                //0
-                _collected0Child0.SetActive(false);
-                _collected0Child1.SetActive(false);
-                _collected0Child2.SetActive(true);
-                //1
-                _collected1Child0.SetActive(false);
-                _collected1Child1.SetActive(true);
-                //2
-                if (!_collected2Child0.activeSelf)
-                {
-                    ResetTexture(_collectedImageMaterial2);
-                    _collected2Column = _texWidth - 1;
-                }
-                _collected2Child0.SetActive(true);
-            }
-        }
-        else
+        if (_listeningToCollected.Count == 0)
         {
             //0
             _collected0Child0.SetActive(false);
@@ -225,50 +193,115 @@ public class SoundWaveManager : MonoBehaviour
             _collected1Child1.SetActive(false);
             //2
             _collected2Child0.SetActive(false);
+            return;
+        }
+        if (_listeningToCollected.Count == 1)
+        {
+            //0
+            if (!_collected0Child0.activeSelf)
+            {
+                ResetTexture(_collectedImageMaterial0);
+                _collected0Column = _texWidth - 1;
+            }
+            _collected0Child0.SetActive(true);
+            _collected0Child1.SetActive(false);
+            _collected0Child2.SetActive(false);
+            //1
+            _collected1Child0.SetActive(false);
+            _collected1Child1.SetActive(false);
+            //2
+            _collected2Child0.SetActive(false);
+        }
+        else if (_listeningToCollected.Count == 2)
+        {
+            //0
+            _collected0Child0.SetActive(false);
+            _collected0Child1.SetActive(true);
+            _collected0Child2.SetActive(false);
+            //1
+            if (!_collected1Child0.activeSelf)
+            {
+                ResetTexture(_collectedImageMaterial1);
+                _collected1Column = _texWidth - 1;
+            }
+            _collected1Child0.SetActive(true);
+            _collected1Child1.SetActive(false);
+            //2
+            _collected2Child0.SetActive(false);
+        }
+        else if (_listeningToCollected.Count >= 3)
+        {
+            //0
+            _collected0Child0.SetActive(false);
+            _collected0Child1.SetActive(false);
+            _collected0Child2.SetActive(true);
+            //1
+            _collected1Child0.SetActive(false);
+            _collected1Child1.SetActive(true);
+            //2
+            if (!_collected2Child0.activeSelf)
+            {
+                ResetTexture(_collectedImageMaterial2);
+                _collected2Column = _texWidth - 1;
+            }
+            _collected2Child0.SetActive(true);
         }
 
         //Update Collected
-        float[] subtractSpecturm = new float[SpectrumSize];
-        for (int i = 0; i < _listeningToCollected.Count; i++)
+        if ((_frameCount + 2) % 3 == 0 || (_frameCount + 3) % 3 == 0)
         {
-            _listeningToCollected[i].GetComponent<AudioSource>().GetSpectrumData(_individualOutputData, 0, FFTWindow.BlackmanHarris);
+            Array.Clear(_subtractSpecturm, 0, _subtractSpecturm.Length - 1);
+            for (int i = 0; i < _listeningToCollected.Count; i++)
+            {
+                _listeningToCollected[i].GetComponent<AudioSource>().GetSpectrumData(_individualOutputData, 0, FFTWindow.BlackmanHarris);
 
-            if (i == 0)
-            {
-                //0
-                DrawSpectrogram(_collectedImageMaterial0, _individualOutputData, _collected0Column);
-                _collected0Column--;
-                if (_collected0Column <= 0) _collected0Column = _texWidth - 1;
-            }
-            else if (i == 1)
-            {
-                //1
-                DrawSpectrogram(_collectedImageMaterial1, _individualOutputData, _collected1Column);
-                _collected1Column--;
-                if (_collected1Column <= 0) _collected1Column = _texWidth - 1;
-            }
-            else if (i == 2)
-            {
-                //2
-                DrawSpectrogram(_collectedImageMaterial2, _individualOutputData, _collected2Column);
-                _collected2Column--;
-                if (_collected2Column <= 0) _collected2Column = _texWidth - 1;
-            }
+                if (i == 0)
+                {
+                    //0
+                    DrawSpectrogram(_collectedImageMaterial0, _individualOutputData, _collected0Column);
+                    _collected0Column--;
+                    if (_collected0Column < 0) _collected0Column = _texWidth - 1;
+                }
+                else if (i == 1)
+                {
+                    //1
+                    DrawSpectrogram(_collectedImageMaterial1, _individualOutputData, _collected1Column);
+                    _collected1Column--;
+                    if (_collected1Column < 0) _collected1Column = _texWidth - 1;
+                }
+                else if (i == 2)
+                {
+                    //2
+                    DrawSpectrogram(_collectedImageMaterial2, _individualOutputData, _collected2Column);
+                    _collected2Column--;
+                    if (_collected2Column < 0) _collected2Column = _texWidth - 1;
+                }
 
-            for (int j = 0; j < SpectrumSize; j++)
-                subtractSpecturm[j] += _individualOutputData[j];
+                for (int j = 0; j < SpectrumSize; j++)
+                    _subtractSpecturm[j] += _individualOutputData[j];
+            }
+        }
+    }
+
+
+    private void UpdatePlayerSoundWave()
+    {
+        //Update Texture
+        if ((_frameCount + 3) % 3 == 0)
+        {
+            AudioListener.GetSpectrumData(_playerOutputDataLeft, 0, FFTWindow.BlackmanHarris);
+            DrawSpectrogram(_playerLeftImageMaterial, _playerOutputDataLeft, _playerLeftColumn, _subtractSpecturm);
+            _playerLeftColumn--;
+            if (_playerLeftColumn < 0) _playerLeftColumn = _texWidth - 1;
         }
 
-        //Update Texture
-        AudioListener.GetSpectrumData(_playerOutputDataLeft, 0, FFTWindow.BlackmanHarris);
-        DrawSpectrogram(_playerLeftImageMaterial, _playerOutputDataLeft, _playerLeftColumn, subtractSpecturm);
-        _playerLeftColumn--;
-        if (_playerLeftColumn <= 0) _playerLeftColumn = _texWidth - 1;
-
-        AudioListener.GetSpectrumData(_playerOutputDataRight, 1, FFTWindow.BlackmanHarris);
-        DrawSpectrogram(_playerRightImageMaterial, _playerOutputDataRight, _playerRightColumn, subtractSpecturm);
-        _playerRightColumn--;
-        if (_playerRightColumn <= 0) _playerRightColumn = _texWidth - 1;
+        if ((_frameCount + 2) % 3 == 0)
+        {
+            AudioListener.GetSpectrumData(_playerOutputDataRight, 1, FFTWindow.BlackmanHarris);
+            DrawSpectrogram(_playerRightImageMaterial, _playerOutputDataRight, _playerRightColumn, _subtractSpecturm);
+            _playerRightColumn--;
+            if (_playerRightColumn < 0) _playerRightColumn = _texWidth - 1;
+        }
     }
 
     private void InitTargetSoundWave()
@@ -283,10 +316,26 @@ public class SoundWaveManager : MonoBehaviour
     private void UpdateTargetSoundWave()
     {
         //Update Texture
-        _targetAudioSource.GetSpectrumData(_targetOutputData, 0, FFTWindow.BlackmanHarris);
-        DrawSpectrogram(_targetImageMaterial, _targetOutputData, _targetColumn);
-        _targetColumn--;
-        if (_targetColumn <= 0) _targetColumn = _texWidth - 1;
+        if ((_frameCount + 1) % 3 == 0)
+        {
+            _targetAudioSource.GetSpectrumData(_targetOutputData, 0, FFTWindow.BlackmanHarris);
+            DrawSpectrogram(_targetImageMaterial, _targetOutputData, _targetColumn);
+            _targetColumn--;
+            if (_targetColumn < 0) _targetColumn = _texWidth - 1;
+        }
+    }
+
+    private void UpdateCustomSoundWave()
+    {
+        if (!_shouldUpdateCustom) return;
+
+        if (_frameCount % 3 == 0)
+        {
+            _customAudioSource.GetSpectrumData(_customOutputData, 0, FFTWindow.BlackmanHarris);
+            DrawSpectrogram(_customImageMaterial, _customOutputData, _customColumn);
+            _customColumn--;
+            if (_customColumn < 0) _customColumn = _texWidth - 1;
+        }
     }
 
     /// <summary>
@@ -301,7 +350,7 @@ public class SoundWaveManager : MonoBehaviour
         float bandSize = 1.1f;
         float crossover = bandSize;
         float b = 0.0f;
-        List<float> exponentialSpectrum = new List<float>(); // TODO: array, field
+        int arrayIndex = 0;
         for (int i = 0; i < SpectrumSize; i++)
         {
             float d = 0.0f;
@@ -315,26 +364,27 @@ public class SoundWaveManager : MonoBehaviour
             if (i > crossover)
             {
                 crossover *= bandSize;
-                exponentialSpectrum.Add(b);
+                _exponentialSpectrum[arrayIndex] = b;
                 b = 0;
+                arrayIndex++;
             }
         }
 
         // Every pixel represents this many data points from the spectrum:
-        float segmentSize = (float)exponentialSpectrum.Count / (float)_texHeight;
+        float segmentSize = (float)_exponentialSpectrum.Length / (float)_texHeight;
 
         // Draw the pixels and apply them to the original texture:
         Texture2D newTex = pMaterial.mainTexture as Texture2D;
         for (int y = 0; y < _texHeight; y++)
         {
-            int x = _texWidth - 1 - pColumn;
-            newTex.SetPixel(x, y, GetGradient(exponentialSpectrum[(int)(y * segmentSize)] * _heightMultiplier, y));
+            int x = _texWidth - pColumn;
+            newTex.SetPixel(x, y, GetGradient(_exponentialSpectrum[(int)(y * segmentSize)] * _heightMultiplier, y));
         }
         newTex.Apply();
         pMaterial.mainTexture = newTex;
 
         // Offset the texture:
-        pMaterial.mainTextureOffset += new Vector2(1 / ((float)_texWidth - 1), 0);
+        pMaterial.mainTextureOffset += new Vector2(1 / ((float)_texWidth), 0);
     }
 
     /// <summary>
@@ -348,16 +398,6 @@ public class SoundWaveManager : MonoBehaviour
             return new Color(1, 1 - (pIndex / _texHeight), 0);
         else
             return new Color(0, 0, 0, 0);
-    }
-
-    private void UpdateCustomSoundWave()
-    {
-        if (!_shouldUpdateCustom) return;
-
-        _customAudioSource.GetSpectrumData(_customOutputData, 0, FFTWindow.BlackmanHarris);
-        DrawSpectrogram(_customImageMaterial, _customOutputData, _customColumn);
-        _customColumn--;
-        if (_customColumn <= 0) _customColumn = _texWidth - 1;
     }
 
     public void StartDrawingCustomSpectrogram(GameObject pGameObject, AudioSource pAudioSource)
@@ -634,5 +674,14 @@ public class SoundWaveManager : MonoBehaviour
     public List<GameObject> GetListeningToAll
     {
         get { return _listeningToAll; }
+    }
+
+    private void OnDisable()
+    {
+        if (_customImageMaterial != null)
+            ResetTexture(_customImageMaterial);
+        ResetTexture(_playerLeftImageMaterial);
+        ResetTexture(_playerRightImageMaterial);
+        ResetTexture(_targetImageMaterial);
     }
 }
