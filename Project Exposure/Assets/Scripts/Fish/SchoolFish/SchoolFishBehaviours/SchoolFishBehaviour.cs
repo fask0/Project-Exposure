@@ -16,7 +16,7 @@ public class SchoolFishBehaviour : FishBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //_rigidBody = GetComponent<Rigidbody>();
+        _rigidBody = GetComponent<Rigidbody>();
         if (_alwaysAvoid)
             _isAvoiding = true;
     }
@@ -40,7 +40,8 @@ public class SchoolFishBehaviour : FishBehaviour
             _hasAddedItselfToSchool = true;
         }
 
-        //_rigidBody.velocity = Vector3.zero;
+        if(_rigidBody != null)
+            _rigidBody.velocity = Vector3.zero;
 
         if (!_fishTooClose)
         {

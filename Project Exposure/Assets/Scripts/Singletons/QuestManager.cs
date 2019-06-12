@@ -5,6 +5,7 @@ using UnityEngine;
 public class QuestManager : MonoBehaviour
 {
     private List<AudioSource> _allTargetsList = new List<AudioSource>();
+    private List<AudioSource> _allTargetDummies = new List<AudioSource>();
     private AudioSource _currentAudioTarget;
     private int _currentTargetIndex;
 
@@ -13,9 +14,9 @@ public class QuestManager : MonoBehaviour
     void Start()
     {
         SingleTons.QuestManager = this;
-        _currentTargetIndex = 0;
         _soundDummyAudioSource = transform.parent.GetChild(5).GetComponent<AudioSource>();
 
+        _currentTargetIndex = 0;
         for (int i = 0; i < 999; i++)
         {
             GameObject go = GameObject.FindGameObjectWithTag("Target" + i);
@@ -24,7 +25,7 @@ public class QuestManager : MonoBehaviour
             _allTargetsList.Add(go.GetComponent<AudioSource>());
         }
 
-        SetTargetAudio(0);
+        SetTargetAudio(_currentTargetIndex);
     }
 
     public void SetTargetAudio(int pTargetIndex)
@@ -70,6 +71,13 @@ public class QuestManager : MonoBehaviour
 
     public GameObject GetCurrentTarget()
     {
-        return _allTargetsList[_currentTargetIndex].gameObject;
+        try
+        {
+            return _allTargetsList[_currentTargetIndex].gameObject;
+        }
+        catch
+        {
+            return null;
+        }
     }
 }

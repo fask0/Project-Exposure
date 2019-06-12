@@ -38,7 +38,6 @@ public class FogEffect : MonoBehaviour
             mat.SetFloat("_SingleColor", 1.0f);
         else
             mat.SetFloat("_SingleColor", 0.0f);
-
     }
 
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
