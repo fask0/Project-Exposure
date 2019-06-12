@@ -31,7 +31,8 @@ public class ScannerBehaviour : MonoBehaviour
 
             if (other.tag == "Collectable")
             {
-                if (Input.GetKeyDown(KeyCode.Mouse0))
+                bool isClickingTarget = false;
+                if (Input.GetKey(KeyCode.Mouse0))
                 {
                     RaycastHit[] hit;
                     hit = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition), 30.0f, ~(1 << 8));
@@ -44,26 +45,35 @@ public class ScannerBehaviour : MonoBehaviour
                         {
                             if (trs[j].gameObject == other.gameObject)
                             {
-                                _playerMovementBehaviour.StartFollowingGameObject(other.gameObject);
+                                isClickingTarget = true;
+                                if (Input.GetKeyDown(KeyCode.Mouse0))
+                                    _playerMovementBehaviour.StartFollowingGameObject(other.gameObject);
                                 break;
                             }
                         }
                     }
                 }
 
-                if (_playerMovementBehaviour.CheckIfFollowingGameObject(other.gameObject))
+                if (isClickingTarget)
                 {
-                    for (int i = 0; i < SingleTons.SoundWaveManager.GetListeningToCollected.Count; i++)
-                        if (SingleTons.SoundWaveManager.GetListeningToCollected[i] == other.gameObject) return;
+                    if (_playerMovementBehaviour.CheckIfFollowingGameObject(other.gameObject) &&
+                        !SingleTons.CollectionsManager.IsCollected(other.gameObject.name))
+                    {
+                        for (int i = 0; i < SingleTons.SoundWaveManager.GetListeningToCollected.Count; i++)
+                            if (SingleTons.SoundWaveManager.GetListeningToCollected[i] == other.gameObject) return;
 
-                    _soundWaveManager.ScanCreature(other.gameObject);
-                    _soundWaveManager.ShowProgress(other.gameObject);
+                        _soundWaveManager.ScanCreature(other.gameObject);
+                        _soundWaveManager.ShowProgress(other.gameObject);
+                    }
+                }
+                else
+                {
+                    _soundWaveManager.HideProgress(other.gameObject);
                 }
             }
             else if (other.tag.Substring(0, 6) == "Target")
             {
                 if (SingleTons.CollectionsManager.HasTargetBeenScanned(other.tag)) return;
-                //print(other.name);
                 _soundWaveManager.ScanTarget(other.gameObject);
                 _soundWaveManager.ShowProgress(other.gameObject);
             }

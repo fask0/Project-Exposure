@@ -71,7 +71,13 @@ public class QuestManager : MonoBehaviour
 
     public GameObject GetCurrentTarget()
     {
-        if (_allTargetsList[_currentTargetIndex] == null) return null;
-        return _allTargetsList[_currentTargetIndex].gameObject;
+        try
+        {
+            return _allTargetsList[_currentTargetIndex].gameObject;
+        }
+        catch
+        {
+            return null;
+        }
     }
 }
