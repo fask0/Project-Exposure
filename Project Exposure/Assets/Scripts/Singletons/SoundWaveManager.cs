@@ -457,9 +457,6 @@ public class SoundWaveManager : MonoBehaviour
                 material.SetFloat("_ScanLines", (_scanDuration - _scanTimeLeft) * 20);
                 material.SetFloat("_ScanLineWidth", _scanDuration - _scanTimeLeft);
             }
-            //mat.SetFloat("_IsScanning", 1);
-            //mat.SetFloat("_ScanLines", (_scanDuration - _scanTimeLeft) * 20);
-            //mat.SetFloat("_ScanLineWidth", _scanDuration - _scanTimeLeft);
 
             if (_scanTimeLeft <= 0)
             {
@@ -485,6 +482,8 @@ public class SoundWaveManager : MonoBehaviour
                         unityEvent.Value.Invoke();
                     }
                 }
+
+                HideProgress(pScannedCreature);
             }
         }
         else
@@ -495,9 +494,6 @@ public class SoundWaveManager : MonoBehaviour
                 material.SetFloat("_ScanLines", 0);
                 material.SetFloat("_ScanLineWidth", 0);
             }
-            //mat.SetFloat("_IsScanning", 0);
-            //mat.SetFloat("_ScanLines", 0);
-            //mat.SetFloat("_ScanLineWidth", 0);
 
             _scanTimeLeft = _scanDuration;
             _currentScan = null;
@@ -556,9 +552,6 @@ public class SoundWaveManager : MonoBehaviour
                 material.SetFloat("_ScanLines", (_scanDuration - _scanTimeLeft) * 20);
                 material.SetFloat("_ScanLineWidth", _scanDuration - _scanTimeLeft);
             }
-            //mat.SetFloat("_IsScanning", 1);
-            //mat.SetFloat("_ScanLines", (_scanDuration - _scanTimeLeft) * 20);
-            //mat.SetFloat("_ScanLineWidth", _scanDuration - _scanTimeLeft);
 
             if (_scanTimeLeft <= 0)
             {
@@ -585,9 +578,6 @@ public class SoundWaveManager : MonoBehaviour
                     material.SetFloat("_ScanLines", 0);
                     material.SetFloat("_ScanLineWidth", 0);
                 }
-                //mat.SetFloat("_IsScanning", 0);
-                //mat.SetFloat("_ScanLines", 0);
-                //mat.SetFloat("_ScanLineWidth", 0);
 
                 _scanTimeLeft = _scanDuration;
                 _cameraBehaviour.StopScanningArtifact();
@@ -603,6 +593,7 @@ public class SoundWaveManager : MonoBehaviour
                 if (onFishScanEvent != null)
                     onFishScanEvent(pScannedTarget);
 
+                HideProgress(pScannedTarget);
             }
         }
         else
@@ -613,9 +604,6 @@ public class SoundWaveManager : MonoBehaviour
                 material.SetFloat("_ScanLines", 0);
                 material.SetFloat("_ScanLineWidth", 0);
             }
-            //mat.SetFloat("_IsScanning", 0);
-            //mat.SetFloat("_ScanLines", 0);
-            //mat.SetFloat("_ScanLineWidth", 0);
 
             _scanTimeLeft = _scanDuration;
             _cameraBehaviour.StopScanningArtifact();
