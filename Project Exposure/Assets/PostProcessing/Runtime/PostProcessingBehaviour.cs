@@ -9,7 +9,7 @@ namespace UnityEngine.PostProcessing
 #if UNITY_5_4_OR_NEWER
     [ImageEffectAllowedInSceneView]
 #endif
-    [RequireComponent(typeof(Camera)), DisallowMultipleComponent, ExecuteInEditMode]
+    [DisallowMultipleComponent, ExecuteInEditMode]
     [AddComponentMenu("Effects/Post-Processing Behaviour", -1)]
     public class PostProcessingBehaviour : MonoBehaviour
     {

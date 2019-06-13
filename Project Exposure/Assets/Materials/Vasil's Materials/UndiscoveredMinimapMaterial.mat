@@ -85,8 +85,8 @@ Material:
     - _Parallax: 0.02
     - _PixelX: 0
     - _PixelY: 0
-    - _PlayerPositionX: 343.065
-    - _PlayerPositionY: 794.8963
+    - _PlayerPositionX: 402.72305
+    - _PlayerPositionY: 800.8812
     - _Radius: 100
     - _RadiusSquared: 10000
     - _SmoothnessTextureChannel: 0

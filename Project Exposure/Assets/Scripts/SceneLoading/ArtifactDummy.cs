@@ -38,11 +38,16 @@ public class ArtifactDummy : MonoBehaviour
 
     public void CheckClosest(GameObject pGameObject)
     {
+        if (SingleTons.QuestManager.GetCurrentTarget() == null) return;
         if (Vector3.Distance(transform.position, SingleTons.QuestManager.GetCurrentTarget().transform.position) >
             Vector3.Distance(_peer.transform.position, SingleTons.QuestManager.GetCurrentTarget().transform.position))
+        {
             _isCloser = false;
+        }
         else
+        {
             _isCloser = true;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -55,6 +60,11 @@ public class ArtifactDummy : MonoBehaviour
             else
                 _radar.SetTarget(_peer.gameObject);
 
+            _hasChangedTarget = true;
+        }
+        else if (_radar.GetTarget() != _peer && _peer._isCloser)
+        {
+            _radar.SetTarget(_peer.gameObject);
             _hasChangedTarget = true;
         }
     }

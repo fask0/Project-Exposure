@@ -14,18 +14,26 @@ public class SetFollowPoints : MonoBehaviour
         _colliderBounds = GetComponent<MeshCollider>().bounds.extents;
         _playerColliderBounds = SingleTons.GameController.Player.GetComponent<CapsuleCollider>().bounds.extents;
 
-        float radius = Mathf.Max(_colliderBounds.x, _colliderBounds.y) + _playerColliderBounds.x * 2;
+        Vector2 radius = Vector2.zero;
+        if (name.Contains("Dolphin"))
+            radius.x = _colliderBounds.z + _playerColliderBounds.x;
+        else
+            radius.x = _colliderBounds.x + _playerColliderBounds.x;
+        radius.y = _colliderBounds.y + _playerColliderBounds.x;
+
         for (int i = 0; i < _followPointTransforms.Length; i++)
         {
             _followPointTransforms[i] = _followPoints[i].transform;
             float angle = (i * Mathf.PI * 2.0f) / _followPointTransforms.Length;
-            _followPointTransforms[i].localPosition = new Vector3(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius, 0);
+            _followPointTransforms[i].localPosition = new Vector3(Mathf.Cos(angle) * radius.x, Mathf.Sin(angle) * radius.y, 0);
             _followPointTransforms[i].LookAt(transform, transform.forward);
         }
     }
 
     public Transform GetClosestPoint(Transform pTransform)
     {
+        if (_followPointTransforms.Length == 0) return null;
+
         int closestElement = 0;
         float closest = float.MaxValue;
         for (int i = 0; i < _followPointTransforms.Length; i++)
