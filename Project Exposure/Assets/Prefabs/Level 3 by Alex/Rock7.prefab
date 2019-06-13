@@ -119,6 +119,7 @@ GameObject:
   - component: {fileID: 4657068687091026822}
   - component: {fileID: 3389844173661635494}
   - component: {fileID: 2176788305759474389}
+  - component: {fileID: 1551410825461806864}
   m_Layer: 0
   m_Name: Rock7(Clone)
   m_TagString: Untagged
@@ -185,6 +186,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &1551410825461806864
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3642619647721359312}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 57436209882880856, guid: ff95bdc684be2d94f86ed185b1dfa399, type: 3}
 --- !u!1 &3901253563950428568
 GameObject:
   m_ObjectHideFlags: 0

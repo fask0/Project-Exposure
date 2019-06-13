@@ -213,6 +213,7 @@ GameObject:
   - component: {fileID: 6024896922302346721}
   - component: {fileID: 2296700490167975808}
   - component: {fileID: 5843748939385491085}
+  - component: {fileID: 3730811936441138009}
   m_Layer: 0
   m_Name: Rock2(Clone)
   m_TagString: Untagged
@@ -279,3 +280,17 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &3730811936441138009
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6319324340447580708}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 4198415253483077088, guid: 7e7fb462a7f404d44a9b66c422e801ba, type: 3}

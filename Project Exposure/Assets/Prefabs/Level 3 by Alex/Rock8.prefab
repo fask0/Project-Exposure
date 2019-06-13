@@ -175,6 +175,7 @@ GameObject:
   - component: {fileID: 2895649480851938202}
   - component: {fileID: 3179431443123309644}
   - component: {fileID: 585590528555548782}
+  - component: {fileID: 6392450378844739629}
   m_Layer: 0
   m_Name: Rock8(Clone)
   m_TagString: Untagged
@@ -241,3 +242,17 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &6392450378844739629
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9117480532719114045}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 4103896755532408876, guid: 42cbacf9a98fdcc48ba5330e52d696b4, type: 3}
