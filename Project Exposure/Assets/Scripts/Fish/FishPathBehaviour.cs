@@ -15,6 +15,7 @@ public class FishPathBehaviour : FishBehaviour
     private bool _fishTooClose = false;
     private GameObject _fishThatsTooClose;
     private FishBehaviourParent _fishThatsTooCloseBehaviour;
+    private Animator _animator;
 
     // Start is called before the first frame update
     private void Start()
@@ -48,6 +49,7 @@ public class FishPathBehaviour : FishBehaviour
         GetNewTarget();
 
         _rigidBody = GetComponent<Rigidbody>();
+        _animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -156,6 +158,13 @@ public class FishPathBehaviour : FishBehaviour
 
         //Get new target
         _currentTarget = _pathPositions[_index] + transform.parent.position;
+        if (_animator != null)
+        {
+            if (Vector3.Dot(transform.right, _pathPositions[_index] - transform.localPosition) > 0)
+                _animator.SetTrigger("_TurnRight");
+            else
+                _animator.SetTrigger("_TurnLeft");
+        }
         _hasTarget = true;
         _index++;
     }

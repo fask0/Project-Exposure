@@ -33,6 +33,8 @@ public class MicrophoneBehaviour : MonoBehaviour
     {
         if (other.gameObject.layer == 10)
         {
+            if (other.isTrigger) return;
+
             AudioSource oSound = other.GetComponent<AudioSource>();
             oSound.maxDistance = _collider.bounds.extents.z * 1.5f;
 
@@ -53,20 +55,18 @@ public class MicrophoneBehaviour : MonoBehaviour
     {
         if (other.gameObject.layer == 10)
         {
+            if (other.isTrigger) return;
+
             other.GetComponent<AudioSource>().maxDistance = SingleTons.CollectionsManager.GetMaxDistance;
 
-            if (other.tag == string.Format("Target" + SingleTons.QuestManager.GetCurrentTargetIndex) || other.tag == "Collectable")
+            if (other.tag == "Collectable")
                 _soundWaveManager.HideProgress(other.transform.gameObject);
 
             SingleTons.SoundWaveManager.GetListeningToAll.Remove(other.transform.gameObject);
 
             for (int i = 0; i < SingleTons.SoundWaveManager.GetListeningToCollected.Count; i++)
-            {
                 if (other.transform.gameObject == SingleTons.SoundWaveManager.GetListeningToCollected[i])
-                {
                     SingleTons.SoundWaveManager.GetListeningToCollected.RemoveAt(i);
-                }
-            }
         }
     }
 }
