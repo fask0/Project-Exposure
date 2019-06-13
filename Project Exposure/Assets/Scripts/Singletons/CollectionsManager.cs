@@ -102,6 +102,7 @@ public class CollectionsManager : MonoBehaviour
             aSource.maxDistance = _defaultAudioDistanace;
             aSource.rolloffMode = AudioRolloffMode.Linear;
             aSource.loop = true;
+            aSource.Play();
             _allAudioSources.Add(gos[i].gameObject);
 
             if (gos[i].gameObject.tag == "Collectable")
