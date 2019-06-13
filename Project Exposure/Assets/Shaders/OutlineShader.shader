@@ -13,7 +13,7 @@
 
 		CGPROGRAM
 		// Physically based Standard lighting model, and enable shadows on all light types
-		#pragma surface surf Standard fullforwardshadows vertex:vert
+		#pragma surface surf Standard fullforwardshadows vertex:vert alpha:fade
 
 		// Use shader model 3.0 target, to get nicer looking lighting
 		#pragma target 3.0
@@ -28,7 +28,7 @@
 		{
 			o.uv_MainTex = v.texcoord;
 
-			v.vertex += float4(v.normal * _OutlineWidth * 0.1f, 1);
+			//v.vertex += float4(v.normal * _OutlineWidth * 0.1f, 1);
 
 			UNITY_INITIALIZE_OUTPUT(Input, o);
 			o.vertex = v.vertex;
@@ -46,6 +46,14 @@
 			//o.Alpha = c.a;
 			o.Emission = _OutlineColor;
 			o.Albedo = _OutlineColor;
+			if (_OutlineWidth > 0)
+			{
+				o.Alpha = _OutlineColor.a;
+			}
+			else
+			{
+				o.Alpha = 0;
+			}
 		}
 		ENDCG
 	}
